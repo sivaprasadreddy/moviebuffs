@@ -1,0 +1,31 @@
+<div th:fragment="pagination">
+
+    <nav aria-label="Page navigation" th:if="${moviesData.getTotalPages() > 1 }">
+        <ul class="pagination pagination-lg justify-content-center">
+            <li th:if="${!moviesData.hasPrevious()}" class="page-item disabled">
+                <a class="page-link" href="#" th:href="${paginationPrefix+'?pageNo=1'}">First</a>
+            </li>
+            <li th:if="${moviesData.hasPrevious()}" class="page-item">
+                <a class="page-link" href="#" th:href="${paginationPrefix+'?pageNo=1'}">First</a>
+            </li>
+            <li th:if="${!moviesData.hasPrevious()}" class="page-item disabled">
+                <a class="page-link" href="#" >Previous</a>
+            </li>
+            <li th:if="${moviesData.hasPrevious()}" class="page-item">
+                <a class="page-link" href="#" th:href="${paginationPrefix+'?pageNo='+(moviesData.getNumber())}">Previous</a>
+            </li>
+            <li th:if="${moviesData.hasNext()}" class="page-item">
+                <a class="page-link" href="#" th:href="${paginationPrefix+'?pageNo='+(moviesData.getNumber()+2)}">Next</a>
+            </li>
+            <li th:if="${!moviesData.hasNext()}" class="page-item disabled">
+                <a class="page-link" href="#">Next</a>
+            </li>
+            <li th:if="${!moviesData.hasNext()}" class="page-item disabled">
+                <a class="page-link" href="#" th:href="${paginationPrefix+'?pageNo='+(moviesData.getTotalPages())}">Last</a>
+            </li>
+            <li th:if="${moviesData.hasNext()}" class="page-item">
+                <a class="page-link" href="#" th:href="${paginationPrefix+'?pageNo='+(moviesData.getTotalPages())}">Last</a>
+            </li>
+        </ul>
+    </nav>
+</div>

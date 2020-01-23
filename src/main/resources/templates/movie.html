@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{mainLayout}">
+<head>
+    <title>Movie</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-md-9">
+            <div>
+                <h3
+                    th:text="${movie.title}">movie.title</h3>
+                <img th:src="${'https://image.tmdb.org/t/p/w500'+movie.posterPath}"  alt="Movie"
+                     height="400" width="300">
+            </div>
+            <div class="pt-2">
+                <a href="#" class="btn btn-primary">Add to Cart</a>
+            </div>
+            <div class="pt-3">
+                <h3>Tagline</h3>
+                <p th:text="${movie.tagline}">movie.tagline</p>
+            </div>
+            <div class="pt-3">
+                <h3>Overview</h3>
+                <p th:text="${movie.overview}">movie.overview</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+</div>
+</body>
+</html>
