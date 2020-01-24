@@ -1,0 +1,27 @@
+package com.sivalabs.moviebuffs.web.mappers;
+
+import com.sivalabs.moviebuffs.entity.Movie;
+import com.sivalabs.moviebuffs.models.MovieDTO;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MovieDTOMapper {
+
+    public MovieDTO map(Movie movie) {
+        if(movie == null) return null;
+        return MovieDTO.builder()
+                .id(movie.getId())
+                .budget(movie.getBudget())
+                .homepage(movie.getHomepage())
+                .imdbId(movie.getImdbId())
+                .originalLanguage(movie.getOriginalLanguage())
+                .overview(movie.getOverview())
+                .posterPath(movie.getPosterPath())
+                .releaseDate(movie.getReleaseDate())
+                .revenue(movie.getRevenue())
+                .tagline(movie.getTagline())
+                .runtime(movie.getRuntime())
+                .title(movie.getTitle())
+                .build();
+    }
+}
