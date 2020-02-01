@@ -67,7 +67,7 @@ public class MovieDataImporter {
         while(iterator.hasNext()){
             String[] nextLine = iterator.next();
             CreditsCsvRecord record = parseCreditsRecord(nextLine);
-            Movie movie = movieService.getMovieById(Long.valueOf(record.getId())).orElse(null);
+            Movie movie = movieService.findMovieById(Long.valueOf(record.getId())).orElse(null);
             List<CastMemberRecord> castMemberRecords = getCastMembers(record.getCast());
             for (CastMemberRecord castMemberRecord : castMemberRecords) {
                 CastMember castMember = csvRowMapperUtils.mapToCastMemberEntity(castMemberRecord);

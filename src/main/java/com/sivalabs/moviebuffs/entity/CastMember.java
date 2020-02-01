@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="cast")
+@Table(name="movie_cast")
 @Setter
 @Getter
 public class CastMember implements Serializable

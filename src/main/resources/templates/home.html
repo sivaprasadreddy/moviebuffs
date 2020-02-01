@@ -11,6 +11,14 @@
 <div layout:fragment="content">
     <div class="row">
     <div class="col-md-9">
+        <div>
+            <form class="form-inline pb-3" method="get" th:action="@{/}">
+                <div class="form-group  col-md-9">
+                    <input class="col-md-12 form-control" type="search" name="query"/>
+                </div>
+                <button class="btn btn-primary btn" type="submit">Search</button>
+            </form>
+        </div>
         <div th:if="${header != null}">
             <h3 th:text="${header}">Header</h3>
             <hr/>
@@ -20,10 +28,10 @@
             <div class="col mb-3" th:each="movie: ${moviesData.content}">
                 <div class="card h-100" >
                     <a href="#" th:href="${'/movies/'+movie.id}">
-                    <img th:src="${'https://image.tmdb.org/t/p/w500'+movie.posterPath}"
+                        <img th:src="${movie.posterPath}"
                          class="card-img-top" alt="Movie"
                          height="300" width="200"
-                    >
+                        />
                     </a>
                     <div class="card-body">
                         <h5 class="card-title"
@@ -34,9 +42,6 @@
                            data-toggle="tooltip"
                            data-placement="top"
                            th:text="${movie.getTrimmedTagline()}">movie.tagline</p>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#" class="btn btn-primary">Add to Cart</a>
                     </div>
                 </div>
             </div>
@@ -61,8 +66,8 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var pageNo = /*[[${pageNo}]]*/ 1;
-        console.log(pageNo);
+        var page = /*[[${page}]]*/ 1;
+        console.log(page);
         /*]]>*/
     </script>
 </div>

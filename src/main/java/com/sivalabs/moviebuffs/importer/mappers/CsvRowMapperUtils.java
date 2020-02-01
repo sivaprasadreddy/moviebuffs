@@ -10,10 +10,13 @@ import com.sivalabs.moviebuffs.entity.Movie;
 import com.sivalabs.moviebuffs.importer.model.CastMemberRecord;
 import com.sivalabs.moviebuffs.importer.model.CrewMemberRecord;
 import com.sivalabs.moviebuffs.importer.model.MovieCsvRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.Normalizer;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -43,12 +46,17 @@ public class CsvRowMapperUtils {
         movie.setRevenue(movieCsvRecord.getRevenue());
         movie.setRuntime(movieCsvRecord.getRuntime());
         movie.setTagline(movieCsvRecord.getTagline());
-        movie.setReleaseDate(movieCsvRecord.getRelease_date());
+        movie.setReleaseDate(toLocalDate(movieCsvRecord.getRelease_date()));
         movie.setOriginalLanguage(movieCsvRecord.getOriginal_language());
         movie.setVoteAverage(safeDouble(movieCsvRecord.getVote_average()));
         movie.setVoteCount(safeDouble(movieCsvRecord.getVote_count()));
         movie.setGenres(convertToGenres(movieCsvRecord.getGenres()));
         return movie;
+    }
+
+    private LocalDate toLocalDate(String dateString) {
+        if(StringUtils.trimToNull(dateString) == null) return null;
+        return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     private List<Genre> convertToGenres(String genresString) throws JsonProcessingException {

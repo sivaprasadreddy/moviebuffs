@@ -4,23 +4,24 @@ import com.sivalabs.moviebuffs.repository.CastMemberRepository;
 import com.sivalabs.moviebuffs.repository.CrewMemberRepository;
 import com.sivalabs.moviebuffs.repository.GenreRepository;
 import com.sivalabs.moviebuffs.repository.MovieRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
+    @Mock
     private MovieRepository movieRepository;
+    @Mock
     private CastMemberRepository castMemberRepository;
+    @Mock
     private CrewMemberRepository crewMemberRepository;
+    @Mock
     private GenreRepository genreRepository;
 
+    @InjectMocks
     private MovieService movieService;
-
-    @BeforeEach
-    void setUp() {
-        movieRepository = mock(MovieRepository.class);
-        movieService = new MovieService(movieRepository, castMemberRepository, crewMemberRepository, genreRepository);
-    }
 
 }

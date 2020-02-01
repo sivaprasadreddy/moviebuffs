@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="crew")
+@Table(name="movie_crew")
 @Setter
 @Getter
 public class CrewMember implements Serializable

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class MovieDTO {
@@ -24,7 +26,7 @@ public class MovieDTO {
     private String revenue;
 
     @JsonProperty("release_date")
-    private String releaseDate;
+    private LocalDate releaseDate;
 
     @JsonProperty("poster_path")
     private String posterPath;

@@ -4,6 +4,8 @@ import com.sivalabs.moviebuffs.entity.Movie;
 import com.sivalabs.moviebuffs.models.MovieDTO;
 import org.springframework.stereotype.Component;
 
+import static com.sivalabs.moviebuffs.utils.Constants.TMDB_IMAGE_PATH_PREFIX;
+
 @Component
 public class MovieDTOMapper {
 
@@ -16,7 +18,7 @@ public class MovieDTOMapper {
                 .imdbId(movie.getImdbId())
                 .originalLanguage(movie.getOriginalLanguage())
                 .overview(movie.getOverview())
-                .posterPath(movie.getPosterPath())
+                .posterPath(TMDB_IMAGE_PATH_PREFIX + movie.getPosterPath())
                 .releaseDate(movie.getReleaseDate())
                 .revenue(movie.getRevenue())
                 .tagline(movie.getTagline())

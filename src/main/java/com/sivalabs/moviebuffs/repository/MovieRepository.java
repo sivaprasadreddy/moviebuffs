@@ -13,4 +13,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query("select m from Movie m inner join m.genres g where g.id = :genreId")
     Page<Movie> findByGenre(@Param("genreId") Long genreId, Pageable pageable);
+
+    Page<Movie> findByTitleContainingIgnoreCase(String query, Pageable pageable);
 }

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Movie implements Serializable
 
 	@JsonProperty("release_date")
 	@Column(name = "release_date")
-	private String releaseDate;
+	private LocalDate releaseDate;
 
 	@JsonProperty("poster_path")
 	@Column(name = "poster_path")

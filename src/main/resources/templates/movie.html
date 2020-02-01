@@ -14,11 +14,8 @@
             <div>
                 <h3
                     th:text="${movie.title}">movie.title</h3>
-                <img th:src="${'https://image.tmdb.org/t/p/w500'+movie.posterPath}"  alt="Movie"
+                <img th:src="${movie.posterPath}"  alt="Movie"
                      height="400" width="300">
-            </div>
-            <div class="pt-2">
-                <a href="#" class="btn btn-primary">Add to Cart</a>
             </div>
             <div class="pt-3">
                 <h3>Tagline</h3>
