@@ -1,7 +1,7 @@
 package com.sivalabs.moviebuffs.config;
 
 import com.opencsv.exceptions.CsvValidationException;
-import com.sivalabs.moviebuffs.service.MovieDataImporter;
+import com.sivalabs.moviebuffs.importer.MovieDataImporter;
 import com.sivalabs.moviebuffs.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

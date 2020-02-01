@@ -14,15 +14,18 @@
             <div>
                 <h3
                     th:text="${movie.title}">movie.title</h3>
-                <img th:src="${'https://image.tmdb.org/t/p/w500'+movie.posterPath}"  alt="Movie"
+                <img th:src="${movie.posterPath}"  alt="Movie"
                      height="400" width="300">
-            </div>
-            <div class="pt-2">
-                <a href="#" class="btn btn-primary">Add to Cart</a>
             </div>
             <div class="pt-3">
                 <h3>Tagline</h3>
                 <p th:text="${movie.tagline}">movie.tagline</p>
+            </div>
+            <div class="pt-3">
+                <p th:text="${'Released Date:'+ movie.releaseDate}">movie.releaseDate</p>
+                <p th:text="${'Budget:'+ movie.budget}">movie.budget</p>
+                <p th:text="${'Runtime:'+ movie.runtime}">movie.runtime</p>
+                <p th:text="${'Original Language:'+ movie.originalLanguage}">movie.originalLanguage</p>
             </div>
             <div class="pt-3">
                 <h3>Overview</h3>

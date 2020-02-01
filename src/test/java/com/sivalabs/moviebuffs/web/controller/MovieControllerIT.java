@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class HomeControllerIT extends AbstractIntegrationTest {
+class MovieControllerIT extends AbstractIntegrationTest {
 
     @Autowired
     private MovieService movieService;

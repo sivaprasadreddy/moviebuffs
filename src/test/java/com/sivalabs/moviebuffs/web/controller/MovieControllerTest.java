@@ -1,7 +1,7 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractMvcUnitTest;
-import com.sivalabs.moviebuffs.entity.Movie;
+import com.sivalabs.moviebuffs.models.MovieDTO;
 import com.sivalabs.moviebuffs.service.MovieService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,15 +18,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebMvcTest(controllers = HomeController.class)
-class HomeControllerTest extends AbstractMvcUnitTest {
+@WebMvcTest(controllers = MovieController.class)
+class MovieControllerTest extends AbstractMvcUnitTest {
 
     @MockBean
     private MovieService movieService;
 
     @Test
     void shouldShowHomePage() throws Exception {
-        Page<Movie> page = new PageImpl<Movie>(new ArrayList<>());
+        Page<MovieDTO> page = new PageImpl<>(new ArrayList<>());
         given(movieService.getMovies(any(Pageable.class))).willReturn(page);
         this.mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
