@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+
+  moviebuffs-api:
+    build: ../moviebuffs-api
+    container_name: moviebuffs-api
+    ports:
+      - "18080:8080"
+      - "18787:8787"
+    restart: always
+    depends_on:
+      - mb-postgresdb
+
+  mb-postgresdb:
+    image: postgres:10.7
+    container_name: mb-postgresdb
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5432:5432"
+
+  moviebuffs-ui-react:
+    build: ../moviebuffs-ui-react
+    container_name: moviebuffs-ui-react
+    ports:
+      - "90:80"
