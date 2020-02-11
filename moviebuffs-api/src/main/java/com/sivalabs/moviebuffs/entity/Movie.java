@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="movies")
@@ -80,6 +81,12 @@ public class Movie implements Serializable
 			joinColumns={@JoinColumn(name="MOVIE_ID", referencedColumnName="ID")},
 			inverseJoinColumns={@JoinColumn(name="GENRE_ID", referencedColumnName="ID")})
 	private List<Genre> genres = new ArrayList<>();
+
+	@OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
+	private Set<CastMember> castMembers;
+
+	@OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
+	private Set<CrewMember> crewMembers;
 
 	@PrePersist
 	public void onCreate() {

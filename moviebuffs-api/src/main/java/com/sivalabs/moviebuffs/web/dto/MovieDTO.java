@@ -1,12 +1,18 @@
 package com.sivalabs.moviebuffs.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sivalabs.moviebuffs.entity.CastMember;
+import com.sivalabs.moviebuffs.entity.CrewMember;
+import com.sivalabs.moviebuffs.entity.Genre;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -40,6 +46,12 @@ public class MovieDTO {
     private String originalLanguage;
 
     private BigDecimal price;
+
+    private List<Genre> genres;
+
+    private Set<CastMember> castMembers;
+
+    private Set<CrewMember> crewMembers;
 
     public String getTrimmedTitle() {
         return StringUtils.abbreviate(title, 30);

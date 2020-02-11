@@ -54,12 +54,12 @@ public class MovieDataImporter {
     @Async
     public void importDataAsync() throws IOException, CsvValidationException {
         importMoviesMetaData();
-        //importCreditsData();
+        importCreditsData();
     }
 
     public void importData() throws IOException, CsvValidationException {
         importMoviesMetaData();
-        //importCreditsData();
+        importCreditsData();
     }
 
     private void importMoviesMetaData() throws IOException, CsvValidationException {
@@ -83,8 +83,9 @@ public class MovieDataImporter {
 
     private void importCreditsData() throws IOException, CsvValidationException {
         log.info("Initializing movies credits from file: {}", properties.getMovieCreditsFile());
-        File file = new ClassPathResource(properties.getMovieCreditsFile(), this.getClass()).getFile();
-        CSVReader csvReader = new CSVReader(new FileReader(file));
+        ClassPathResource file = new ClassPathResource(properties.getMovieCreditsFile(), this.getClass());
+        InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
+        CSVReader csvReader = new CSVReader(inputStreamReader);
         csvReader.skip(1);
         CSVIterator iterator = new CSVIterator(csvReader);
 

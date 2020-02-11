@@ -1,5 +1,6 @@
 package com.sivalabs.moviebuffs.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,7 @@ public class CrewMember implements Serializable
     @Column(name = "profile_path")
     private String profilePath;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
