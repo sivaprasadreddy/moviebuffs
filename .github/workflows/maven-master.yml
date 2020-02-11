@@ -31,7 +31,7 @@ jobs:
         with:
           java-version: 11.0.4
       - name: SonarCloud Scan
-        run: mvn -B clean verify -Pci -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn -B clean verify sonar:sonar -Pci -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: moviebuffs-api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
