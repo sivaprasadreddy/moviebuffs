@@ -1,11 +1,16 @@
-name: Java CI
+name: Dev Branch CI
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - 'master'
+      - 'release*'
 
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
+  test:
+    name: Test - Units & Integrations
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v1
@@ -15,3 +20,4 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B verify --file pom.xml
+      working-directory: moviebuffs-api

@@ -44,7 +44,7 @@
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<ui.build.dir>${project.basedir}/../moviebuffs-ui-react/build</ui.build.dir>
 
-		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -424,7 +424,7 @@
 					<plugin>
 						<groupId>org.sonarsource.scanner.maven</groupId>
 						<artifactId>sonar-maven-plugin</artifactId>
-						<version>3.5.0.1254</version>
+						<version>3.7.0.1746</version>
 						<executions>
 							<execution>
 								<!--<phase>verify</phase>-->
