@@ -11,7 +11,7 @@ import static com.sivalabs.moviebuffs.utils.Constants.PROFILE_IT;
 import static com.sivalabs.moviebuffs.utils.Constants.PROFILE_TEST;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@ActiveProfiles({PROFILE_TEST, PROFILE_IT})
+@ActiveProfiles({PROFILE_IT})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {

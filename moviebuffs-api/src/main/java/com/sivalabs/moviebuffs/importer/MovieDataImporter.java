@@ -52,6 +52,11 @@ public class MovieDataImporter {
     }
 
     @Async
+    public void importDataAsync() throws IOException, CsvValidationException {
+        importMoviesMetaData();
+        //importCreditsData();
+    }
+
     public void importData() throws IOException, CsvValidationException {
         importMoviesMetaData();
         //importCreditsData();

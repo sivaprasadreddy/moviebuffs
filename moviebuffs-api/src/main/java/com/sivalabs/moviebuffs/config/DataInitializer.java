@@ -3,9 +3,11 @@ package com.sivalabs.moviebuffs.config;
 import com.opencsv.exceptions.CsvValidationException;
 import com.sivalabs.moviebuffs.importer.MovieDataImporter;
 import com.sivalabs.moviebuffs.utils.Constants;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -13,19 +15,22 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-@Profile({Constants.PROFILE_NOT_PROD, Constants.PROFILE_NOT_HEROKU})
+@ConditionalOnProperty(name = "application.import-tmdb-data-async", havingValue = "true")
+@RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
     private final MovieDataImporter movieDataImporter;
-
-    @Autowired
-    public DataInitializer(MovieDataImporter movieDataImporter) {
-        this.movieDataImporter = movieDataImporter;
-    }
+    private final ApplicationProperties applicationProperties;
 
     @Override
     public void run(String... args) throws IOException, CsvValidationException {
-        movieDataImporter.importData();
-        log.debug("Data initialized");
+        if(applicationProperties.isImportTmdbDataAsync()) {
+            log.info("Initializing TMDB data in async mode");
+            movieDataImporter.importDataAsync();
+        } else {
+            log.info("Initializing TMDB data in sync mode");
+            movieDataImporter.importData();
+        }
+        log.debug("TMDB data initialized successfully");
     }
 }

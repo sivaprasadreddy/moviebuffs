@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 
+import static com.sivalabs.moviebuffs.utils.TestConstants.PRODUCTS_COLLECTION_BASE_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,7 +30,7 @@ public class CatalogControllerTest extends AbstractMvcUnitTest {
         Page<ProductDTO> page = new PageImpl<>(new ArrayList<>());
         given(catalogService.getProducts(any(Pageable.class))).willReturn(page);
 
-        this.mockMvc.perform(get("/api/products"))
+        this.mockMvc.perform(get(PRODUCTS_COLLECTION_BASE_PATH))
                 .andExpect(status().isOk());
     }
 }

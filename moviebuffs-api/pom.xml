@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 	http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -23,8 +23,11 @@
 		<swagger2.version>2.9.2</swagger2.version>
 		<problem-spring-web.version>0.25.2</problem-spring-web.version>
 		<logstash-logback.version>4.9</logstash-logback.version>
+		<commons-io.version>2.6</commons-io.version>
+		<opencsv.version>5.0</opencsv.version>
 		<jjwt.version>0.6.0</jjwt.version>
 		<testcontainers.version>1.12.2</testcontainers.version>
+		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
 		<jacoco.minimum.coverage>0.40</jacoco.minimum.coverage>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -32,11 +35,16 @@
 		<sonar.exclusions>
 			src/main/java/**/config/*.*,
 			src/main/java/**/entity/*.*,
+			src/main/java/**/models/*.*,
 			src/main/java/**/exception/*.*,
+			src/main/java/**/utils/*.*,
+			src/main/java/**/mappers/*.*,
 			src/main/java/**/*Application.*
 		</sonar.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<ui.build.dir>${project.basedir}/../moviebuffs-ui-react/build</ui.build.dir>
+
+		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -61,14 +69,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!--<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
-		</dependency>-->
-		<dependency>
-			<groupId>nz.net.ultraq.thymeleaf</groupId>
-			<artifactId>thymeleaf-layout-dialect</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
@@ -76,12 +76,12 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
+			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>5.0</version>
+			<version>${opencsv.version}</version>
 		</dependency>
 
 		<dependency>
@@ -119,7 +119,7 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${swagger2.version}</version>
 		</dependency>
-		<!--<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
@@ -128,7 +128,6 @@
 			<artifactId>jjwt</artifactId>
 			<version>${jjwt.version}</version>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.zalando</groupId>
 			<artifactId>problem-spring-web-starter</artifactId>
@@ -138,23 +137,6 @@
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>${logstash-logback.version}</version>
-		</dependency>
-
-		<!-- UI dependencies -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>4.4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
-			<version>5.8.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>vue</artifactId>
-			<version>2.5.16</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -179,11 +161,22 @@
 			<artifactId>junit-jupiter-params</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--<dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency>-->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.playtika.testcontainers</groupId>
+			<artifactId>embedded-postgresql</artifactId>
+			<version>${playtika.testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
@@ -226,8 +219,22 @@
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<verbose>false</verbose>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+					<failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<includeOnlyProperties>
+						<includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+						<includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+						<includeOnlyProperty>^git.branch$</includeOnlyProperty>
+					</includeOnlyProperties>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -241,7 +248,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.4</version>
+				<version>${jacoco-maven-plugin.version}</version>
 				<configuration>
 					<dataFile>${project.build.directory}/coverage-reports/aggregate.exec</dataFile>
 					<rules>
@@ -260,8 +267,11 @@
 						<exclude>**/*Application.*</exclude>
 						<exclude>**/config/**</exclude>
 						<exclude>**/model/*</exclude>
+						<exclude>**/models/*</exclude>
 						<exclude>**/exception/*</exclude>
 						<exclude>**/entity/*</exclude>
+						<exclude>**/utils/*</exclude>
+						<exclude>**/mappers/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>

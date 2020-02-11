@@ -1,13 +1,18 @@
 package com.sivalabs.moviebuffs.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sivalabs.moviebuffs.config.security.TokenHelper;
 import com.sivalabs.moviebuffs.utils.Constants;
+import com.sivalabs.moviebuffs.utils.SecurityUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.zalando.problem.ProblemModule;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 @ActiveProfiles(Constants.PROFILE_TEST)
@@ -19,6 +24,18 @@ public class AbstractMvcUnitTest {
 
     @Autowired
     protected ObjectMapper objectMapper;
+
+    @MockBean
+    protected UserDetailsService userDetailsService;
+
+    @MockBean
+    protected TokenHelper tokenHelper;
+
+    @MockBean
+    protected SecurityProblemSupport problemSupport;
+
+    @MockBean
+    protected SecurityUtils securityUtils;
 
     @BeforeEach
     void setUpBase() {
