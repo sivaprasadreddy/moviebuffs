@@ -32,6 +32,7 @@
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.organization>sivaprasadreddy-github</sonar.organization>
+		<sonar.projectKey>sivaprasadreddy_moviebuffs</sonar.projectKey>
 		<sonar.exclusions>
 			src/main/java/**/config/*.*,
 			src/main/java/**/entity/*.*,
@@ -395,24 +396,6 @@
 			<id>ci</id>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>com.ning.maven.plugins</groupId>
-						<artifactId>maven-dependency-versions-check-plugin</artifactId>
-						<version>2.0.4</version>
-						<configuration>
-							<skip>false</skip>
-							<failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
-							<warnIfMajorVersionIsHigher>true</warnIfMajorVersionIsHigher>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>verify</phase>
-								<goals>
-									<goal>check</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>org.owasp</groupId>
 						<artifactId>dependency-check-maven</artifactId>
