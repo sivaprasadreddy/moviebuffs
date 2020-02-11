@@ -1,4 +1,4 @@
-package com.sivalabs.moviebuffs.models;
+package com.sivalabs.moviebuffs.web.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
-public class ChangePasswordRequest {
+public class ChangePasswordDTO {
 
     @NotBlank(message = "Old password cannot be blank")
     String oldPassword;

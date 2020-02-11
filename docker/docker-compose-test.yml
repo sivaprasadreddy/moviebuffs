@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+
+  moviebuffs-api-hub:
+    image: sivaprasadreddy/moviebuffs-api
+    container_name: moviebuffs-api-hub
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    ports:
+      - "18080:8080"
+      - "18787:8787"
+    restart: always

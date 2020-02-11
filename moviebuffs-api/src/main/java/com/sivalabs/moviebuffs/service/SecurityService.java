@@ -1,24 +1,21 @@
-package com.sivalabs.moviebuffs.utils;
+package com.sivalabs.moviebuffs.service;
 
 import com.sivalabs.moviebuffs.config.security.SecurityUser;
 import com.sivalabs.moviebuffs.entity.User;
-import com.sivalabs.moviebuffs.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import static com.sivalabs.moviebuffs.utils.Constants.ROLE_ADMIN;
+
 @Component
-public class SecurityUtils {
+@RequiredArgsConstructor
+public class SecurityService {
 
-    private final UserRepository userRepository;
-
-    @Autowired
-    public SecurityUtils(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserService userService;
 
     public User loginUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,7 +27,7 @@ public class SecurityUtils {
             return securityUser.getUser();
         } else if (authentication instanceof UsernamePasswordAuthenticationToken) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return userRepository.findByEmail(userDetails.getUsername()).orElse(null);
+            return userService.getUserByEmail(userDetails.getUsername()).orElse(null);
         }
         return null;
     }
@@ -38,7 +35,7 @@ public class SecurityUtils {
     public boolean isCurrentUserAdmin() {
         User loginUser = loginUser();
         if(loginUser != null) {
-            return loginUser.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+            return loginUser.getRoles().stream().anyMatch(role -> role.getName().equals(ROLE_ADMIN));
         }
         return false;
     }

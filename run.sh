@@ -5,6 +5,7 @@ declare dc_main=${project_dir}/docker/docker-compose.yml
 declare dc_platform=${project_dir}/docker/docker-compose-platform.yml
 declare dc_elk=${project_dir}/docker/docker-compose-elk.yml
 declare dc_monitoring=${project_dir}/docker/docker-compose-monitoring.yml
+declare dc_test=${project_dir}/docker/docker-compose-test.yml
 declare moviebuffs_api="moviebuffs-api"
 declare sonarqube="sonarqube"
 declare elk="elasticsearch logstash kibana"
@@ -62,6 +63,12 @@ function monitoring() {
     echo 'Starting Prometheus, Grafana....'
     docker-compose -f ${dc_monitoring} up --build --force-recreate -d ${monitoring}
     docker-compose -f ${dc_monitoring} logs -f
+}
+
+function hubtest() {
+    echo 'Run API from DockerHub....'
+    docker-compose -f ${dc_test} up -d
+    docker-compose -f ${dc_test} logs -f
 }
 
 action="start"

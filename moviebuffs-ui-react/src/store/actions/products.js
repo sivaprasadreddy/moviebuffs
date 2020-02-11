@@ -5,7 +5,7 @@ export const RECEIVE_PRODUCT = "RECEIVE_PRODUCT";
 
 export function fetchProducts(page) {
   return dispatch => {
-    return axios("/api/products?page="+page)
+    return axios("/api/movies?page="+page)
       .then(response => {
         return dispatch({
           type: RECEIVE_PRODUCTS,
@@ -18,7 +18,7 @@ export function fetchProducts(page) {
 
 export function fetchProductById(id) {
     return dispatch => {
-        return axios("/api/products/"+id)
+        return axios("/api/movies/"+id)
             .then(response => {
                 return dispatch({
                     type: RECEIVE_PRODUCT,

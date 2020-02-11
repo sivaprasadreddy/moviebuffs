@@ -1,4 +1,4 @@
-package com.sivalabs.moviebuffs.models;
+package com.sivalabs.moviebuffs.web.dto;
 
 import com.sivalabs.moviebuffs.entity.Order;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderConfirmation {
+public class OrderConfirmationDTO {
     private String orderId;
     private Order.OrderStatus orderStatus;
 }

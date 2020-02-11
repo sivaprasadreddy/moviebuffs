@@ -1,12 +1,8 @@
 package com.sivalabs.moviebuffs.importer.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sivalabs.moviebuffs.entity.Movie;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 @Data

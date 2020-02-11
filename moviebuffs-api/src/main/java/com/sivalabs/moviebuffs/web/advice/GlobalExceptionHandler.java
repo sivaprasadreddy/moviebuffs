@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
+import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    private ExceptionTranslator translator = new ExceptionTranslator();
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     ResponseEntity<Problem> handleResourceNotFoundException(
@@ -20,15 +23,15 @@ public class GlobalExceptionHandler {
             NativeWebRequest request
     ) {
         log.error(exception.getLocalizedMessage(), exception);
-        Problem problem = Problem.builder().withStatus(Status.NOT_FOUND).build();
-        return ResponseEntity.ok(problem);
+        return translator.create(Status.NOT_FOUND, exception, request);
     }
 
     @ExceptionHandler(value = ApplicationException.class)
     ResponseEntity<Problem> handleApplicationException(ApplicationException exception,
                                                        NativeWebRequest request) {
         log.error(exception.getLocalizedMessage(), exception);
-        Problem problem = Problem.builder().withStatus(Status.BAD_REQUEST).build();
-        return ResponseEntity.ok(problem);
+        return translator.create(Status.BAD_REQUEST, exception, request);
     }
 }
+
+class ExceptionTranslator implements ProblemHandling { }

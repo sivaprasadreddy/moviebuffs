@@ -1,17 +1,17 @@
 package com.sivalabs.moviebuffs.web.mappers;
 
 import com.sivalabs.moviebuffs.entity.Movie;
-import com.sivalabs.moviebuffs.models.ProductDTO;
+import com.sivalabs.moviebuffs.web.dto.MovieDTO;
 import org.springframework.stereotype.Component;
 
 import static com.sivalabs.moviebuffs.utils.Constants.TMDB_IMAGE_PATH_PREFIX;
 
 @Component
-public class MovieToProductDTOMapper {
+public class MovieDTOMapper {
 
-    public ProductDTO map(Movie movie) {
+    public MovieDTO map(Movie movie) {
         if(movie == null) return null;
-        return ProductDTO.builder()
+        return MovieDTO.builder()
                 .id(movie.getId())
                 .budget(movie.getBudget())
                 .homepage(movie.getHomepage())

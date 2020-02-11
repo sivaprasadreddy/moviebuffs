@@ -3,7 +3,7 @@ package com.sivalabs.moviebuffs.web.controller;
 import com.sivalabs.moviebuffs.common.AbstractIntegrationTest;
 import com.sivalabs.moviebuffs.config.ApplicationProperties;
 import com.sivalabs.moviebuffs.config.security.TokenHelper;
-import com.sivalabs.moviebuffs.models.AuthenticationRequest;
+import com.sivalabs.moviebuffs.web.dto.AuthenticationRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -23,28 +23,28 @@ class AuthenticationControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldLoginSuccessfullyWithValidCredentials() throws Exception {
-        AuthenticationRequest authenticationRequest = AuthenticationRequest.builder()
+        AuthenticationRequestDTO authenticationRequestDTO = AuthenticationRequestDTO.builder()
                 .username("admin@gmail.com")
                 .password("admin")
                 .build();
 
         this.mockMvc.perform(post("/api/auth/login")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .content(objectMapper.writeValueAsString(authenticationRequestDTO)))
                 .andExpect(status().isOk());
 
     }
 
     @Test
     void shouldNotLoginWithInvalidCredentials() throws Exception {
-        AuthenticationRequest authenticationRequest = AuthenticationRequest.builder()
+        AuthenticationRequestDTO authenticationRequestDTO = AuthenticationRequestDTO.builder()
                 .username("mymail@gmail.com")
                 .password("secret")
                 .build();
 
         this.mockMvc.perform(post("/api/auth/login")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(authenticationRequest)))
+                .content(objectMapper.writeValueAsString(authenticationRequestDTO)))
                 .andExpect(status().isUnauthorized());
 
     }

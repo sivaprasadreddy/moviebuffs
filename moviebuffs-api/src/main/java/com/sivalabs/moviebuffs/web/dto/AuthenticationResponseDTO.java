@@ -1,4 +1,4 @@
-package com.sivalabs.moviebuffs.models;
+package com.sivalabs.moviebuffs.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
+public class AuthenticationResponseDTO {
     @JsonProperty("access_token")
     private String accessToken;
 

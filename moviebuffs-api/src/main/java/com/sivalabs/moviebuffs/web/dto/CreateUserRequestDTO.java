@@ -1,4 +1,4 @@
-package com.sivalabs.moviebuffs.models;
+package com.sivalabs.moviebuffs.web.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
-public class CreateUserRequest {
+public class CreateUserRequestDTO {
     @NotBlank(message = "Name cannot be blank")
     String name;
 

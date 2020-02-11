@@ -1,9 +1,10 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.entity.Genre;
-import com.sivalabs.moviebuffs.models.ProductDTO;
-import com.sivalabs.moviebuffs.models.ProductsResponse;
-import com.sivalabs.moviebuffs.service.CatalogService;
+import com.sivalabs.moviebuffs.service.MovieService;
+import com.sivalabs.moviebuffs.web.dto.MovieDTO;
+import com.sivalabs.moviebuffs.web.dto.MoviesResponseDTO;
+import com.sivalabs.moviebuffs.web.mappers.MovieDTOMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,42 +27,43 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class CatalogController {
+public class MoviesController {
     private static final int DEFAULT_PAGE_SIZE = 25;
 
-    private final CatalogService catalogService;
+    private final MovieService movieService;
+    private final MovieDTOMapper movieDTOMapper;
 
-    @GetMapping("/products")
-    public ProductsResponse getMovies(
+    @GetMapping("/movies")
+    public MoviesResponseDTO getMovies(
             @RequestParam(name = "genre", required = false) String genreSlug,
             @PageableDefault(size = DEFAULT_PAGE_SIZE)
             @SortDefault.SortDefaults({@SortDefault(sort = "title", direction = ASC)})
             Pageable pageable) {
         log.info("API Fetching movies for page {}", pageable.getPageNumber());
-        Page<ProductDTO> moviesPage;
+        Page<MovieDTO> moviesPage;
         if(StringUtils.isNotBlank(genreSlug)) {
             moviesPage = getMoviesByGenreSlug(genreSlug, pageable);
         } else {
-            moviesPage = catalogService.getProducts(pageable);
+            moviesPage = movieService.findMovies(pageable).map(movieDTOMapper::map);
         }
         log.info("Current page {}", moviesPage.getNumber());
-        return new ProductsResponse(moviesPage);
+        return new MoviesResponseDTO(moviesPage);
     }
 
-    @GetMapping("/products/{id}")
-    public ResponseEntity<ProductDTO> getMovieById(@PathVariable Long id) {
-        Optional<ProductDTO> movieById = catalogService.getProductById(id);
+    @GetMapping("/movies/{id}")
+    public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id) {
+        Optional<MovieDTO> movieById = movieService.findMovieById(id).map(movieDTOMapper::map);
         return movieById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/genres")
     public List<Genre> getGenres() {
-        return catalogService.findAllGenres(Sort.by("name"));
+        return movieService.findAllGenres(Sort.by("name"));
     }
 
-    private Page<ProductDTO> getMoviesByGenreSlug(String genreSlug, Pageable pageable) {
-        Optional<Genre> byId = catalogService.findGenreBySlug(genreSlug);
-        return byId.map(genre -> catalogService.findProductsByGenre(genre.getId(), pageable))
+    private Page<MovieDTO> getMoviesByGenreSlug(String genreSlug, Pageable pageable) {
+        Optional<Genre> byId = movieService.findGenreBySlug(genreSlug);
+        return byId.map(genre -> movieService.findMoviesByGenre(genre.getId(), pageable).map(movieDTOMapper::map))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()));
     }
 }

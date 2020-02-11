@@ -10,7 +10,9 @@ public final class Constants {
     public static final String PROFILE_IT = "integration-test";
     public static final String PROFILE_DOCKER = "docker";
 
-    public static final String KAFKA_TOPIC_ORDERS = "orders";
     public static final String TMDB_IMAGE_PATH_PREFIX = "https://image.tmdb.org/t/p/w500";
+
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
 }

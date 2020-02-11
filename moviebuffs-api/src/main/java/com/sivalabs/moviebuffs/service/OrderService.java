@@ -1,10 +1,10 @@
 package com.sivalabs.moviebuffs.service;
 
-import com.sivalabs.moviebuffs.exception.OrderProcessingException;
 import com.sivalabs.moviebuffs.entity.Order;
 import com.sivalabs.moviebuffs.exception.OrderNotFoundException;
-import com.sivalabs.moviebuffs.models.OrderConfirmation;
+import com.sivalabs.moviebuffs.exception.OrderProcessingException;
 import com.sivalabs.moviebuffs.repository.OrderRepository;
+import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +24,13 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public OrderConfirmation createOrder(Order order) {
+    public OrderConfirmationDTO createOrder(Order order) {
         order.setOrderId(UUID.randomUUID().toString());
         order.setStatus(Order.OrderStatus.NEW);
         order.getItems().forEach(lineItem -> lineItem.setOrder(order));
         Order savedOrder = this.orderRepository.save(order);
         log.info("Created Order ID=" + savedOrder.getId() + ", ref_num=" + savedOrder.getOrderId());
-        return new OrderConfirmation(savedOrder.getOrderId(), savedOrder.getStatus());
+        return new OrderConfirmationDTO(savedOrder.getOrderId(), savedOrder.getStatus());
     }
 
     public List<Order> findAllOrders() {

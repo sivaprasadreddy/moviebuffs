@@ -36,7 +36,7 @@
 		<sonar.exclusions>
 			src/main/java/**/config/*.*,
 			src/main/java/**/entity/*.*,
-			src/main/java/**/models/*.*,
+			src/main/java/**/dto/*.*,
 			src/main/java/**/exception/*.*,
 			src/main/java/**/utils/*.*,
 			src/main/java/**/mappers/*.*,
@@ -268,7 +268,7 @@
 						<exclude>**/*Application.*</exclude>
 						<exclude>**/config/**</exclude>
 						<exclude>**/model/*</exclude>
-						<exclude>**/models/*</exclude>
+						<exclude>**/dto/*</exclude>
 						<exclude>**/exception/*</exclude>
 						<exclude>**/entity/*</exclude>
 						<exclude>**/utils/*</exclude>

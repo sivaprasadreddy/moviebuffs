@@ -1,8 +1,8 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractIntegrationTest;
-import com.sivalabs.moviebuffs.models.ChangePasswordRequest;
-import com.sivalabs.moviebuffs.models.CreateUserRequest;
+import com.sivalabs.moviebuffs.web.dto.ChangePasswordDTO;
+import com.sivalabs.moviebuffs.web.dto.CreateUserRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -22,7 +22,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     void shouldCreateNewUser() throws Exception {
-        CreateUserRequest createUserRequest = CreateUserRequest.builder()
+        CreateUserRequestDTO createUserRequestDTO = CreateUserRequestDTO.builder()
                 .email("myemail@gmail.com")
                 .password("secret")
                 .name("myname")
@@ -30,7 +30,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
         this.mockMvc.perform(post("/api/users")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createUserRequest)))
+                .content(objectMapper.writeValueAsString(createUserRequestDTO)))
                 .andExpect(status().isCreated());
 
     }
@@ -38,28 +38,28 @@ class UserControllerIT extends AbstractIntegrationTest {
     @Test
     @WithMockUser("siva@gmail.com")
     void shouldUpdatePasswordWhenUserIsAuthorized() throws Exception {
-        ChangePasswordRequest changePasswordRequest= ChangePasswordRequest.builder()
+        ChangePasswordDTO changePasswordDTO = ChangePasswordDTO.builder()
                 .oldPassword("siva")
                 .newPassword("newpwd")
                 .build();
 
         this.mockMvc.perform(post("/api/users/change-password")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(changePasswordRequest)))
+                .content(objectMapper.writeValueAsString(changePasswordDTO)))
                 .andExpect(status().isOk());
 
     }
 
     @Test
     void shouldFailToUpdatePasswordWhenUserIsNotAuthorized() throws Exception {
-        ChangePasswordRequest changePasswordRequest= ChangePasswordRequest.builder()
+        ChangePasswordDTO changePasswordDTO = ChangePasswordDTO.builder()
                 .oldPassword("admin")
                 .newPassword("newpwd")
                 .build();
 
         this.mockMvc.perform(post("/api/users/change-password")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(changePasswordRequest)))
+                .content(objectMapper.writeValueAsString(changePasswordDTO)))
                 .andExpect(status().isForbidden());
 
     }

@@ -1,8 +1,8 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.entity.Order;
-import com.sivalabs.moviebuffs.models.OrderConfirmation;
 import com.sivalabs.moviebuffs.service.OrderService;
+import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +27,8 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderConfirmation createOrder(@RequestBody Order order) {
-        OrderConfirmation confirmation = orderService.createOrder(order);
+    public OrderConfirmationDTO createOrder(@RequestBody Order order) {
+        OrderConfirmationDTO confirmation = orderService.createOrder(order);
         ordersCounter.increment();
         return confirmation;
     }

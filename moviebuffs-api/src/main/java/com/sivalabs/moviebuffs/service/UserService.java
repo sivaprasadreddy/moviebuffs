@@ -4,8 +4,6 @@ import com.sivalabs.moviebuffs.entity.Role;
 import com.sivalabs.moviebuffs.entity.User;
 import com.sivalabs.moviebuffs.exception.ApplicationException;
 import com.sivalabs.moviebuffs.exception.UserNotFoundException;
-import com.sivalabs.moviebuffs.models.ChangePasswordRequest;
-import com.sivalabs.moviebuffs.models.UserDTO;
 import com.sivalabs.moviebuffs.repository.RoleRepository;
 import com.sivalabs.moviebuffs.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.sivalabs.moviebuffs.utils.Constants.ROLE_USER;
+
 @Service
 @Transactional
 @Slf4j
@@ -27,8 +27,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public Optional<UserDTO> getUserById(Long id) {
-        return userRepository.findById(id).map(UserDTO::fromEntity);
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Transactional(readOnly = true)
@@ -36,27 +36,24 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public UserDTO createUser(UserDTO user) {
+    public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new ApplicationException("Email "+user.getEmail()+" is already in use");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User userEntity = user.toEntity();
-        Optional<Role> role_user = roleRepository.findByName("ROLE_USER");
-        userEntity.setRoles(Collections.singletonList(role_user.orElse(null)));
-        return UserDTO.fromEntity(userRepository.save(userEntity));
+        Optional<Role> roleUser = roleRepository.findByName(ROLE_USER);
+        user.setRoles(Collections.singletonList(roleUser.orElse(null)));
+        return userRepository.save(user);
     }
 
-    public UserDTO updateUser(UserDTO user) {
+    public User updateUser(User user) {
         Optional<User> byId = userRepository.findById(user.getId());
-        if(!byId.isPresent()) {
+        if(byId.isEmpty()) {
             throw new UserNotFoundException("User with id "+user.getId() + " not found");
         }
-        User userEntity = user.toEntity();
-        userEntity.setPassword(byId.get().getPassword());
-        userEntity.setRoles(byId.get().getRoles());
-        return UserDTO.fromEntity(userRepository.save(userEntity));
-
+        user.setRoles(byId.get().getRoles());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long userId) {
@@ -64,14 +61,14 @@ public class UserService {
         byId.ifPresent(userRepository::delete);
     }
 
-    public void changePassword(String email, ChangePasswordRequest changePasswordRequest) {
+    public void changePassword(String email, String oldPwd, String newPwd) {
         Optional<User> userByEmail = this.getUserByEmail(email);
-        if(!userByEmail.isPresent()) {
+        if(userByEmail.isEmpty()) {
             throw new UserNotFoundException("User with email " + email + " not found");
         }
         User user = userByEmail.get();
-        if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        if (passwordEncoder.matches(oldPwd, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newPwd));
             userRepository.save(user);
         } else {
             throw new ApplicationException("Current password doesn't match");

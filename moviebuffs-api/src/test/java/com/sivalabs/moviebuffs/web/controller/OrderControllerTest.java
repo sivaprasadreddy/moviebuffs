@@ -3,7 +3,7 @@ package com.sivalabs.moviebuffs.web.controller;
 import com.sivalabs.moviebuffs.common.AbstractMvcUnitTest;
 import com.sivalabs.moviebuffs.entity.Order;
 import com.sivalabs.moviebuffs.exception.OrderProcessingException;
-import com.sivalabs.moviebuffs.models.OrderConfirmation;
+import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import com.sivalabs.moviebuffs.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,17 +75,17 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     @Test
     void shouldCreateNewOrder() throws Exception {
         Order order = this.orderList.get(0);
-        OrderConfirmation orderConfirmation = new OrderConfirmation();
-        orderConfirmation.setOrderId("1234");
-        orderConfirmation.setOrderStatus(Order.OrderStatus.NEW);
-        given(orderService.createOrder(any(Order.class))).willReturn(orderConfirmation);
+        OrderConfirmationDTO orderConfirmationDTO = new OrderConfirmationDTO();
+        orderConfirmationDTO.setOrderId("1234");
+        orderConfirmationDTO.setOrderStatus(Order.OrderStatus.NEW);
+        given(orderService.createOrder(any(Order.class))).willReturn(orderConfirmationDTO);
 
         this.mockMvc.perform(post(ORDERS_COLLECTION_BASE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.orderId", is(orderConfirmation.getOrderId())))
-                .andExpect(jsonPath("$.orderStatus", is(orderConfirmation.getOrderStatus().name())))
+                .andExpect(jsonPath("$.orderId", is(orderConfirmationDTO.getOrderId())))
+                .andExpect(jsonPath("$.orderStatus", is(orderConfirmationDTO.getOrderStatus().name())))
         ;
 
     }

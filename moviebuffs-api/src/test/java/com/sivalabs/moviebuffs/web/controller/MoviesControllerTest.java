@@ -1,9 +1,9 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractMvcUnitTest;
-import com.sivalabs.moviebuffs.models.ProductDTO;
-import com.sivalabs.moviebuffs.service.CatalogService;
+import com.sivalabs.moviebuffs.entity.Movie;
 import com.sivalabs.moviebuffs.service.MovieService;
+import com.sivalabs.moviebuffs.web.mappers.MovieDTOMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,24 +13,27 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 
-import static com.sivalabs.moviebuffs.utils.TestConstants.PRODUCTS_COLLECTION_BASE_PATH;
+import static com.sivalabs.moviebuffs.utils.TestConstants.MOVIES_COLLECTION_BASE_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = CatalogController.class)
-public class CatalogControllerTest extends AbstractMvcUnitTest {
+@WebMvcTest(controllers = MoviesController.class)
+public class MoviesControllerTest extends AbstractMvcUnitTest {
 
     @MockBean
-    private CatalogService catalogService;
+    private MovieService movieService;
+
+    @MockBean
+    private MovieDTOMapper movieDTOMapper;
 
     @Test
-    void shouldShowHomePage() throws Exception {
-        Page<ProductDTO> page = new PageImpl<>(new ArrayList<>());
-        given(catalogService.getProducts(any(Pageable.class))).willReturn(page);
+    void shouldReturnMovies() throws Exception {
+        Page<Movie> page = new PageImpl<>(new ArrayList<>());
+        given(movieService.findMovies(any(Pageable.class))).willReturn(page);
 
-        this.mockMvc.perform(get(PRODUCTS_COLLECTION_BASE_PATH))
+        this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH))
                 .andExpect(status().isOk());
     }
 }

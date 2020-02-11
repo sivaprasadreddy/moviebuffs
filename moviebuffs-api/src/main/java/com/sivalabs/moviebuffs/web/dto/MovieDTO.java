@@ -1,4 +1,4 @@
-package com.sivalabs.moviebuffs.models;
+package com.sivalabs.moviebuffs.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class ProductDTO {
+public class MovieDTO {
     private Long id;
 
     private String title;

@@ -5,10 +5,11 @@ import com.sivalabs.moviebuffs.config.security.CustomUserDetailsService;
 import com.sivalabs.moviebuffs.config.security.SecurityUser;
 import com.sivalabs.moviebuffs.config.security.TokenHelper;
 import com.sivalabs.moviebuffs.entity.User;
-import com.sivalabs.moviebuffs.models.AuthenticationRequest;
-import com.sivalabs.moviebuffs.models.AuthenticationResponse;
-import com.sivalabs.moviebuffs.models.UserDTO;
-import com.sivalabs.moviebuffs.utils.SecurityUtils;
+import com.sivalabs.moviebuffs.service.SecurityService;
+import com.sivalabs.moviebuffs.web.dto.AuthenticationRequestDTO;
+import com.sivalabs.moviebuffs.web.dto.AuthenticationResponseDTO;
+import com.sivalabs.moviebuffs.web.dto.UserDTO;
+import com.sivalabs.moviebuffs.web.mappers.UserDTOMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,13 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final TokenHelper tokenHelper;
-    private final SecurityUtils securityUtils;
+    private final UserDTOMapper userDTOMapper;
+    private final SecurityService securityService;
     private final ApplicationProperties applicationProperties;
 
 
     @PostMapping(value = "/auth/login")
-    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest credentials) {
+    public AuthenticationResponseDTO createAuthenticationToken(@RequestBody AuthenticationRequestDTO credentials) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword())
         );
@@ -43,12 +45,12 @@ public class AuthenticationController {
 
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
         String jws = tokenHelper.generateToken(user.getUsername());
-        return new AuthenticationResponse(jws, applicationProperties.getJwt().getExpiresIn());
+        return new AuthenticationResponseDTO(jws, applicationProperties.getJwt().getExpiresIn());
     }
 
     @PostMapping(value = "/auth/refresh")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<AuthenticationResponse> refreshAuthenticationToken(HttpServletRequest request) {
+    public ResponseEntity<AuthenticationResponseDTO> refreshAuthenticationToken(HttpServletRequest request) {
         String authToken = tokenHelper.getToken(request);
         if (authToken != null) {
             String email = tokenHelper.getUsernameFromToken(authToken);
@@ -57,7 +59,7 @@ public class AuthenticationController {
             if (validToken) {
                 String refreshedToken = tokenHelper.refreshToken(authToken);
                 return ResponseEntity.ok(
-                        new AuthenticationResponse(
+                        new AuthenticationResponseDTO(
                                 refreshedToken,
                                 applicationProperties.getJwt().getExpiresIn()
                         )
@@ -73,9 +75,9 @@ public class AuthenticationController {
     @GetMapping("/auth/me")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<UserDTO> me() {
-        User loginUser = securityUtils.loginUser();
+        User loginUser = securityService.loginUser();
         if(loginUser != null) {
-            return ResponseEntity.ok(UserDTO.fromEntity(loginUser));
+            return ResponseEntity.ok(userDTOMapper.toDTO(loginUser));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

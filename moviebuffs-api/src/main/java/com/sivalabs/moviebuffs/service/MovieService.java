@@ -4,16 +4,15 @@ import com.sivalabs.moviebuffs.entity.CastMember;
 import com.sivalabs.moviebuffs.entity.CrewMember;
 import com.sivalabs.moviebuffs.entity.Genre;
 import com.sivalabs.moviebuffs.entity.Movie;
-import com.sivalabs.moviebuffs.models.ProductDTO;
 import com.sivalabs.moviebuffs.repository.CastMemberRepository;
 import com.sivalabs.moviebuffs.repository.CrewMemberRepository;
 import com.sivalabs.moviebuffs.repository.GenreRepository;
 import com.sivalabs.moviebuffs.repository.MovieRepository;
-import com.sivalabs.moviebuffs.web.mappers.MovieToProductDTOMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +29,35 @@ public class MovieService {
     private final CastMemberRepository castMemberRepository;
     private final CrewMemberRepository crewMemberRepository;
     private final GenreRepository genreRepository;
-    private final MovieToProductDTOMapper movieToProductDTOMapper;
 
     @Transactional(readOnly = true)
     public Optional<Movie> findMovieById(Long id) {
         return movieRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Movie> findMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Movie> findMoviesByGenre(Long genreId, Pageable pageable) {
+        return movieRepository.findByGenre(genreId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Movie> searchMovies(String query, Pageable pageable) {
+        return movieRepository.findByTitleContainingIgnoreCase(query, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Genre> findAllGenres(Sort sort) {
+        return genreRepository.findAll(sort);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Genre> findGenreBySlug(String slug) {
+        return genreRepository.findBySlug(slug);
     }
 
     public Movie createMovie(Movie movie) {
@@ -55,11 +78,7 @@ public class MovieService {
         }
         return genreList;
     }
-
-    public Page<ProductDTO> getMovies(Pageable pageable) {
-        return movieRepository.findAll(pageable).map(movieToProductDTOMapper::map);
-    }
-
+    
     public CastMember save(CastMember castMember) {
         return castMemberRepository.save(castMember);
     }

@@ -3,7 +3,7 @@ package com.sivalabs.moviebuffs.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sivalabs.moviebuffs.config.security.TokenHelper;
 import com.sivalabs.moviebuffs.utils.Constants;
-import com.sivalabs.moviebuffs.utils.SecurityUtils;
+import com.sivalabs.moviebuffs.service.SecurityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,7 +17,7 @@ import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 @ActiveProfiles(Constants.PROFILE_TEST)
 @Import(TestConfig.class)
-public class AbstractMvcUnitTest {
+public abstract class AbstractMvcUnitTest {
 
     @Autowired
     protected MockMvc mockMvc;
@@ -35,7 +35,7 @@ public class AbstractMvcUnitTest {
     protected SecurityProblemSupport problemSupport;
 
     @MockBean
-    protected SecurityUtils securityUtils;
+    protected SecurityService securityService;
 
     @BeforeEach
     void setUpBase() {
