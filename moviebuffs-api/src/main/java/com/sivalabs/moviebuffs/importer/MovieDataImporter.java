@@ -22,10 +22,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,41 +52,63 @@ public class MovieDataImporter {
 
     @Async
     public void importDataAsync() throws IOException, CsvValidationException {
-        importMoviesMetaData();
-        importCreditsData();
+        importDataInternal();
     }
 
     public void importData() throws IOException, CsvValidationException {
+        importDataInternal();
+    }
+
+    public void importDataInternal() throws IOException, CsvValidationException {
         importMoviesMetaData();
         importCreditsData();
     }
 
     private void importMoviesMetaData() throws IOException, CsvValidationException {
-        log.info("Initializing movies database from file: {}", properties.getMoviesDataFile());
-        ClassPathResource file = new ClassPathResource(properties.getMoviesDataFile(), this.getClass());
-        InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
-        CSVReader csvReader = new CSVReader(inputStreamReader);
-        csvReader.skip(1);
-        CSVIterator iterator = new CSVIterator(csvReader);
+        log.info("Initializing movies database from files: {}", properties.getMoviesDataFiles());
+        long start = System.currentTimeMillis();
+        for (String dataFile : properties.getMoviesDataFiles()) {
+            importMoviesMetaDataFile(dataFile);
+        }
+        long end = System.currentTimeMillis();
+        log.debug("Time took for importing movie metadata : {} seconds", (end-start)/1000);
+    }
+
+    private void importMoviesMetaDataFile(String fileName) throws IOException, CsvValidationException {
+        log.info("Importing movies from file: {}", fileName);
+        CSVIterator iterator = getCsvIteratorFromClassPathResource(fileName);
 
         long count = 0L;
-        while(iterator.hasNext()){
+        List<Movie> moviesBatch = new ArrayList<>();
+         while(iterator.hasNext()){
             String[] nextLine = iterator.next();
             MovieCsvRecord record = parseMovieRecord(nextLine);
             Movie movie = csvRowMapperUtils.mapToMovieEntity(record);
-            movieService.createMovie(movie);
+             moviesBatch.add(movie);
+             if(moviesBatch.size() >= 100) {
+                 movieService.createMovies(moviesBatch);
+                 moviesBatch = new ArrayList<>();
+             }
             count++;
         }
-        log.info("Initialized movies database with {} records", count);
+        if(moviesBatch.size() > 0) {
+            movieService.createMovies(moviesBatch);
+            count += moviesBatch.size();
+        }
+
+        log.info("Imported movies with {} records from file {}", count, fileName);
     }
 
     private void importCreditsData() throws IOException, CsvValidationException {
-        log.info("Initializing movies credits from file: {}", properties.getMovieCreditsFile());
-        ClassPathResource file = new ClassPathResource(properties.getMovieCreditsFile(), this.getClass());
-        InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
-        CSVReader csvReader = new CSVReader(inputStreamReader);
-        csvReader.skip(1);
-        CSVIterator iterator = new CSVIterator(csvReader);
+        log.info("Importing movies credits from files: {}", properties.getMovieCreditsFiles());
+        for (String dataFile : properties.getMovieCreditsFiles()) {
+            importCreditsDataFile(dataFile);
+        }
+    }
+
+    private void importCreditsDataFile(String fileName) throws IOException, CsvValidationException {
+        log.info("Importing movies credits from file: {}", fileName);
+        CSVIterator iterator = getCsvIteratorFromClassPathResource(fileName);
 
         long count = 0L;
         while(iterator.hasNext()){
@@ -95,21 +116,45 @@ public class MovieDataImporter {
             CreditsCsvRecord record = parseCreditsRecord(nextLine);
             Movie movie = movieService.findMovieById(Long.valueOf(record.getId())).orElse(null);
             List<CastMemberRecord> castMemberRecords = getCastMembers(record.getCast());
+            List<CastMember> castMembersBatch = new ArrayList<>();
             for (CastMemberRecord castMemberRecord : castMemberRecords) {
                 CastMember castMember = csvRowMapperUtils.mapToCastMemberEntity(castMemberRecord);
                 castMember.setMovie(movie);
-                movieService.save(castMember);
+                castMembersBatch.add(castMember);
+                if(castMembersBatch.size() >= 100) {
+                    movieService.saveAllCastMembers(castMembersBatch);
+                    castMembersBatch = new ArrayList<>();
+                }
+            }
+            if(castMembersBatch.size() > 0) {
+                movieService.saveAllCastMembers(castMembersBatch);
             }
 
             List<CrewMemberRecord> crewMemberRecords = getCrewMembers(record.getCrew());
+            List<CrewMember> crewMembersBatch = new ArrayList<>();
             for (CrewMemberRecord crewMemberRecord : crewMemberRecords) {
                 CrewMember crewMember = csvRowMapperUtils.mapToCrewMemberEntity(crewMemberRecord);
                 crewMember.setMovie(movie);
-                movieService.save(crewMember);
+                crewMembersBatch.add(crewMember);
+                if(crewMembersBatch.size() >= 100) {
+                    movieService.saveAllCrewMembers(crewMembersBatch);
+                    crewMembersBatch = new ArrayList<>();
+                }
+            }
+            if(crewMembersBatch.size() > 0) {
+                movieService.saveAllCrewMembers(crewMembersBatch);
             }
             count++;
         }
         log.info("Initialized movies credits with {} records", count);
+    }
+
+    private CSVIterator getCsvIteratorFromClassPathResource(String fileName) throws IOException, CsvValidationException {
+        ClassPathResource file = new ClassPathResource(fileName, this.getClass());
+        InputStreamReader inputStreamReader = new InputStreamReader(file.getInputStream());
+        CSVReader csvReader = new CSVReader(inputStreamReader);
+        csvReader.skip(1);
+        return new CSVIterator(csvReader);
     }
 
     private MovieCsvRecord parseMovieRecord(String[] nextLine) {

@@ -25,6 +25,7 @@ public class MovieDTOMapper {
                 .runtime(movie.getRuntime())
                 .title(movie.getTitle())
                 .price(movie.getPrice())
+                .genres(movie.getGenres())
                 .castMembers(movie.getCastMembers())
                 .crewMembers(movie.getCrewMembers())
                 .build();

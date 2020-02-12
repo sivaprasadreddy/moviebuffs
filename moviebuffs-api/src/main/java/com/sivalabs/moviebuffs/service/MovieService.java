@@ -66,6 +66,14 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
+    public List<Movie> createMovies(List<Movie> moviesBatch) {
+        for (Movie movie : moviesBatch) {
+            List<Genre> genreList = saveGenres(movie.getGenres());
+            movie.setGenres(genreList);
+        }
+        return movieRepository.saveAll(moviesBatch);
+    }
+
     private List<Genre> saveGenres(List<Genre> genres) {
         List<Genre> genreList = new ArrayList<>();
         for (Genre genre : genres) {
@@ -86,5 +94,14 @@ public class MovieService {
     public CrewMember save(CrewMember crewMember) {
         return crewMemberRepository.save(crewMember);
     }
+
+    public List<CastMember> saveAllCastMembers(List<CastMember> castMembers) {
+        return castMemberRepository.saveAll(castMembers);
+    }
+
+    public List<CrewMember> saveAllCrewMembers(List<CrewMember> crewMembers) {
+        return crewMemberRepository.saveAll(crewMembers);
+    }
+
 
 }
