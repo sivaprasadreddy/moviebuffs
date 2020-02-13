@@ -1,5 +1,6 @@
 package com.sivalabs.moviebuffs.web.controller;
 
+import com.sivalabs.moviebuffs.config.Loggable;
 import com.sivalabs.moviebuffs.entity.Genre;
 import com.sivalabs.moviebuffs.service.MovieService;
 import com.sivalabs.moviebuffs.web.dto.MovieDTO;
@@ -27,8 +28,9 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Loggable
 public class MoviesController {
-    private static final int DEFAULT_PAGE_SIZE = 25;
+    private static final int DEFAULT_PAGE_SIZE = 24;
 
     private final MovieService movieService;
     private final MovieDTOMapper movieDTOMapper;

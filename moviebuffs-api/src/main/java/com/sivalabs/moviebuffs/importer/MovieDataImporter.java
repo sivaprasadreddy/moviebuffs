@@ -9,6 +9,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import com.sivalabs.moviebuffs.config.ApplicationProperties;
 import com.sivalabs.moviebuffs.entity.CastMember;
 import com.sivalabs.moviebuffs.entity.CrewMember;
+import com.sivalabs.moviebuffs.entity.Genre;
 import com.sivalabs.moviebuffs.entity.Movie;
 import com.sivalabs.moviebuffs.importer.mappers.CsvRowMapperUtils;
 import com.sivalabs.moviebuffs.importer.model.CastMemberRecord;
@@ -19,14 +20,14 @@ import com.sivalabs.moviebuffs.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -59,7 +60,7 @@ public class MovieDataImporter {
         importDataInternal();
     }
 
-    public void importDataInternal() throws IOException, CsvValidationException {
+    private void importDataInternal() throws IOException, CsvValidationException {
         importMoviesMetaData();
         importCreditsData();
     }
@@ -71,80 +72,97 @@ public class MovieDataImporter {
             importMoviesMetaDataFile(dataFile);
         }
         long end = System.currentTimeMillis();
-        log.debug("Time took for importing movie metadata : {} seconds", (end-start)/1000);
+        log.debug("Time took for importing movie metadata : {} seconds", (end - start) / 1000);
     }
 
     private void importMoviesMetaDataFile(String fileName) throws IOException, CsvValidationException {
         log.info("Importing movies from file: {}", fileName);
         CSVIterator iterator = getCsvIteratorFromClassPathResource(fileName);
-
+        Map<String, Genre> genresMap = movieService.findAllGenres(Sort.by("name"))
+                .stream().collect(Collectors.toMap(Genre::getName, g -> g));
         long count = 0L;
         List<Movie> moviesBatch = new ArrayList<>();
-         while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             String[] nextLine = iterator.next();
             MovieCsvRecord record = parseMovieRecord(nextLine);
             Movie movie = csvRowMapperUtils.mapToMovieEntity(record);
-             moviesBatch.add(movie);
-             if(moviesBatch.size() >= 100) {
-                 movieService.createMovies(moviesBatch);
-                 moviesBatch = new ArrayList<>();
-             }
+            movie.setGenres(saveGenres(genresMap, movie.getGenres()));
+            moviesBatch.add(movie);
             count++;
+            if (moviesBatch.size() >= 100) {
+                movieService.createMovies(moviesBatch);
+                log.info("Imported {} movies so far", count);
+                moviesBatch = new ArrayList<>();
+            }
         }
-        if(moviesBatch.size() > 0) {
+        if (moviesBatch.size() > 0) {
             movieService.createMovies(moviesBatch);
             count += moviesBatch.size();
         }
-
         log.info("Imported movies with {} records from file {}", count, fileName);
+    }
+
+    private Set<Genre> saveGenres(Map<String, Genre> existingGenres, Set<Genre> genres) {
+        Set<Genre> genreList = new HashSet<>();
+        for (Genre genre : genres) {
+            Genre existingGenre = existingGenres.get(genre.getName());
+            if (existingGenre != null) {
+                genreList.add(existingGenre);
+            } else {
+                Genre savedGenre = movieService.saveGenre(genre);
+                genreList.add(savedGenre);
+                existingGenres.put(savedGenre.getName(), savedGenre);
+            }
+        }
+        return genreList;
     }
 
     private void importCreditsData() throws IOException, CsvValidationException {
         log.info("Importing movies credits from files: {}", properties.getMovieCreditsFiles());
+        long start = System.currentTimeMillis();
         for (String dataFile : properties.getMovieCreditsFiles()) {
             importCreditsDataFile(dataFile);
         }
+        long end = System.currentTimeMillis();
+        log.debug("Time took for importing movie credits data : {} seconds", (end - start) / 1000);
     }
 
     private void importCreditsDataFile(String fileName) throws IOException, CsvValidationException {
         log.info("Importing movies credits from file: {}", fileName);
         CSVIterator iterator = getCsvIteratorFromClassPathResource(fileName);
 
-        long count = 0L;
-        while(iterator.hasNext()){
+        long count=0L, castCount = 0L, crewCount = 0L;
+        while (iterator.hasNext()) {
             String[] nextLine = iterator.next();
             CreditsCsvRecord record = parseCreditsRecord(nextLine);
             Movie movie = movieService.findMovieById(Long.valueOf(record.getId())).orElse(null);
             List<CastMemberRecord> castMemberRecords = getCastMembers(record.getCast());
-            List<CastMember> castMembersBatch = new ArrayList<>();
+            List<CastMember> castMembers = new ArrayList<>();
             for (CastMemberRecord castMemberRecord : castMemberRecords) {
                 CastMember castMember = csvRowMapperUtils.mapToCastMemberEntity(castMemberRecord);
                 castMember.setMovie(movie);
-                castMembersBatch.add(castMember);
-                if(castMembersBatch.size() >= 100) {
-                    movieService.saveAllCastMembers(castMembersBatch);
-                    castMembersBatch = new ArrayList<>();
-                }
+                castMembers.add(castMember);
+                castCount++;
             }
-            if(castMembersBatch.size() > 0) {
-                movieService.saveAllCastMembers(castMembersBatch);
+            if (castMembers.size() > 0) {
+                movieService.saveAllCastMembers(castMembers);
             }
+            log.info("Imported {} movie cast records so far", castCount);
 
             List<CrewMemberRecord> crewMemberRecords = getCrewMembers(record.getCrew());
-            List<CrewMember> crewMembersBatch = new ArrayList<>();
+            List<CrewMember> crewMembers = new ArrayList<>();
             for (CrewMemberRecord crewMemberRecord : crewMemberRecords) {
                 CrewMember crewMember = csvRowMapperUtils.mapToCrewMemberEntity(crewMemberRecord);
                 crewMember.setMovie(movie);
-                crewMembersBatch.add(crewMember);
-                if(crewMembersBatch.size() >= 100) {
-                    movieService.saveAllCrewMembers(crewMembersBatch);
-                    crewMembersBatch = new ArrayList<>();
-                }
+                crewMembers.add(crewMember);
+                crewCount++;
             }
-            if(crewMembersBatch.size() > 0) {
-                movieService.saveAllCrewMembers(crewMembersBatch);
+            if (crewMembers.size() > 0) {
+                movieService.saveAllCrewMembers(crewMembers);
             }
+            log.info("Imported {} movie crew records so far", crewCount);
             count++;
+            log.info("Imported {} movie credits records so far", count);
         }
         log.info("Initialized movies credits with {} records", count);
     }

@@ -9,8 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -80,7 +79,7 @@ public class Movie implements Serializable
 			name="movie_genre",
 			joinColumns={@JoinColumn(name="MOVIE_ID", referencedColumnName="ID")},
 			inverseJoinColumns={@JoinColumn(name="GENRE_ID", referencedColumnName="ID")})
-	private List<Genre> genres = new ArrayList<>();
+	private Set<Genre> genres = new HashSet<>();
 
 	@OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
 	private Set<CastMember> castMembers;

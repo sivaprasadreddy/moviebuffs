@@ -45,7 +45,7 @@ public class CastMember implements Serializable
     private String profilePath;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 }

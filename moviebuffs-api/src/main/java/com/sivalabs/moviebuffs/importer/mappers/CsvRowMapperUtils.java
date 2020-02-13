@@ -18,10 +18,7 @@ import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Component
@@ -68,12 +65,12 @@ public class CsvRowMapperUtils {
         return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
-    private List<Genre> convertToGenres(String genresString) throws JsonProcessingException {
+    private Set<Genre> convertToGenres(String genresString) throws JsonProcessingException {
         Genre[] genres = objectMapper.readValue(genresString, Genre[].class);
         for (Genre genre : genres) {
             genre.setSlug(toSlug(genre.getName()));
         }
-        return Arrays.asList(genres);
+        return new HashSet<>(Arrays.asList(genres));
     }
 
     public CrewMember mapToCrewMemberEntity(CrewMemberRecord crewMemberRecord) {

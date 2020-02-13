@@ -47,7 +47,7 @@ public class MovieDTO {
 
     private BigDecimal price;
 
-    private List<Genre> genres;
+    private Set<Genre> genres;
 
     private Set<CastMember> castMembers;
 

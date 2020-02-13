@@ -1,15 +1,17 @@
 package com.sivalabs.moviebuffs.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "genres")
-@Data
+@Setter
+@Getter
 public class Genre implements Serializable {
     @Id
     @SequenceGenerator(name = "genre_id_generator", sequenceName = "genre_id_seq", allocationSize = 1)
@@ -24,5 +26,5 @@ public class Genre implements Serializable {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "genres")
-    private List<Movie> movies;
+    private Set<Movie> movies;
 }

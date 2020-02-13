@@ -1,5 +1,6 @@
 package com.sivalabs.moviebuffs.service;
 
+import com.sivalabs.moviebuffs.config.Loggable;
 import com.sivalabs.moviebuffs.entity.CastMember;
 import com.sivalabs.moviebuffs.entity.CrewMember;
 import com.sivalabs.moviebuffs.entity.Genre;
@@ -16,14 +17,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Loggable
 public class MovieService {
     private final MovieRepository movieRepository;
     private final CastMemberRepository castMemberRepository;
@@ -37,7 +37,7 @@ public class MovieService {
 
     @Transactional(readOnly = true)
     public Page<Movie> findMovies(Pageable pageable) {
-        return movieRepository.findAll(pageable);
+        return movieRepository.findMoviesWithCastAndCrew(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -61,21 +61,17 @@ public class MovieService {
     }
 
     public Movie createMovie(Movie movie) {
-        List<Genre> genreList = saveGenres(movie.getGenres());
+        Set<Genre> genreList = saveGenres(movie.getGenres());
         movie.setGenres(genreList);
         return movieRepository.save(movie);
     }
 
     public List<Movie> createMovies(List<Movie> moviesBatch) {
-        for (Movie movie : moviesBatch) {
-            List<Genre> genreList = saveGenres(movie.getGenres());
-            movie.setGenres(genreList);
-        }
         return movieRepository.saveAll(moviesBatch);
     }
 
-    private List<Genre> saveGenres(List<Genre> genres) {
-        List<Genre> genreList = new ArrayList<>();
+    private Set<Genre> saveGenres(Set<Genre> genres) {
+        Set<Genre> genreList = new HashSet<>();
         for (Genre genre : genres) {
             Optional<Genre> byId = genreRepository.findByName(genre.getName());
             if(byId.isPresent()) {
@@ -103,5 +99,11 @@ public class MovieService {
         return crewMemberRepository.saveAll(crewMembers);
     }
 
+    public Optional<Genre> findGenreByName(String name) {
+        return genreRepository.findByName(name);
+    }
 
+    public Genre saveGenre(Genre genre) {
+        return genreRepository.save(genre);
+    }
 }
