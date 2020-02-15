@@ -1,6 +1,7 @@
 package com.sivalabs.moviebuffs.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 @Table(name="movies")
 @Setter
 @Getter
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Movie implements Serializable
 {
 	private static final long serialVersionUID = 1L;

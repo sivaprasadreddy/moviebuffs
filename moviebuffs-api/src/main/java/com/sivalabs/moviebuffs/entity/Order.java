@@ -1,5 +1,6 @@
 package com.sivalabs.moviebuffs.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "orders")
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Order {
 
     @Id

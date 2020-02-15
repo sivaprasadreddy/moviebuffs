@@ -8,19 +8,25 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Setter
 @Getter
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
     @JsonProperty("created_at")
-    @Column(insertable = true, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @JsonProperty("updated_at")
-    @Column(insertable = false, updatable = true)
+    @Column(insertable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @PrePersist

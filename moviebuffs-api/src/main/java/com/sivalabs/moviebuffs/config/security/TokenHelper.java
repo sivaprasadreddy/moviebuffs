@@ -19,7 +19,7 @@ public class TokenHelper {
     private final TimeProvider timeProvider;
 
     private static final String AUDIENCE_WEB = "web";
-    private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
     public String getUsernameFromToken(String token) {
         String username;
@@ -30,17 +30,6 @@ public class TokenHelper {
             username = null;
         }
         return username;
-    }
-
-    private Date getIssuedAtDateFromToken(String token) {
-        Date issueAt;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            issueAt = claims.getIssuedAt();
-        } catch (Exception e) {
-            issueAt = null;
-        }
-        return issueAt;
     }
 
     public String refreshToken(String token) {
@@ -90,21 +79,18 @@ public class TokenHelper {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        // User user = (User) userDetails;
-        // final Date created = getIssuedAtDateFromToken(token);
         return (username != null && username.equals(userDetails.getUsername()));
     }
 
+    /**
+     *  Getting the token from Authentication header
+     *  e.g Bearer your_token
+     */
     public String getToken( HttpServletRequest request ) {
-        /**
-         *  Getting the token from Authentication header
-         *  e.g Bearer your_token
-         */
         String authHeader = getAuthHeaderFromHeader( request );
         if ( authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
         }
-
         return null;
     }
 

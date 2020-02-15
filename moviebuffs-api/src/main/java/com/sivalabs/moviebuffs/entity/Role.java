@@ -1,6 +1,7 @@
 package com.sivalabs.moviebuffs.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name="roles")
 @Setter
 @Getter
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Role extends BaseEntity implements Serializable
 {
 

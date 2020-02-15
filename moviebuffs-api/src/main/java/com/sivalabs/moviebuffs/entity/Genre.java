@@ -1,6 +1,7 @@
 package com.sivalabs.moviebuffs.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Table(name = "genres")
 @Setter
 @Getter
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class Genre implements Serializable {
     @Id
     @SequenceGenerator(name = "genre_id_generator", sequenceName = "genre_id_seq", allocationSize = 1)

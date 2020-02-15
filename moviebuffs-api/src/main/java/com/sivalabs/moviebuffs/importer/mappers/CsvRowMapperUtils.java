@@ -37,18 +37,18 @@ public class CsvRowMapperUtils {
     public Movie mapToMovieEntity(MovieCsvRecord movieCsvRecord) throws JsonProcessingException {
         Movie movie = new Movie();
         movie.setTitle(movieCsvRecord.getTitle());
-        movie.setImdbId(movieCsvRecord.getImdb_id());
+        movie.setImdbId(movieCsvRecord.getImdbId());
         movie.setBudget(movieCsvRecord.getBudget());
         movie.setHomepage(movieCsvRecord.getHomepage());
-        movie.setPosterPath(movieCsvRecord.getPoster_path());
+        movie.setPosterPath(movieCsvRecord.getPosterPath());
         movie.setOverview(movieCsvRecord.getOverview());
         movie.setRevenue(movieCsvRecord.getRevenue());
         movie.setRuntime(movieCsvRecord.getRuntime());
         movie.setTagline(movieCsvRecord.getTagline());
-        movie.setReleaseDate(toLocalDate(movieCsvRecord.getRelease_date()));
-        movie.setOriginalLanguage(movieCsvRecord.getOriginal_language());
-        movie.setVoteAverage(safeDouble(movieCsvRecord.getVote_average()));
-        movie.setVoteCount(safeDouble(movieCsvRecord.getVote_count()));
+        movie.setReleaseDate(toLocalDate(movieCsvRecord.getReleaseDate()));
+        movie.setOriginalLanguage(movieCsvRecord.getOriginalLanguage());
+        movie.setVoteAverage(safeDouble(movieCsvRecord.getVoteAverage()));
+        movie.setVoteCount(safeDouble(movieCsvRecord.getVoteCount()));
         movie.setPrice(randomPrice());
         movie.setGenres(convertToGenres(movieCsvRecord.getGenres()));
         return movie;

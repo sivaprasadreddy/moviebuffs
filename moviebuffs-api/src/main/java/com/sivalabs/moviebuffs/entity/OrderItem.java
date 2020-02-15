@@ -1,6 +1,7 @@
 package com.sivalabs.moviebuffs.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Entity
 @Table(name = "order_items")
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 public class OrderItem {
     @Id
     @SequenceGenerator(name = "order_item_id_generator", sequenceName = "order_item_id_seq", allocationSize = 1)
