@@ -33,19 +33,19 @@ import java.util.stream.Collectors;
 @Component
 public class MovieDataImporter {
 
-    private final ApplicationProperties properties;
     private final MovieService movieService;
     private final CsvRowMapperUtils csvRowMapperUtils;
+    private final ApplicationProperties properties;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public MovieDataImporter(ApplicationProperties properties,
-                             MovieService movieService,
-                             CsvRowMapperUtils csvRowMapperUtils) {
-        this.properties = properties;
+    public MovieDataImporter(MovieService movieService,
+                             CsvRowMapperUtils csvRowMapperUtils,
+                             ApplicationProperties properties) {
         this.movieService = movieService;
         this.csvRowMapperUtils = csvRowMapperUtils;
+        this.properties = properties;
 
         objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
@@ -95,7 +95,7 @@ public class MovieDataImporter {
                 moviesBatch = new ArrayList<>();
             }
         }
-        if (moviesBatch.size() > 0) {
+        if (!moviesBatch.isEmpty()) {
             movieService.createMovies(moviesBatch);
             count += moviesBatch.size();
         }
