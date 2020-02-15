@@ -16,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         Optional<com.sivalabs.moviebuffs.entity.User> user = userRepository.findByEmail(username);
         if (user.isPresent()) {
             return new SecurityUser(user.get());

@@ -25,6 +25,7 @@ public class TokenHelper {
         String username;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
+            if(claims == null) return null;
             username = claims.getSubject();
         } catch (Exception e) {
             username = null;
@@ -37,6 +38,7 @@ public class TokenHelper {
         Date a = timeProvider.now();
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
+            if(claims == null) return null;
             claims.setIssuedAt(a);
             refreshedToken = Jwts.builder()
                     .setClaims(claims)

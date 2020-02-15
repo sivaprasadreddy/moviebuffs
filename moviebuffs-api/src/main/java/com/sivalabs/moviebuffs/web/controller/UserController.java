@@ -75,15 +75,15 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         log.info("process=delete_user, user_id="+id);
-        userService.getUserById(id).map ( u -> {
+        userService.getUserById(id).ifPresent(u -> {
             if (securityService.loginUser() == null ||
                     (!id.equals(securityService.loginUser().getId()) &&
                             !securityService.isCurrentUserAdmin())) {
-                throw new UserNotFoundException("User not found with id="+ id);
+                throw new UserNotFoundException("User not found with id=" + id);
             } else {
                 userService.deleteUser(id);
+                log.info("Deleted user with id : {}", id);
             }
-            return u;
         });
     }
 

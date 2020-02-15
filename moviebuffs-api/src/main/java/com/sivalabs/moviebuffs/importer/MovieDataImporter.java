@@ -131,7 +131,9 @@ public class MovieDataImporter {
         log.info("Importing movies credits from file: {}", fileName);
         CSVIterator iterator = getCsvIteratorFromClassPathResource(fileName);
 
-        long count=0L, castCount = 0L, crewCount = 0L;
+        long count=0L;
+        long castCount = 0L;
+        long crewCount = 0L;
         while (iterator.hasNext()) {
             String[] nextLine = iterator.next();
             CreditsCsvRecord record = parseCreditsRecord(nextLine);
@@ -144,7 +146,7 @@ public class MovieDataImporter {
                 castMembers.add(castMember);
                 castCount++;
             }
-            if (castMembers.size() > 0) {
+            if (!castMembers.isEmpty()) {
                 movieService.saveAllCastMembers(castMembers);
             }
             log.info("Imported {} movie cast records so far", castCount);
@@ -157,7 +159,7 @@ public class MovieDataImporter {
                 crewMembers.add(crewMember);
                 crewCount++;
             }
-            if (crewMembers.size() > 0) {
+            if (!crewMembers.isEmpty()) {
                 movieService.saveAllCrewMembers(crewMembers);
             }
             log.info("Imported {} movie crew records so far", crewCount);
