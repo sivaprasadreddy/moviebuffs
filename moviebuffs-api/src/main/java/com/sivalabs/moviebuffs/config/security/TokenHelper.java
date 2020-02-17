@@ -79,7 +79,7 @@ public class TokenHelper {
         return new Date(timeProvider.now().getTime() + applicationProperties.getJwt().getExpiresIn() * 1000);
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username != null && username.equals(userDetails.getUsername()));
     }

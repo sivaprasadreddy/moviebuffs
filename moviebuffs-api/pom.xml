@@ -28,7 +28,7 @@
 		<jjwt.version>0.6.0</jjwt.version>
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
-		<jacoco.minimum.coverage>0.30</jacoco.minimum.coverage>
+		<jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.organization>sivaprasadreddy-github</sonar.organization>

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
@@ -35,7 +35,7 @@ public class AuthenticationController {
     private final ApplicationProperties applicationProperties;
 
 
-    @PostMapping(value = "/auth/login")
+    @PostMapping(value = "/login")
     public AuthenticationResponseDTO createAuthenticationToken(@RequestBody AuthenticationRequestDTO credentials) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword())
@@ -48,37 +48,23 @@ public class AuthenticationController {
         return new AuthenticationResponseDTO(jws, applicationProperties.getJwt().getExpiresIn());
     }
 
-    @PostMapping(value = "/auth/refresh")
+    @PostMapping(value = "/refresh")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<AuthenticationResponseDTO> refreshAuthenticationToken(HttpServletRequest request) {
         String authToken = tokenHelper.getToken(request);
-        if (authToken != null) {
-            String email = tokenHelper.getUsernameFromToken(authToken);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            Boolean validToken = tokenHelper.validateToken(authToken, userDetails);
-            if (validToken) {
-                String refreshedToken = tokenHelper.refreshToken(authToken);
-                return ResponseEntity.ok(
-                        new AuthenticationResponseDTO(
-                                refreshedToken,
-                                applicationProperties.getJwt().getExpiresIn()
-                        )
-                );
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        String refreshedToken = tokenHelper.refreshToken(authToken);
+        return ResponseEntity.ok(
+                new AuthenticationResponseDTO(
+                        refreshedToken,
+                        applicationProperties.getJwt().getExpiresIn()
+                )
+        );
     }
 
-    @GetMapping("/auth/me")
+    @GetMapping("/me")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<UserDTO> me() {
         User loginUser = securityService.loginUser();
-        if(loginUser != null) {
-            return ResponseEntity.ok(userDTOMapper.toDTO(loginUser));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(userDTOMapper.toDTO(loginUser));
     }
 }

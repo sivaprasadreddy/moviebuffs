@@ -2,7 +2,7 @@ package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.entity.User;
 import com.sivalabs.moviebuffs.exception.BadRequestException;
-import com.sivalabs.moviebuffs.exception.UserNotFoundException;
+import com.sivalabs.moviebuffs.exception.ResourceNotFoundException;
 import com.sivalabs.moviebuffs.service.SecurityService;
 import com.sivalabs.moviebuffs.service.UserService;
 import com.sivalabs.moviebuffs.web.dto.ChangePasswordDTO;
@@ -18,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -60,8 +62,7 @@ public class UserController {
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO userDTO) {
         log.info("process=update_user, user_id="+id);
-        if (securityService.loginUser() == null ||
-                (!id.equals(securityService.loginUser().getId()) && !securityService.isCurrentUserAdmin())) {
+        if (!isCurrentUserHasPrivilege(id)) {
             throw new BadRequestException("You can't mess with other user details");
         } else {
             userDTO.setId(id);
@@ -75,16 +76,15 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         log.info("process=delete_user, user_id="+id);
-        userService.getUserById(id).ifPresent(u -> {
-            if (securityService.loginUser() == null ||
-                    (!id.equals(securityService.loginUser().getId()) &&
-                            !securityService.isCurrentUserAdmin())) {
-                throw new UserNotFoundException("User not found with id=" + id);
+        User deletedUser = userService.getUserById(id).map(u -> {
+            if (!isCurrentUserHasPrivilege(u.getId())) {
+                throw new BadRequestException("User not found with id=" + id);
             } else {
                 userService.deleteUser(id);
-                log.info("Deleted user with id : {}", id);
+                return u;
             }
-        });
+        }).orElseThrow(() -> new ResourceNotFoundException("User not found with id=" + id));
+        log.info("Deleted user with id :{}", deletedUser.getId());
     }
 
     @PostMapping("/change-password")
@@ -94,5 +94,11 @@ public class UserController {
         String email = currentUser.getName();
         log.info("process=change_password, email={}", email);
         userService.changePassword(email, changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+    }
+
+    private boolean isCurrentUserHasPrivilege(Long userId) {
+        return securityService.loginUser() != null &&
+                (userId.equals(securityService.loginUser().getId()) ||
+                        securityService.isCurrentUserAdmin());
     }
 }

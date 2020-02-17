@@ -66,8 +66,8 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public List<Movie> createMovies(List<Movie> moviesBatch) {
-        return movieRepository.saveAll(moviesBatch);
+    public List<Movie> createMovies(List<Movie> movies) {
+        return movieRepository.saveAll(movies);
     }
 
     private Set<Genre> saveGenres(Set<Genre> genres) {
@@ -82,14 +82,6 @@ public class MovieService {
         }
         return genreList;
     }
-    
-    public CastMember save(CastMember castMember) {
-        return castMemberRepository.save(castMember);
-    }
-
-    public CrewMember save(CrewMember crewMember) {
-        return crewMemberRepository.save(crewMember);
-    }
 
     public List<CastMember> saveAllCastMembers(List<CastMember> castMembers) {
         return castMemberRepository.saveAll(castMembers);
@@ -97,10 +89,6 @@ public class MovieService {
 
     public List<CrewMember> saveAllCrewMembers(List<CrewMember> crewMembers) {
         return crewMemberRepository.saveAll(crewMembers);
-    }
-
-    public Optional<Genre> findGenreByName(String name) {
-        return genreRepository.findByName(name);
     }
 
     public Genre saveGenre(Genre genre) {

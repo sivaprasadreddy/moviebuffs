@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(name = "application.import-tmdb-data-async", havingValue = "true")
+@ConditionalOnProperty(name = "application.import-tmdb-data", havingValue = "true")
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 

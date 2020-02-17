@@ -2,13 +2,17 @@ package com.sivalabs.moviebuffs.web.mappers;
 
 import com.sivalabs.moviebuffs.entity.Role;
 import com.sivalabs.moviebuffs.entity.User;
+import com.sivalabs.moviebuffs.repository.RoleRepository;
 import com.sivalabs.moviebuffs.web.dto.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class UserDTOMapper {
+    private final RoleRepository roleRep;
 
     public User toEntity(UserDTO userDTO) {
         User user = new User();
@@ -16,6 +20,13 @@ public class UserDTOMapper {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
+        if(userDTO.getRoles() != null) {
+            user.setRoles(
+                    userDTO.getRoles().stream()
+                            .map(r -> roleRep.findByName(r).orElse(null))
+                            .collect(Collectors.toList())
+            );
+        }
         return user;
     }
 

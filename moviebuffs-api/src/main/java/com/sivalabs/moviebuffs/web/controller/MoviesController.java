@@ -2,6 +2,7 @@ package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.config.Loggable;
 import com.sivalabs.moviebuffs.entity.Genre;
+import com.sivalabs.moviebuffs.exception.ResourceNotFoundException;
 import com.sivalabs.moviebuffs.service.MovieService;
 import com.sivalabs.moviebuffs.web.dto.MovieDTO;
 import com.sivalabs.moviebuffs.web.dto.MoviesResponseDTO;
@@ -55,7 +56,8 @@ public class MoviesController {
     @GetMapping("/movies/{id}")
     public ResponseEntity<MovieDTO> getMovieById(@PathVariable Long id) {
         Optional<MovieDTO> movieById = movieService.findMovieById(id).map(movieDTOMapper::map);
-        return movieById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return movieById.map(ResponseEntity::ok)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found with id="+id));
     }
 
     @GetMapping("/genres")

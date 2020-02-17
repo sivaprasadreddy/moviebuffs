@@ -1,6 +1,7 @@
 package com.sivalabs.moviebuffs.web.advice;
 
 import com.sivalabs.moviebuffs.exception.ApplicationException;
+import com.sivalabs.moviebuffs.exception.BadRequestException;
 import com.sivalabs.moviebuffs.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ApplicationException.class)
     ResponseEntity<Problem> handleApplicationException(ApplicationException exception,
+                                                       NativeWebRequest request) {
+        log.error(exception.getLocalizedMessage(), exception);
+        return translator.create(Status.BAD_REQUEST, exception, request);
+    }
+
+    @ExceptionHandler(value = BadRequestException.class)
+    ResponseEntity<Problem> handleBadRequestException(BadRequestException exception,
                                                        NativeWebRequest request) {
         log.error(exception.getLocalizedMessage(), exception);
         return translator.create(Status.BAD_REQUEST, exception, request);
