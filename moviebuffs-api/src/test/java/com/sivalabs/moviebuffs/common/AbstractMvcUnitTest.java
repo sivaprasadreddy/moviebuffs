@@ -2,8 +2,8 @@ package com.sivalabs.moviebuffs.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sivalabs.moviebuffs.config.security.TokenHelper;
-import com.sivalabs.moviebuffs.utils.Constants;
 import com.sivalabs.moviebuffs.service.SecurityService;
+import com.sivalabs.moviebuffs.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -13,8 +13,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Aspect
 @Component
 public class LoggingAspect {
