@@ -29,6 +29,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sivalabs.moviebuffs.utils.TimeUtils.millisToLongDHMS;
+
 @Slf4j
 @Component
 public class MovieDataImporter {
@@ -37,7 +39,7 @@ public class MovieDataImporter {
     private final CsvRowMapperUtils csvRowMapperUtils;
     private final ApplicationProperties properties;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public MovieDataImporter(MovieService movieService,
@@ -72,7 +74,7 @@ public class MovieDataImporter {
             importMoviesMetaDataFile(dataFile);
         }
         long end = System.currentTimeMillis();
-        log.debug("Time took for importing movie metadata : {} seconds", (end - start) / 1000);
+        log.debug("Time took for importing movie metadata : {} ", millisToLongDHMS(end - start));
     }
 
     private void importMoviesMetaDataFile(String fileName) throws IOException, CsvValidationException {
@@ -89,7 +91,7 @@ public class MovieDataImporter {
             movie.setGenres(saveGenres(genresMap, movie.getGenres()));
             moviesBatch.add(movie);
             count++;
-            if (moviesBatch.size() >= 100) {
+            if (moviesBatch.size() >= properties.getImportTmdbDataBatchSize()) {
                 movieService.createMovies(moviesBatch);
                 log.info("Imported {} movies so far", count);
                 moviesBatch = new ArrayList<>();
@@ -124,7 +126,7 @@ public class MovieDataImporter {
             importCreditsDataFile(dataFile);
         }
         long end = System.currentTimeMillis();
-        log.debug("Time took for importing movie credits data : {} seconds", (end - start) / 1000);
+        log.debug("Time took for importing movie credits data : {}", millisToLongDHMS(end - start));
     }
 
     private void importCreditsDataFile(String fileName) throws IOException, CsvValidationException {

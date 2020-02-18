@@ -1,14 +1,47 @@
 package com.sivalabs.moviebuffs.datafactory;
 
-import com.sivalabs.moviebuffs.entity.Order;
-import com.sivalabs.moviebuffs.entity.OrderItem;
+import com.sivalabs.moviebuffs.entity.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.sivalabs.moviebuffs.importer.mappers.CsvRowMapperUtils.toSlug;
 
 public class TestDataFactory {
+
+    public static User createUser() {
+        String uuid = UUID.randomUUID().toString();
+        return createUser(uuid+"@gmail.com", uuid);
+    }
+
+    public static User createUser(String email) {
+        String uuid = UUID.randomUUID().toString();
+        return createUser(email, uuid);
+    }
+
+    public static User createUser(String email, String password) {
+        User user = new User();
+        user.setName("someuser");
+        user.setEmail(email);
+        user.setPassword(password);
+        return user;
+    }
+
+    public static Movie createMovie(String title, String...genreNames) {
+        Movie movie = new Movie();
+        movie.setTitle(title);
+        movie.setGenres(Arrays.stream(genreNames).map(g -> {
+            Genre genre = new Genre();
+            genre.setName(g);
+            genre.setSlug(toSlug(g));
+            return genre;
+        }).collect(Collectors.toSet()));
+        return movie;
+    }
 
     public static Order createOrder(Long id) {
         Order order = new Order();

@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 @Component
 public class CsvRowMapperUtils {
-    ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private static final Pattern NONLATIN = Pattern.compile("[^\\w-]");
     private static final Pattern WHITESPACE = Pattern.compile("[\\s]");

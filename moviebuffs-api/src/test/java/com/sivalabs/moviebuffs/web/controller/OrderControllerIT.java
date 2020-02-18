@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
@@ -22,6 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestPropertySource(properties = {
+    "application.import-tmdb-data=false"
+})
 class OrderControllerIT  extends AbstractIntegrationTest {
 
     @Autowired
@@ -43,14 +47,14 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldFetchAllOrders() throws Exception {
+    void should_fetch_all_orders() throws Exception {
         this.mockMvc.perform(get(ORDERS_COLLECTION_BASE_PATH))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(orderList.size())));
     }
 
     @Test
-    void shouldFetchOrderById() throws Exception {
+    void should_fetch_order_by_id() throws Exception {
         Order order = this.orderList.get(0);
 
         this.mockMvc.perform(get(ORDERS_SINGLE_BASE_PATH, order.getOrderId()))
@@ -59,7 +63,7 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldCreateNewOrder() throws Exception {
+    void should_create_new_order() throws Exception {
         Order order = this.orderList.get(0);
 
         this.mockMvc.perform(post(ORDERS_COLLECTION_BASE_PATH)
@@ -73,7 +77,7 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldDeleteOrder() throws Exception {
+    void should_delete_order() throws Exception {
         String orderId = orderList.get(0).getOrderId();
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId))

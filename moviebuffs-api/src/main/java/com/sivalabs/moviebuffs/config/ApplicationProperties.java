@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class ApplicationProperties {
     private boolean importTmdbData;
+    private int importTmdbDataBatchSize;
     private boolean importTmdbDataAsync;
     private List<String> moviesDataFiles;
     private List<String> movieCreditsFiles;

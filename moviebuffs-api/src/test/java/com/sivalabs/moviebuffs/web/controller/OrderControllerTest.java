@@ -2,7 +2,8 @@ package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractMvcUnitTest;
 import com.sivalabs.moviebuffs.entity.Order;
-import com.sivalabs.moviebuffs.exception.OrderProcessingException;
+import com.sivalabs.moviebuffs.exception.BadRequestException;
+import com.sivalabs.moviebuffs.exception.ResourceNotFoundException;
 import com.sivalabs.moviebuffs.service.OrderService;
 import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,12 +23,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = OrderController.class)
+@WebMvcTest(controllers = {OrderController.class})
 class OrderControllerTest extends AbstractMvcUnitTest {
 
     @MockBean
@@ -45,7 +46,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void shouldFetchAllOrders() throws Exception {
+    void should_fetch_all_orders() throws Exception {
         given(orderService.findAllOrders()).willReturn(this.orderList);
 
         this.mockMvc.perform(get(ORDERS_COLLECTION_BASE_PATH))
@@ -54,7 +55,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void shouldFetchOrderById() throws Exception {
+    void should_fetch_order_by_id() throws Exception {
         Order order = this.orderList.get(0);
         given(orderService.findOrderByOrderId(order.getOrderId())).willReturn(Optional.of(order));
 
@@ -64,7 +65,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void shouldGet404WhileFetchingNonExistingOrder() throws Exception {
+    void should_get_404_while_fetching_non_existing_order() throws Exception {
         String orderId = "1234";
         given(orderService.findOrderByOrderId(orderId)).willReturn(Optional.empty());
 
@@ -73,7 +74,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void shouldCreateNewOrder() throws Exception {
+    void should_create_new_order() throws Exception {
         Order order = this.orderList.get(0);
         OrderConfirmationDTO orderConfirmationDTO = new OrderConfirmationDTO();
         orderConfirmationDTO.setOrderId("1234");
@@ -91,7 +92,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void shouldDeleteOrder() throws Exception {
+    void should_delete_order() throws Exception {
         String orderId = "1234";
         doNothing().when(orderService).cancelOrder(orderId);
 
@@ -100,25 +101,21 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void shouldNotBeAbleToDeleteOrderAfterDelivered() throws Exception {
+    void should_not_be_able_to_delete_order_after_delivered() throws Exception {
         Order order = this.orderList.get(0);
         order.setStatus(Order.OrderStatus.DELIVERED);
-        willThrow(OrderProcessingException.class).given(orderService).cancelOrder(order.getOrderId());
+        willThrow(BadRequestException.class).given(orderService).cancelOrder(order.getOrderId());
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, order.getOrderId()))
-                .andExpect(status().is5xxServerError());
-
-        verify(orderService, never()).createOrder(any(Order.class));
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    void shouldNotBeAbleToDeleteNonExistingOrder() throws Exception {
+    void should_not_be_able_to_delete_non_existing_order() throws Exception {
         String orderId = "1234";
-        willThrow(OrderProcessingException.class).given(orderService).cancelOrder(orderId);
+        willThrow(ResourceNotFoundException.class).given(orderService).cancelOrder(orderId);
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId))
-                .andExpect(status().is5xxServerError());
-
-        verify(orderService, never()).createOrder(any(Order.class));
+                .andExpect(status().isNotFound());
     }
 }

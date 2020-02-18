@@ -1,8 +1,8 @@
 package com.sivalabs.moviebuffs.service;
 
 import com.sivalabs.moviebuffs.entity.Order;
-import com.sivalabs.moviebuffs.exception.OrderNotFoundException;
-import com.sivalabs.moviebuffs.exception.OrderProcessingException;
+import com.sivalabs.moviebuffs.exception.BadRequestException;
+import com.sivalabs.moviebuffs.exception.ResourceNotFoundException;
 import com.sivalabs.moviebuffs.repository.OrderRepository;
 import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -44,11 +44,11 @@ public class OrderService {
     public void cancelOrder(String orderId) {
         Order order = findOrderByOrderId(orderId).orElse(null);
         if (order == null) {
-            throw new OrderNotFoundException("Order with id: "+ orderId + " is not found");
+            throw new ResourceNotFoundException("Order with id: "+ orderId + " is not found");
         }
 
         if (order.getStatus() == Order.OrderStatus.DELIVERED) {
-            throw new OrderProcessingException("Order is already delivered");
+            throw new BadRequestException("Order is already delivered");
         }
         order.setStatus(Order.OrderStatus.CANCELLED);
         orderRepository.save(order);

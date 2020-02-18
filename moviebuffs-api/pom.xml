@@ -139,6 +139,11 @@
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>${logstash-logback.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.gavlyukovskiy</groupId>
+			<artifactId>p6spy-spring-boot-starter</artifactId>
+			<version>1.6.1</version>
+		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>

@@ -13,6 +13,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
 
+import static com.sivalabs.moviebuffs.utils.TimeUtils.millisToLongDHMS;
+
 @Aspect
 @Component
 public class LoggingAspect {
@@ -60,7 +62,7 @@ public class LoggingAspect {
             long end = System.currentTimeMillis();
             if (log.isDebugEnabled()) {
                 log.debug("Exit: {}.{}(). Time taken: {} millis", joinPoint.getSignature().getDeclaringTypeName(),
-                        joinPoint.getSignature().getName(), (end-start));
+                        joinPoint.getSignature().getName(), millisToLongDHMS(end-start));
             }
             return result;
         } catch (IllegalArgumentException e) {

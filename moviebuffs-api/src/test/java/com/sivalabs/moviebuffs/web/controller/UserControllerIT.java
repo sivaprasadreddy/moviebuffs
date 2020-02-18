@@ -1,6 +1,7 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractIntegrationTest;
+import com.sivalabs.moviebuffs.datafactory.TestDataFactory;
 import com.sivalabs.moviebuffs.entity.User;
 import com.sivalabs.moviebuffs.service.UserService;
 import com.sivalabs.moviebuffs.web.dto.ChangePasswordDTO;
@@ -8,25 +9,29 @@ import com.sivalabs.moviebuffs.web.dto.CreateUserRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestPropertySource(properties = {
+    "application.import-tmdb-data=false"
+})
 class UserControllerIT extends AbstractIntegrationTest {
 
     @Autowired
     private UserService userService;
 
     @Test
-    void shouldFindUserById() throws Exception {
+    void should_find_user_by_id() throws Exception {
         Long userId = 1L;
         this.mockMvc.perform(get("/api/users/{id}", userId))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void shouldCreateNewUserWithValidData() throws Exception {
+    void should_create_new_user_with_valid_data() throws Exception {
         CreateUserRequestDTO createUserRequestDTO = CreateUserRequestDTO.builder()
                 .email("myemail@gmail.com")
                 .password("secret")
@@ -41,7 +46,7 @@ class UserControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldFailToCreateNewUserWithExistingEmail() throws Exception {
+    void should_fail_to_create_new_user_with_existing_email() throws Exception {
         CreateUserRequestDTO createUserRequestDTO = CreateUserRequestDTO.builder()
                 .email("admin@gmail.com")
                 .password("secret")
@@ -57,7 +62,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("admin@gmail.com")
-    void shouldUpdateOtherUserDetailsWhenUserIsAuthorizedAdmin() throws Exception {
+    void should_update_other_user_details_when_user_is_authorized_admin() throws Exception {
         User savedUser = createUser("someuser1@gmail.com");
 
         savedUser.setName("New name");
@@ -70,7 +75,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("siva1@gmail.com")
-    void shouldUpdateOwnUserDetailsWhenUserIsAuthorized() throws Exception {
+    void should_update_own_user_details_when_user_is_authorized() throws Exception {
         User savedUser = createUser("siva1@gmail.com");
 
         savedUser.setName("New name");
@@ -84,7 +89,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("siva@gmail.com")
-    void shouldNotUpdateOtherUserDetailsWhenUserIsNotAdmin() throws Exception {
+    void should_not_update_other_user_details_when_user_is_not_admin() throws Exception {
         User savedUser = createUser("siva2@gmail.com");
         savedUser.setName("New name");
 
@@ -97,7 +102,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("admin@gmail.com")
-    void shouldFailToDeleteNonExistingUser() throws Exception {
+    void should_fail_to_delete_non_existing_user() throws Exception {
         this.mockMvc.perform(delete("/api/users/{id}", 9999))
                 .andExpect(status().isNotFound());
 
@@ -105,7 +110,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("admin@gmail.com")
-    void shouldBeAbleToDeleteOtherUserIfUserIsAdmin() throws Exception {
+    void should_be_able_to_delete_other_user_if_user_is_admin() throws Exception {
         User savedUser = createUser("someuser@gmail.com");
 
         this.mockMvc.perform(delete("/api/users/{id}", savedUser.getId()))
@@ -115,7 +120,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("siva@gmail.com")
-    void shouldNotBeAbleToDeleteOtherUserIfNotAdmin() throws Exception {
+    void should_not_be_able_to_delete_other_user_if_not_admin() throws Exception {
         User savedUser = createUser("user123@gmail.com");
         this.mockMvc.perform(delete("/api/users/{id}", savedUser.getId()))
                 .andExpect(status().isBadRequest());
@@ -123,7 +128,7 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser("siva@gmail.com")
-    void shouldUpdatePasswordWhenUserIsAuthorized() throws Exception {
+    void should_update_password_when_user_is_authorized() throws Exception {
         ChangePasswordDTO changePasswordDTO = ChangePasswordDTO.builder()
                 .oldPassword("siva")
                 .newPassword("newpwd")
@@ -137,7 +142,7 @@ class UserControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldFailToUpdatePasswordWhenUserIsNotAuthorized() throws Exception {
+    void should_fail_to_update_password_when_user_is_not_authorized() throws Exception {
         ChangePasswordDTO changePasswordDTO = ChangePasswordDTO.builder()
                 .oldPassword("admin")
                 .newPassword("newpwd")
@@ -151,10 +156,10 @@ class UserControllerIT extends AbstractIntegrationTest {
     }
 
     private User createUser(String email) {
-        User user = new User();
-        user.setName("someuser");
-        user.setEmail(email);
-        user.setPassword("secret");
-        return userService.createUser(user);
+        User user = TestDataFactory.createUser(email);
+        String plainPwd = user.getPassword();
+        userService.createUser(user);
+        user.setPassword(plainPwd);
+        return user;
     }
 }

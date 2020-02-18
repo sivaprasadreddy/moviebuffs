@@ -76,7 +76,7 @@ public class Movie implements Serializable
 	@Column(insertable = false)
 	protected LocalDateTime updatedAt = LocalDateTime.now();
 
-	@ManyToMany(cascade=CascadeType.MERGE)
+	@ManyToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 			name="movie_genre",
 			joinColumns={@JoinColumn(name="MOVIE_ID", referencedColumnName="ID")},

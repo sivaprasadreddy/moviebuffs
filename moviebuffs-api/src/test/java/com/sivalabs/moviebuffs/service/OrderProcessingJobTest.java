@@ -4,6 +4,10 @@ import com.sivalabs.moviebuffs.entity.Order;
 import com.sivalabs.moviebuffs.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +16,19 @@ import static com.sivalabs.moviebuffs.datafactory.TestDataFactory.createOrder;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class OrderProcessingJobTest {
 
+    @Mock
     private OrderRepository orderRepository;
+
+    @InjectMocks
     private OrderProcessingJob orderProcessingJob;
 
     private List<Order> orderList = null;
 
     @BeforeEach
     void setUp() {
-        orderRepository = mock(OrderRepository.class);
-        orderProcessingJob = new OrderProcessingJob(orderRepository);
-
         orderList = new ArrayList<>();
         orderList.add(createOrder(1L));
         orderList.add(createOrder(2L));
@@ -31,7 +36,7 @@ class OrderProcessingJobTest {
     }
 
     @Test
-    void shouldProcessOrders() {
+    void should_process_orders() {
         given(orderRepository.findByStatus(Order.OrderStatus.NEW)).willReturn(orderList);
 
         orderProcessingJob.processOrders();
@@ -40,7 +45,7 @@ class OrderProcessingJobTest {
     }
 
     @Test
-    void shouldIgnoreIfNoOrdersToProcess() {
+    void should_ignore_if_no_orders_to_process() {
         given(orderRepository.findByStatus(Order.OrderStatus.NEW)).willReturn(new ArrayList<>());
 
         orderProcessingJob.processOrders();

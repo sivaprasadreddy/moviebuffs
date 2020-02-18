@@ -8,34 +8,34 @@ import static com.sivalabs.moviebuffs.utils.TestConstants.MOVIES_SINGLE_BASE_PAT
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MoviesControllerIT extends AbstractIntegrationTest {
+class MoviesControllerIT extends AbstractIntegrationTest {
 
     @Test
-    void shouldFetchAllMovies() throws Exception {
+    void should_fetch_all_movies() throws Exception {
         this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void shouldFetchMoviesByGenre() throws Exception {
+    void should_fetch_movies_by_genre() throws Exception {
         this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH+"?genre=comedy"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void shouldFetchMovieById() throws Exception {
+    void should_fetch_movie_by_id() throws Exception {
         this.mockMvc.perform(get(MOVIES_SINGLE_BASE_PATH, 1))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void shouldReturn404WhenMovieIdIsNotExists() throws Exception {
+    void should_return_404_when_movie_id_is_not_exists() throws Exception {
         this.mockMvc.perform(get(MOVIES_SINGLE_BASE_PATH, 999999))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void shouldFetchAllGenres() throws Exception {
+    void should_fetch_all_genres() throws Exception {
         this.mockMvc.perform(get("/api/genres"))
                 .andExpect(status().isOk());
     }

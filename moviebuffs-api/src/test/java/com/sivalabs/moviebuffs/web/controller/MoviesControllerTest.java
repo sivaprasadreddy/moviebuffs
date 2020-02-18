@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = MoviesController.class)
-public class MoviesControllerTest extends AbstractMvcUnitTest {
+class MoviesControllerTest extends AbstractMvcUnitTest {
 
     @MockBean
     private MovieService movieService;
@@ -29,7 +29,7 @@ public class MoviesControllerTest extends AbstractMvcUnitTest {
     private MovieDTOMapper movieDTOMapper;
 
     @Test
-    void shouldReturnMovies() throws Exception {
+    void should_return_movies() throws Exception {
         Page<Movie> page = new PageImpl<>(new ArrayList<>());
         given(movieService.findMovies(any(Pageable.class))).willReturn(page);
 

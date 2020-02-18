@@ -39,7 +39,7 @@ class MovieDataImporterTest {
     }
 
     @Test
-    void shouldImportMovieDataSuccessfully() throws IOException, CsvValidationException {
+    void should_import_movie_data_successfully() throws IOException, CsvValidationException {
         movieDataImporter.importData();
         assertTrue(true);
     }

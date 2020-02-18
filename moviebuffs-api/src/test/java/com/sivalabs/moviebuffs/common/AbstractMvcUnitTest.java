@@ -16,7 +16,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 @ActiveProfiles(Constants.PROFILE_TEST)
-@Import(TestConfig.class)
+@Import({TestConfig.class})
 public abstract class AbstractMvcUnitTest {
 
     @Autowired
