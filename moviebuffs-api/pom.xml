@@ -34,7 +34,7 @@
 		<sonar.organization>sivaprasadreddy-github</sonar.organization>
 		<sonar.projectKey>sivaprasadreddy_moviebuffs</sonar.projectKey>
 		<sonar.exclusions>
-			src/main/java/**/config/*.*,
+			src/main/java/**/config/**/*.*,
 			src/main/java/**/entity/*.*,
 			src/main/java/**/dto/*.*,
 			src/main/java/**/exception/*.*,

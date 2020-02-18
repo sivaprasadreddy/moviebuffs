@@ -40,7 +40,6 @@ public class MovieService {
 
     @Transactional(readOnly = true)
     public Page<Movie> findMovies(Pageable pageable) {
-        //return movieRepository.findMoviesWithCastAndCrew(pageable);
         return movieRepository.findAll(pageable);
     }
 
