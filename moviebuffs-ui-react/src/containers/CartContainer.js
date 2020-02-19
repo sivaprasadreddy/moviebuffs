@@ -1,6 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
+import {connect} from "react-redux";
+import {NavLink} from "react-router-dom";
 import * as actions from "../store/actions/index";
 
 class CartContainer extends React.Component {
@@ -174,9 +174,13 @@ class CartContainer extends React.Component {
   };
   render() {
     return (
-      <div>
-        <h1>Cart</h1>
-        {this.checkoutForm()}
+      <div className="row">
+        <div className="col-md-6 offset-md-2">
+            <div className="pb-3">
+              <h1>Cart</h1>
+              {this.checkoutForm()}
+            </div>
+        </div>
       </div>
     );
   }

@@ -1,8 +1,6 @@
 package com.sivalabs.moviebuffs.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sivalabs.moviebuffs.entity.CastMember;
-import com.sivalabs.moviebuffs.entity.CrewMember;
 import com.sivalabs.moviebuffs.entity.Genre;
 import lombok.Builder;
 import lombok.Data;
@@ -47,9 +45,9 @@ public class MovieDTO {
 
     private Set<Genre> genres;
 
-    private Set<CastMember> castMembers;
+    private Set<CastMemberDTO> castMembers;
 
-    private Set<CrewMember> crewMembers;
+    private Set<CrewMemberDTO> crewMembers;
 
     public String getTrimmedTitle() {
         return StringUtils.abbreviate(title, 30);

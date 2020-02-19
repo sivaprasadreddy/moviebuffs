@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Slf4j
 @RestController
@@ -39,17 +39,20 @@ public class MoviesController {
     @GetMapping("/movies")
     public MoviesResponseDTO getMovies(
             @RequestParam(name = "genre", required = false) String genreSlug,
+            @RequestParam(name = "query", required = false) String query,
             @PageableDefault(size = DEFAULT_PAGE_SIZE)
-            @SortDefault.SortDefaults({@SortDefault(sort = "title", direction = ASC)})
+            @SortDefault.SortDefaults({@SortDefault(sort = "releaseDate", direction = DESC)})
             Pageable pageable) {
-        log.info("API Fetching movies for page {}", pageable.getPageNumber());
+        log.info("API Fetching movies for page : {}, query: {}, genre: {}",
+                pageable.getPageNumber(), query, genreSlug);
         Page<MovieDTO> moviesPage;
-        if(StringUtils.isNotBlank(genreSlug)) {
-            moviesPage = getMoviesByGenreSlug(genreSlug, pageable);
+        if(StringUtils.isBlank(genreSlug) && StringUtils.isNotBlank(query)) {
+            moviesPage = movieService.searchMovies(query, pageable).map(movieDTOMapper::map);
+        } else if(StringUtils.isNotBlank(genreSlug)) {
+            moviesPage = getMoviesByGenreSlug(genreSlug, query, pageable);
         } else {
             moviesPage = movieService.findMovies(pageable).map(movieDTOMapper::map);
         }
-        log.info("Current page {}", moviesPage.getNumber());
         return new MoviesResponseDTO(moviesPage);
     }
 
@@ -65,9 +68,9 @@ public class MoviesController {
         return movieService.findAllGenres(Sort.by("name"));
     }
 
-    private Page<MovieDTO> getMoviesByGenreSlug(String genreSlug, Pageable pageable) {
+    private Page<MovieDTO> getMoviesByGenreSlug(String genreSlug, String query, Pageable pageable) {
         Optional<Genre> byId = movieService.findGenreBySlug(genreSlug);
-        return byId.map(genre -> movieService.findMoviesByGenre(genre.getId(), pageable).map(movieDTOMapper::map))
+        return byId.map(genre -> movieService.findMoviesByGenre(genre.getId(), query, pageable).map(movieDTOMapper::map))
                 .orElseGet(() -> new PageImpl<>(new ArrayList<>()));
     }
 }

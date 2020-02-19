@@ -1,56 +1,64 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
-const pagination = props => (
-    <nav aria-label="Page navigation">
-        <ul className="pagination pagination justify-content-center">
-            {!props.products.hasPrevious &&
-            <li className="page-item disabled">
-                <NavLink className="page-link" to={'/products/page/'+1}>First</NavLink>
-            </li>
-            }
-            {props.products.hasPrevious &&
-            <li className="page-item">
-                <NavLink className="page-link" to={'/products/page/'+1}>First</NavLink>
-            </li>
-            }
+const pagination = props => {
 
-            {!props.products.hasPrevious &&
-            <li className="page-item disabled">
-                <NavLink className="page-link" to={'/products/page/'+1}>Previous</NavLink>
-            </li>
-            }
-            {props.products.hasPrevious &&
-            <li className="page-item">
-                <NavLink className="page-link"
-                         to={'/products/page/'+(props.products.pageNumber-1)}>Previous</NavLink>
-            </li>
-            }
+    const basePath = props.basePath;
+    const searchParam = props.query !== "" ? "&query="+props.query : "";
+    const genreParam = props.genre !== "" ? "&genre="+props.genre : "";
+    const firstPage = basePath + '?page=1'+ genreParam + searchParam;
+    const prevPage = basePath + '?page='+(props.products.pageNumber - 1) + genreParam + searchParam;
+    const nextPage = basePath + '?page='+(props.products.pageNumber + 1) + genreParam + searchParam;
+    const lastPage = basePath + '?page='+(props.products.totalPages) + genreParam + searchParam;
 
-            {props.products.hasNext &&
-            <li className="page-item">
-                <NavLink className="page-link" to={'/products/page/'+(props.products.pageNumber+1)}>Next</NavLink>
-            </li>
-            }
-            {!props.products.hasNext &&
-            <li className="page-item disabled">
-                <NavLink className="page-link"
-                         to={'/products/page/'+(props.products.pageNumber+1)}>Next</NavLink>
-            </li>
-            }
+    return (
+        <nav aria-label="Page navigation">
+            <ul className="pagination pagination justify-content-center">
+                {!props.products.hasPrevious &&
+                <li className="page-item disabled">
+                    <NavLink className="page-link" to={firstPage}>First</NavLink>
+                </li>
+                }
+                {props.products.hasPrevious &&
+                <li className="page-item">
+                    <NavLink className="page-link" to={firstPage}>First</NavLink>
+                </li>
+                }
 
-            {!props.products.hasNext &&
-            <li className="page-item disabled">
-                <NavLink className="page-link" to={'/products/page/'+(props.products.totalPages)}>Last</NavLink>
-            </li>
-            }
-            {props.products.hasNext &&
-            <li className="page-item ">
-                <NavLink className="page-link"
-                         to={'/products/page/'+(props.products.totalPages)}>Last</NavLink>
-            </li>
-            }
-        </ul>
-    </nav>
-);
+                {!props.products.hasPrevious &&
+                <li className="page-item disabled">
+                    <NavLink className="page-link" to={prevPage}>Previous</NavLink>
+                </li>
+                }
+                {props.products.hasPrevious &&
+                <li className="page-item">
+                    <NavLink className="page-link" to={prevPage}>Previous</NavLink>
+                </li>
+                }
+
+                {props.products.hasNext &&
+                <li className="page-item">
+                    <NavLink className="page-link" to={nextPage}>Next</NavLink>
+                </li>
+                }
+                {!props.products.hasNext &&
+                <li className="page-item disabled">
+                    <NavLink className="page-link" to={nextPage}>Next</NavLink>
+                </li>
+                }
+
+                {!props.products.hasNext &&
+                <li className="page-item disabled">
+                    <NavLink className="page-link" to={lastPage}>Last</NavLink>
+                </li>
+                }
+                {props.products.hasNext &&
+                <li className="page-item ">
+                    <NavLink className="page-link" to={lastPage}>Last</NavLink>
+                </li>
+                }
+            </ul>
+        </nav>
+    );
+};
 export default pagination;

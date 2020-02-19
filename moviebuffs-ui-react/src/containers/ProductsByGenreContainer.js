@@ -5,32 +5,32 @@ import * as actions from "../store/actions/index";
 import ProductList from "../components/ProductList";
 import GenreList from "../components/GenresList";
 
-class ProductsContainer extends React.Component {
+class ProductsByGenreContainer extends React.Component {
 
   constructor(props) {
     super(props);
     const values = queryString.parse(this.props.location.search);
+    //const genre = this.props.match.params.genre || "";
     this.state = {
       page: values.page || 1,
-      query: values.query || ""
+      query: values.query || "",
+      genre: values.genre
     };
   }
 
   componentDidMount() {
-    //console.log('props',this.props)
-    //const page = this.props.match.params.page || 1;
     this.props.fetchAllGenres();
-    this.loadMovies(this.state.page, this.state.query)
+    this.loadMovies(this.state.page, this.state.genre, this.state.query)
   }
 
   searchMovies = () => {
-    this.props.history.push('/products?page=1&query='+this.state.query);
-    this.loadMovies(1, this.state.query)
+    this.props.history.push('/genres?genre='+this.state.genre+'&query='+this.state.query+'&page=1');
+    this.loadMovies(1, this.state.genre, this.state.query)
   };
 
-  loadMovies = (page, query) => {
-    //console.log('page: '+ page+", query: "+query);
-    this.props.fetchProducts(page, "", query);
+  loadMovies = (page, genre, query) => {
+    // console.log('page: '+ page+", query: "+query+", genre:"+genre);
+    this.props.fetchProducts(page, genre, query);
   };
 
   render() {
@@ -50,13 +50,14 @@ class ProductsContainer extends React.Component {
 
             <ProductList
               products={this.props.products}
-              basePath={"/products"}
+              basePath={"/genres"}
+              genre={this.state.genre}
               query={this.state.query === ""? "": this.state.query}
               onAddToCart={this.props.addProductToCart}
             />
           </div>
           <div className="col-md-3">
-              <GenreList genres={this.props.genres}/>
+            <GenreList genres={this.props.genres}/>
           </div>
         </div>
     );
@@ -80,4 +81,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsContainer);
+)(ProductsByGenreContainer);

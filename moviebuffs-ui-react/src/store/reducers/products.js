@@ -1,5 +1,7 @@
-import { RECEIVE_PRODUCTS, RECEIVE_PRODUCT } from "../actions/products";
+import {RECEIVE_ALL_GENRES, RECEIVE_PRODUCT, RECEIVE_PRODUCTS} from "../actions/products";
+
 const initialState = {
+  genres: [],
   products: { data: [] },
   product: {}
 };
@@ -8,6 +10,10 @@ function reducer(state = initialState, action) {
     case RECEIVE_PRODUCTS:
       return Object.assign({}, state, {
         products: action.payload
+      });
+    case RECEIVE_ALL_GENRES:
+      return Object.assign({}, state, {
+        genres: action.payload
       });
     case RECEIVE_PRODUCT:
       return Object.assign({}, state, {

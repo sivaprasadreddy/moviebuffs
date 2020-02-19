@@ -52,6 +52,9 @@
     <profiles>
         <profile>
             <id>npm</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -100,9 +103,6 @@
         </profile>
         <profile>
             <id>yarn</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>

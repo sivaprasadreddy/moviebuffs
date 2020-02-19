@@ -1,6 +1,5 @@
 package com.sivalabs.moviebuffs.service;
 
-import com.sivalabs.moviebuffs.config.Loggable;
 import com.sivalabs.moviebuffs.entity.CastMember;
 import com.sivalabs.moviebuffs.entity.CrewMember;
 import com.sivalabs.moviebuffs.entity.Genre;
@@ -11,6 +10,7 @@ import com.sivalabs.moviebuffs.repository.GenreRepository;
 import com.sivalabs.moviebuffs.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +26,6 @@ import java.util.Set;
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Loggable
 public class MovieService {
     private final MovieRepository movieRepository;
     private final CastMemberRepository castMemberRepository;
@@ -44,8 +43,9 @@ public class MovieService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Movie> findMoviesByGenre(Long genreId, Pageable pageable) {
-        return movieRepository.findByGenre(genreId, pageable);
+    public Page<Movie> findMoviesByGenre(Long genreId, String query, Pageable pageable) {
+        String searchQuery = StringUtils.trimToEmpty(query).replaceAll("%","");
+        return movieRepository.findByGenre(genreId, "%"+searchQuery+"%", pageable);
     }
 
     @Transactional(readOnly = true)

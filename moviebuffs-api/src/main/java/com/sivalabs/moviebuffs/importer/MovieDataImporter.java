@@ -93,7 +93,7 @@ public class MovieDataImporter {
             count++;
             if (moviesBatch.size() >= properties.getImportTmdbDataBatchSize()) {
                 movieService.createMovies(moviesBatch);
-                log.info("Imported {} movies so far", count);
+                log.trace("Imported {} movies so far", count);
                 moviesBatch = new ArrayList<>();
             }
         }
@@ -140,6 +140,10 @@ public class MovieDataImporter {
             String[] nextLine = iterator.next();
             CreditsCsvRecord record = parseCreditsRecord(nextLine);
             Movie movie = movieService.findMovieById(Long.valueOf(record.getId())).orElse(null);
+            if(movie == null) {
+                log.warn("Got a movie credit record with movie_id: {}, which doesn't exist", record.getId());
+                continue;
+            }
             List<CastMemberRecord> castMemberRecords = getCastMembers(record.getCast());
             List<CastMember> castMembers = new ArrayList<>();
             for (CastMemberRecord castMemberRecord : castMemberRecords) {
@@ -151,7 +155,7 @@ public class MovieDataImporter {
             if (!castMembers.isEmpty()) {
                 movieService.saveAllCastMembers(castMembers);
             }
-            log.info("Imported {} movie cast records so far", castCount);
+            log.trace("Imported {} movie cast records so far", castCount);
 
             List<CrewMemberRecord> crewMemberRecords = getCrewMembers(record.getCrew());
             List<CrewMember> crewMembers = new ArrayList<>();
@@ -164,9 +168,9 @@ public class MovieDataImporter {
             if (!crewMembers.isEmpty()) {
                 movieService.saveAllCrewMembers(crewMembers);
             }
-            log.info("Imported {} movie crew records so far", crewCount);
+            log.trace("Imported {} movie crew records so far", crewCount);
             count++;
-            log.info("Imported {} movie credits records so far", count);
+            log.trace("Imported {} movie credits records so far", count);
         }
         log.info("Initialized movies credits with {} records", count);
     }
