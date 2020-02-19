@@ -104,6 +104,7 @@ create table orders (
     credit_card_number varchar(50),
     cvv varchar(10),
     status varchar(100),
+    created_by bigint REFERENCES users(id),
     created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp WITH TIME ZONE,
     primary key (id)
@@ -112,6 +113,7 @@ create table orders (
 create table order_items (
     id bigint DEFAULT nextval('order_item_id_seq') not null,
     product_code varchar(255) not null,
+    product_name varchar(1024) not null,
     product_price numeric not null,
     quantity integer not null,
     order_id bigint not null references orders(id),

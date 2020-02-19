@@ -1,15 +1,42 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
+import {NavLink} from "react-router-dom";
+import {connect} from "react-redux";
+import {cleanState} from "../store/localStorage";
 
 class NavBar extends React.Component {
+
   cartItemsCount = () => {
     return this.props.cart
       .map(item => item.quantity)
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
   };
 
+  logoutHandler = () => {
+        cleanState();
+        window.location = "/";
+    };
+
   render() {
+      let authenticatedLinks;
+
+      if (this.props.user && this.props.user.access_token) {
+          authenticatedLinks = (
+              <li className="nav-item">
+                  <NavLink className="nav-link" to="/login" onClick={this.logoutHandler}>
+                      Logout
+                  </NavLink>
+              </li>
+          );
+      } else {
+          authenticatedLinks = (
+              <li className="nav-item">
+                  <NavLink className="nav-link" to="/login">
+                      Login
+                  </NavLink>
+              </li>
+          );
+      }
+
     return (
       <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <NavLink className="navbar-brand" to="/">
@@ -40,6 +67,7 @@ class NavBar extends React.Component {
                 Cart ({this.cartItemsCount()})
               </NavLink>
             </li>
+              {authenticatedLinks}
           </ul>
         </div>
       </nav>
@@ -49,8 +77,10 @@ class NavBar extends React.Component {
 
 const mapStateToProps = state => {
   const { cart } = state.cart;
+  const { user } = state;
   return {
-    cart: cart
+    cart: cart,
+    user: user
   };
 };
 

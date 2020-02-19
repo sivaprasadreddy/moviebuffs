@@ -57,12 +57,17 @@ public class TestDataFactory {
         Set<OrderItem> items = new HashSet<>();
         items.add(createOrderItem(order));
         order.setItems(items);
+
+        User createdBy = new User();
+        createdBy.setId(1L);
+        order.setCreatedBy(createdBy);
         return order;
     }
 
     public static OrderItem createOrderItem(Order order) {
         OrderItem item = new OrderItem();
         item.setProductCode("P001");
+        item.setProductName("Some Product");
         item.setProductPrice(BigDecimal.TEN);
         item.setQuantity(1);
         item.setOrder(order);

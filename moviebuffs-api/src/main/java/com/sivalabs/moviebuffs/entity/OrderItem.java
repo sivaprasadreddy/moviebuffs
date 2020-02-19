@@ -12,13 +12,14 @@ import java.math.BigDecimal;
 @Getter
 @Entity
 @Table(name = "order_items")
-@EqualsAndHashCode(of = {"id"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"order"}, callSuper = false)
 public class OrderItem {
     @Id
     @SequenceGenerator(name = "order_item_id_generator", sequenceName = "order_item_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "order_item_id_generator")
     private Long id;
     private String productCode;
+    private String productName;
     private BigDecimal productPrice;
     private Integer quantity;
     @ManyToOne(optional = false)

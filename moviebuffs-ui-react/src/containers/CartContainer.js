@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import {NavLink} from "react-router-dom";
 import * as actions from "../store/actions/index";
+import {isAuthenticated} from "../store/localStorage";
 
 class CartContainer extends React.Component {
   constructor(props) {
@@ -72,6 +73,7 @@ class CartContainer extends React.Component {
     const items = this.props.cart.map(item => {
       return {
         productCode: item.product.id,
+        productName: item.product.title,
         productPrice: item.product.price,
         quantity: item.quantity
       };
@@ -167,7 +169,14 @@ class CartContainer extends React.Component {
       return (
         <div>
           {this.cartItems()}
-          {this.orderForm()}
+          {isAuthenticated() && this.orderForm()}
+          {!isAuthenticated() &&
+          <div>
+              <h3>
+                  Please <NavLink to="/login">Login</NavLink> to place order
+              </h3>
+          </div>
+          }
         </div>
       );
     }

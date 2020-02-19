@@ -26,6 +26,7 @@
 		<commons-io.version>2.6</commons-io.version>
 		<opencsv.version>5.0</opencsv.version>
 		<jjwt.version>0.6.0</jjwt.version>
+		<heroku.appName>sivalabs-moviebuffs</heroku.appName>
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
 		<jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
@@ -384,6 +385,23 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>2.0.11</version>
+				<configuration>
+					<appName>${heroku.appName}</appName>
+					<includeTarget>false</includeTarget>
+					<includes>
+						<include>target/moviebuffs-api-0.0.1-SNAPSHOT.jar</include>
+					</includes>
+					<!--
+					<processTypes>
+						<web>java -Dserver.port=$PORT -Dspring.profiles.active=heroku $JAVA_OPTS -jar target/bookmarker-java-0.0.1-SNAPSHOT.jar</web>
+					</processTypes>
+					-->
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,7 +1,9 @@
 import {fetchAllGenres, fetchProductById, fetchProducts} from "./products";
-import {addProductToCart, placeOrder} from "./cart";
+import {addProductToCart, fetchOrderById, placeOrder} from "./cart";
+import {login} from "./user";
 
 export {
+    login,
     fetchProducts,fetchProductById, fetchAllGenres,
-    addProductToCart, placeOrder
+    addProductToCart, placeOrder, fetchOrderById
 };

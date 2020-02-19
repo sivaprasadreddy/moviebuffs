@@ -20,17 +20,19 @@ node {
 
     try {
         utils.checkout()
+
+        dir("moviebuffs-ui-react") {
+            utils.npmBuild("UI Build")
+            utils.npmTest("UI Test")
+        }
+
         dir("moviebuffs-api") {
             utils.runMavenTests("Tests")
             utils.runOWASPChecks("OWASP Checks")
             utils.publishDockerImage("Publish Docker", DOCKER_USERNAME, API_IMAGE_NAME)
             utils.deployOnHeroku("Heroku Deployment")
         }
-        dir("moviebuffs-ui-react") {
-            utils.npmBuild("UI Build")
-            utils.npmTest("UI Test")
-            utils.publishDockerImage("UI PublishDocker", DOCKER_USERNAME, UI_IMAGE_NAME)
-        }
+
         dir("moviebuffs-gatling-tests") {
             utils.runMavenGatlingTests("Perf Test")
         }

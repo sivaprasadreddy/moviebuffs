@@ -17,6 +17,12 @@ class MoviesControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
+    void should_search_movies_by_title() throws Exception {
+        this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH+"?query=hero"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void should_fetch_movies_by_genre() throws Exception {
         this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH+"?genre=comedy"))
                 .andExpect(status().isOk());
