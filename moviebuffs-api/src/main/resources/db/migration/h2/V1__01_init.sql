@@ -36,6 +36,7 @@ create table user_role (
 create table movies (
     id bigint DEFAULT nextval('movie_id_seq') not null,
     title varchar(255),
+    tmdb_id varchar(255),
     imdb_id varchar(255),
     release_date varchar(255),
     poster_path varchar(512),
@@ -64,7 +65,7 @@ create table movie_cast (
     name varchar(512),
     cast_order varchar(255),
     profile_path varchar(255),
-    movie_id varchar(255),
+    movie_id bigint,
     primary key (id)
 );
 
@@ -77,7 +78,7 @@ create table movie_crew (
     job varchar(512),
     name varchar(512),
     profile_path varchar(255),
-    movie_id varchar(255),
+    movie_id bigint,
     primary key (id)
 );
 

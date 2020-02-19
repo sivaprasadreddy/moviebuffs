@@ -139,7 +139,7 @@ public class MovieDataImporter {
         while (iterator.hasNext()) {
             String[] nextLine = iterator.next();
             CreditsCsvRecord record = parseCreditsRecord(nextLine);
-            Movie movie = movieService.findMovieById(Long.valueOf(record.getId())).orElse(null);
+            Movie movie = movieService.findByTmdbId(record.getId()).orElse(null);
             if(movie == null) {
                 log.warn("Got a movie credit record with movie_id: {}, which doesn't exist", record.getId());
                 continue;

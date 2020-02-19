@@ -63,6 +63,11 @@ public class MovieService {
         return genreRepository.findBySlug(slug);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Movie> findByTmdbId(String tmdbId) {
+        return movieRepository.findByTmdbId(tmdbId);
+    }
+
     public Movie createMovie(Movie movie) {
         Set<Genre> genreList = saveGenres(movie.getGenres());
         movie.setGenres(genreList);

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
@@ -18,4 +20,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Page<Movie> findByGenre(@Param("genreId") Long genreId, @Param("query") String query, Pageable pageable);
 
     Page<Movie> findByTitleContainingIgnoreCase(String query, Pageable pageable);
+
+    Optional<Movie> findByTmdbId(String tmdbId);
 }
