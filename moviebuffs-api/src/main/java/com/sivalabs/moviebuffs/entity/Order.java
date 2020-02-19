@@ -1,5 +1,6 @@
 package com.sivalabs.moviebuffs.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,11 @@ public class Order {
     private String cvv;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
     public enum OrderStatus {
         NEW, DELIVERED, CANCELLED, ERROR

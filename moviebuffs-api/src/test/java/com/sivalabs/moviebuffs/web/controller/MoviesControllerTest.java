@@ -12,9 +12,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static com.sivalabs.moviebuffs.utils.TestConstants.MOVIES_COLLECTION_BASE_PATH;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +36,14 @@ class MoviesControllerTest extends AbstractMvcUnitTest {
         given(movieService.findMovies(any(Pageable.class))).willReturn(page);
 
         this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void should_return_empty_movie_results_for_invalid_genre() throws Exception {
+        given(movieService.findGenreBySlug(anyString())).willReturn(Optional.empty());
+
+        this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH+"?genre=abcd"))
                 .andExpect(status().isOk());
     }
 }

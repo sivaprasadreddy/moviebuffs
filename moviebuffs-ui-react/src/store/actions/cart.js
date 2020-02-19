@@ -1,5 +1,5 @@
 import axios from "./axios";
-import { history } from "../../index";
+import {history} from "../../index";
 
 export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
 export const ORDER_CREATION_SUCCESS = "ORDER_CREATION_SUCCESS";
@@ -20,6 +20,7 @@ export function clearCart() {
 
 export function placeOrder(order) {
   let orderObject = Object.assign({}, order);
+  console.log('orderObject', orderObject);
   return dispatch => {
     return axios
       .post("/api/orders", orderObject)
@@ -33,4 +34,12 @@ export function placeOrder(order) {
       })
       .catch(e => console.log("error", e));
   };
+}
+
+export function fetchOrderById(orderId) {
+    return axios("/api/orders/"+orderId)
+        .then(response => {
+            return response.data;
+        })
+        .catch(e => console.log("error", e));
 }

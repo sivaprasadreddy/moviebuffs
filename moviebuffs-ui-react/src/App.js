@@ -1,6 +1,7 @@
 import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import NavBar from "./components/NavBar";
+import Login from "./components/Login";
 import ProductsContainer from "./containers/ProductsContainer";
 import ProductContainer from "./containers/ProductContainer";
 import CartContainer from "./containers/CartContainer";
@@ -15,6 +16,7 @@ class App extends React.Component {
         <NavBar />
         <main role="main" className="container-fluid">
           <Switch>
+            <Route path="/login" component={Login} />
             <Route exact path="/">
                <Redirect to="/products" />
             </Route>

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.zalando.problem.ProblemModule;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
@@ -47,6 +48,7 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "admin@gmail.com", roles = {"USER", "ADMIN"})
     void should_fetch_all_orders() throws Exception {
         this.mockMvc.perform(get(ORDERS_COLLECTION_BASE_PATH))
                 .andExpect(status().isOk())
@@ -54,6 +56,7 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "admin@gmail.com")
     void should_fetch_order_by_id() throws Exception {
         Order order = this.orderList.get(0);
 
@@ -63,6 +66,7 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     void should_create_new_order() throws Exception {
         Order order = this.orderList.get(0);
 
@@ -77,8 +81,11 @@ class OrderControllerIT  extends AbstractIntegrationTest {
     }
 
     @Test
-    void should_delete_order() throws Exception {
-        String orderId = orderList.get(0).getOrderId();
+    @WithMockUser(value = "admin@gmail.com")
+    void should_cancel_order() throws Exception {
+        Order order = orderList.get(0);
+        //order.getCreatedBy().setId(1L);
+        String orderId = order.getOrderId();
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId))
                 .andExpect(status().isOk());

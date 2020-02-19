@@ -40,4 +40,8 @@ public class SecurityService {
         return false;
     }
 
+    public boolean isCurrentUserHasPrivilege(Long userId) {
+        System.out.println(userId+":"+(loginUser()==null?null:loginUser().getId()));
+        return loginUser() != null && (userId.equals(loginUser().getId()) || isCurrentUserAdmin());
+    }
 }

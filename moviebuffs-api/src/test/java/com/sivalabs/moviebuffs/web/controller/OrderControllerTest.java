@@ -3,7 +3,6 @@ package com.sivalabs.moviebuffs.web.controller;
 import com.sivalabs.moviebuffs.common.AbstractMvcUnitTest;
 import com.sivalabs.moviebuffs.entity.Order;
 import com.sivalabs.moviebuffs.exception.BadRequestException;
-import com.sivalabs.moviebuffs.exception.ResourceNotFoundException;
 import com.sivalabs.moviebuffs.service.OrderService;
 import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import static com.sivalabs.moviebuffs.utils.TestConstants.ORDERS_COLLECTION_BASE
 import static com.sivalabs.moviebuffs.utils.TestConstants.ORDERS_SINGLE_BASE_PATH;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doNothing;
@@ -46,6 +47,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
+    @WithMockUser(roles = {"USER", "ADMIN"})
     void should_fetch_all_orders() throws Exception {
         given(orderService.findAllOrders()).willReturn(this.orderList);
 
@@ -55,9 +57,11 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
+    @WithMockUser
     void should_fetch_order_by_id() throws Exception {
         Order order = this.orderList.get(0);
         given(orderService.findOrderByOrderId(order.getOrderId())).willReturn(Optional.of(order));
+        given(securityService.isCurrentUserHasPrivilege(anyLong())).willReturn(true);
 
         this.mockMvc.perform(get(ORDERS_SINGLE_BASE_PATH, order.getOrderId()))
                 .andExpect(status().isOk())
@@ -65,6 +69,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
+    @WithMockUser
     void should_get_404_while_fetching_non_existing_order() throws Exception {
         String orderId = "1234";
         given(orderService.findOrderByOrderId(orderId)).willReturn(Optional.empty());
@@ -74,6 +79,7 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
+    @WithMockUser
     void should_create_new_order() throws Exception {
         Order order = this.orderList.get(0);
         OrderConfirmationDTO orderConfirmationDTO = new OrderConfirmationDTO();
@@ -92,8 +98,12 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
+    @WithMockUser
     void should_delete_order() throws Exception {
-        String orderId = "1234";
+        Order order = this.orderList.get(0);
+        String orderId = order.getOrderId();
+        given(orderService.findOrderByOrderId(order.getOrderId())).willReturn(Optional.of(order));
+        given(securityService.isCurrentUserHasPrivilege(anyLong())).willReturn(true);
         doNothing().when(orderService).cancelOrder(orderId);
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId))
@@ -101,9 +111,12 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void should_not_be_able_to_delete_order_after_delivered() throws Exception {
+    @WithMockUser
+    void should_not_be_able_to_cancel_order_after_delivered() throws Exception {
         Order order = this.orderList.get(0);
         order.setStatus(Order.OrderStatus.DELIVERED);
+        given(orderService.findOrderByOrderId(order.getOrderId())).willReturn(Optional.of(order));
+        given(securityService.isCurrentUserHasPrivilege(anyLong())).willReturn(true);
         willThrow(BadRequestException.class).given(orderService).cancelOrder(order.getOrderId());
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, order.getOrderId()))
@@ -111,9 +124,23 @@ class OrderControllerTest extends AbstractMvcUnitTest {
     }
 
     @Test
-    void should_not_be_able_to_delete_non_existing_order() throws Exception {
+    @WithMockUser
+    void should_not_be_able_to_cancel_others_order_if_not_admin() throws Exception {
+        Order order = this.orderList.get(0);
+        order.setStatus(Order.OrderStatus.DELIVERED);
+        given(orderService.findOrderByOrderId(order.getOrderId())).willReturn(Optional.of(order));
+        given(securityService.isCurrentUserHasPrivilege(anyLong())).willReturn(false);
+        //willThrow(BadRequestException.class).given(orderService).cancelOrder(order.getOrderId());
+
+        this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, order.getOrderId()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser
+    void should_not_be_able_to_cancel_non_existing_order() throws Exception {
         String orderId = "1234";
-        willThrow(ResourceNotFoundException.class).given(orderService).cancelOrder(orderId);
+        given(orderService.findOrderByOrderId(orderId)).willReturn(Optional.empty());
 
         this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId))
                 .andExpect(status().isNotFound());
