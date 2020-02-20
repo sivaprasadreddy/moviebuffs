@@ -4,8 +4,8 @@ import {NavLink} from "react-router-dom";
 const pagination = props => {
 
     const basePath = props.basePath;
-    const searchParam = props.query !== "" ? "&query="+props.query : "";
-    const genreParam = props.genre !== "" ? "&genre="+props.genre : "";
+    const searchParam = (props.query !== undefined && props.query !== "") ? "&query="+props.query : "";
+    const genreParam = (props.genre !== undefined && props.genre !== "") ? "&genre="+props.genre : "";
     const firstPage = basePath + '?page=1'+ genreParam + searchParam;
     const prevPage = basePath + '?page='+(props.products.pageNumber - 1) + genreParam + searchParam;
     const nextPage = basePath + '?page='+(props.products.pageNumber + 1) + genreParam + searchParam;

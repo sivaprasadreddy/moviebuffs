@@ -21,6 +21,7 @@
         <module>moviebuffs-ui-react</module>
         <module>moviebuffs-api</module>
         <module>moviebuffs-gatling-tests</module>
+        <module>tools</module>
     </modules>
 
 </project>
