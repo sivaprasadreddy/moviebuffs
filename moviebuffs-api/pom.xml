@@ -28,6 +28,7 @@
 		<jjwt.version>0.6.0</jjwt.version>
 		<heroku.appName>sivalabs-moviebuffs</heroku.appName>
 		<testcontainers.version>1.12.2</testcontainers.version>
+		<p6spy.starter.version>1.6.1</p6spy.starter.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
 		<jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
@@ -48,6 +49,10 @@
 		<ui.build.dir>${ui.proj.dir}/build</ui.build.dir>
 
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+		<dependency-check-maven.version>3.3.2</dependency-check-maven.version>
+		<frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+		<heroku-maven-plugin.version>2.0.11</heroku-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -144,7 +149,7 @@
 		<dependency>
 			<groupId>com.github.gavlyukovskiy</groupId>
 			<artifactId>p6spy-spring-boot-starter</artifactId>
-			<version>1.6.1</version>
+			<version>${p6spy.starter.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -392,7 +397,7 @@
 					<plugin>
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.6</version>
+						<version>${frontend-maven-plugin.version}</version>
 						<configuration>
 							<workingDirectory>${ui.proj.dir}</workingDirectory>
 						</configuration>
@@ -462,12 +467,12 @@
 					<plugin>
 						<groupId>com.heroku.sdk</groupId>
 						<artifactId>heroku-maven-plugin</artifactId>
-						<version>2.0.11</version>
+						<version>${heroku-maven-plugin.version}</version>
 						<configuration>
 							<appName>${heroku.appName}</appName>
 							<includeTarget>false</includeTarget>
 							<includes>
-								<include>target/moviebuffs-api-0.0.1-SNAPSHOT.jar</include>
+								<include>${build.directory}/${build.finalName}.jar</include>
 							</includes>
 							<!--
                             <processTypes>
@@ -479,15 +484,22 @@
 					<plugin>
 						<groupId>org.owasp</groupId>
 						<artifactId>dependency-check-maven</artifactId>
-						<version>3.3.2</version>
+						<version>${dependency-check-maven.version}</version>
 						<configuration>
 							<failOnError>false</failOnError>
 						</configuration>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>sonar</id>
+			<build>
+				<plugins>
 					<plugin>
 						<groupId>org.sonarsource.scanner.maven</groupId>
 						<artifactId>sonar-maven-plugin</artifactId>
-						<version>3.7.0.1746</version>
+						<version>${sonar-maven-plugin.version}</version>
 						<executions>
 							<execution>
 								<goals>
@@ -497,7 +509,6 @@
 						</executions>
 					</plugin>
 				</plugins>
-
 			</build>
 		</profile>
 	</profiles>

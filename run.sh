@@ -43,7 +43,7 @@ function stop_all() {
 }
 
 function build_api() {
-    ./mvnw clean verify
+    ./mvnw clean package -DskipTests -Pci
 }
 
 function sonar() {
