@@ -37,6 +37,7 @@ public class CsvRowMapperUtils {
     public Movie mapToMovieEntity(MovieCsvRecord movieCsvRecord) throws JsonProcessingException {
         Movie movie = new Movie();
         movie.setTitle(movieCsvRecord.getTitle());
+        movie.setTmdbId(movieCsvRecord.getId());
         movie.setImdbId(movieCsvRecord.getImdbId());
         movie.setBudget(movieCsvRecord.getBudget());
         movie.setHomepage(movieCsvRecord.getHomepage());

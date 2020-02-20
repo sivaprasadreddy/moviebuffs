@@ -29,6 +29,10 @@ public class Movie implements Serializable
 
 	private String title;
 
+	@JsonProperty("tmdb_id")
+	@Column(name = "tmdb_id")
+	private String tmdbId;
+
 	@JsonProperty("imdb_id")
 	@Column(name = "imdb_id")
 	private String imdbId;

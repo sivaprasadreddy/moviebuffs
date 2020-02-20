@@ -32,6 +32,12 @@ public class MovieService {
     private final CrewMemberRepository crewMemberRepository;
     private final GenreRepository genreRepository;
 
+    public void cleanupMovieData() {
+        crewMemberRepository.deleteAll();
+        castMemberRepository.deleteAll();
+        movieRepository.deleteAll();
+    }
+
     @Transactional(readOnly = true)
     public Optional<Movie> findMovieById(Long id) {
         return movieRepository.findById(id);
@@ -61,6 +67,11 @@ public class MovieService {
     @Transactional(readOnly = true)
     public Optional<Genre> findGenreBySlug(String slug) {
         return genreRepository.findBySlug(slug);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Movie> findByTmdbId(String tmdbId) {
+        return movieRepository.findByTmdbId(tmdbId);
     }
 
     public Movie createMovie(Movie movie) {

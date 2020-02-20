@@ -31,7 +31,7 @@ jobs:
         with:
           java-version: 1.8
       - name: SonarCloud Scan
-        run: mvn -B clean verify sonar:sonar -Pci -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn -B clean verify sonar:sonar -Psonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: ./moviebuffs-api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +50,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Package with Maven
-        run: mvn -B package -DskipTests --file pom.xml
+        run: mvn -B package -DskipTests -Pci --file pom.xml
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
       - name: Build Docker image
