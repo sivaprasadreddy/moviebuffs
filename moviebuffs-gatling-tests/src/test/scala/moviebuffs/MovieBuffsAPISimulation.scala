@@ -15,20 +15,51 @@ class MovieBuffsAPISimulation extends Simulation {
     .acceptEncodingHeader("gzip, deflate")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
 
-
-  val getAllProducts = exec(http("AllProducts").get("/api/movies")).pause(1)
-  val getAllOrders = exec(http("AllOrders").get("/api/orders")).pause(1)
-
-
   // Now, we can write the scenario as a composition
-  val scnGetAllProducts = scenario("Get All Products").exec(getAllProducts).pause(2)
-  val scnGetAllOrders = scenario("Get All Orders").exec(getAllOrders).pause(2)
-
-  //setUp(scn.inject(atOnceUsers(10)).protocols(httpConf))
+  val scnBrowseProducts = scenario("Browse Products").exec(Browse.products).pause(2)
 
   setUp(
-      scnGetAllProducts.inject(rampUsers(500) during  (10 seconds)),
-      scnGetAllOrders.inject(rampUsers(500) during  (10 seconds)),
+      scnBrowseProducts.inject(rampUsers(500) during  (10 seconds))
+      //,scnBrowseProducts.inject(atOnceUsers(100))
   ).protocols(httpConf)
+    .assertions(
+      global.responseTime.max.lt(800),
+      global.successfulRequests.percent.gt(95)
+    )
+
+}
+
+object Browse {
+  val searchFeeder = csv("data/search.csv").random
+  val genreFeeder = csv("data/genres.csv").random
+
+  val searchInGenre =
+    feed(genreFeeder)
+    .feed(searchFeeder)
+    .exec(http("Search Products By Genre")
+    .get("/api/movies?genre=${genre}&query=${key}"))
+    .pause(3)
+
+  val byGenre = feed(genreFeeder)
+    .exec(http("Products By Genre")
+      .get("/api/movies?genre=${genre}"))
+    .pause(3)
+
+  val search = feed(searchFeeder)
+    .exec(http("Search")
+      .get("/api/movies?query=${key}"))
+    .pause(3)
+
+  val gotoPage = repeat(5, "n") {
+    exec{ session => session.set("pageNo", session("n").as[Int] + 1) }
+    .exec(http("Products Page ${pageNo}").get("/api/movies?page=${pageNo}"))
+    .pause(1)
+  }
+
+  val products =
+    exec(gotoPage)
+      .exec(search)
+      .exec(byGenre)
+      .exec(searchInGenre)
 
 }

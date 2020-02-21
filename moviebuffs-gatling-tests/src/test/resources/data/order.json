@@ -1,0 +1,15 @@
+{
+  "customerName": "${randstring}",
+  "customerEmail": "${randstring}@gmail.com",
+  "deliveryAddress": "${randstring}",
+  "creditCardNumber": "1111222233334444",
+  "cvv": "123",
+  "items": [
+    {
+      "productCode": "${productCode}",
+      "productName": "${productName}",
+      "productPrice": "${productPrice}",
+      "quantity": "${randomQuantity}"
+    }
+  ]
+}

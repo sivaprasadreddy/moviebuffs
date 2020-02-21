@@ -402,7 +402,6 @@
 							<workingDirectory>${ui.proj.dir}</workingDirectory>
 						</configuration>
 						<executions>
-							<!-- Install our node and npm version to run npm/node scripts-->
 							<execution>
 								<id>install node and npm</id>
 								<goals>
@@ -413,20 +412,16 @@
 									<npmVersion>6.11.3</npmVersion>
 								</configuration>
 							</execution>
-							<!-- Install all project dependencies -->
 							<execution>
 								<id>npm install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
-								<!-- optional: default phase is "generate-resources" -->
 								<phase>generate-resources</phase>
-								<!-- Optional configuration which provides for running any npm/yarn command -->
 								<configuration>
 									<arguments>install</arguments>
 								</configuration>
 							</execution>
-							<!-- Build and minify static files -->
 							<execution>
 								<id>npm run build</id>
 								<goals>

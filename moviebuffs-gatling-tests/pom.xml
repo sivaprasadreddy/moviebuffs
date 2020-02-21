@@ -58,7 +58,7 @@
         <artifactId>gatling-maven-plugin</artifactId>
         <version>${gatling-plugin.version}</version>
         <configuration>
-          <resultsFolder>target/gatling/results</resultsFolder>
+          <runMultipleSimulations>true</runMultipleSimulations>
         </configuration>
       </plugin>
     </plugins>
