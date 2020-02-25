@@ -467,7 +467,7 @@
 							<appName>${heroku.appName}</appName>
 							<includeTarget>false</includeTarget>
 							<includes>
-								<include>${build.directory}/${build.finalName}.jar</include>
+								<include>${project.build.directory}/${project.build.finalName}.jar</include>
 							</includes>
 							<!--
                             <processTypes>

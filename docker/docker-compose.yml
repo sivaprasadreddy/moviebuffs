@@ -11,10 +11,12 @@ services:
     depends_on:
       - mb-postgresdb
     environment:
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       SPRING_DATASOURCE_URL: jdbc:postgresql://mb-postgresdb:5432/appdb
       SPRING_DATASOURCE_USERNAME: siva
       SPRING_DATASOURCE_PASSWORD: secret
+      APPLICATION_LOGSTASH_HOST: logstash
 
   mb-postgresdb:
     image: postgres:10.7

@@ -100,7 +100,7 @@ public class MovieDataImporter {
             movie.setGenres(saveGenres(genresMap, movie.getGenres()));
             moviesBatch.add(movie);
             recordCount++;
-            if(recordCount >= properties.getImportTmdbDataMaxSize()) {
+            if(properties.getImportTmdbDataMaxSize()> 0 && recordCount >= properties.getImportTmdbDataMaxSize()) {
                 break;
             }
             if (moviesBatch.size() >= properties.getImportTmdbDataBatchSize()) {
