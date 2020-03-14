@@ -1,7 +1,7 @@
 package com.sivalabs.moviebuffs.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sivalabs.moviebuffs.entity.Genre;
+import com.sivalabs.moviebuffs.core.entity.Genre;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

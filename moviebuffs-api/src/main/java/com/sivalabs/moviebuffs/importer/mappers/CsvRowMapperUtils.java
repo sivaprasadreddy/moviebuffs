@@ -1,17 +1,16 @@
 package com.sivalabs.moviebuffs.importer.mappers;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sivalabs.moviebuffs.entity.CastMember;
-import com.sivalabs.moviebuffs.entity.CrewMember;
-import com.sivalabs.moviebuffs.entity.Genre;
-import com.sivalabs.moviebuffs.entity.Movie;
+import com.sivalabs.moviebuffs.core.entity.CastMember;
+import com.sivalabs.moviebuffs.core.entity.CrewMember;
+import com.sivalabs.moviebuffs.core.entity.Genre;
+import com.sivalabs.moviebuffs.core.entity.Movie;
 import com.sivalabs.moviebuffs.importer.model.CastMemberRecord;
 import com.sivalabs.moviebuffs.importer.model.CrewMemberRecord;
 import com.sivalabs.moviebuffs.importer.model.MovieCsvRecord;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,17 +21,13 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 @Component
+@RequiredArgsConstructor
 public class CsvRowMapperUtils {
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
-    private static final Pattern NONLATIN = Pattern.compile("[^\\w-]");
+    private static final Random random = new Random();
+    private static final Pattern NON_LATIN = Pattern.compile("[^\\w-]");
     private static final Pattern WHITESPACE = Pattern.compile("[\\s]");
-
-    @Autowired
-    public CsvRowMapperUtils() {
-        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-    }
 
     public Movie mapToMovieEntity(MovieCsvRecord movieCsvRecord) throws JsonProcessingException {
         Movie movie = new Movie();
@@ -57,8 +52,7 @@ public class CsvRowMapperUtils {
 
     private BigDecimal randomPrice() {
         int min = 10, max = 100;
-        Random r = new Random();
-        return new BigDecimal(r.nextInt((max - min) + 1) + min);
+        return new BigDecimal(random.nextInt((max - min) + 1) + min);
     }
 
     private LocalDate toLocalDate(String dateString) {
@@ -100,9 +94,9 @@ public class CsvRowMapperUtils {
     }
 
     public static String toSlug(String input) {
-        String nowhitespace = WHITESPACE.matcher(input).replaceAll("-");
-        String normalized = Normalizer.normalize(nowhitespace, Normalizer.Form.NFD);
-        String slug = NONLATIN.matcher(normalized).replaceAll("");
+        String noWhitespace = WHITESPACE.matcher(input).replaceAll("-");
+        String normalized = Normalizer.normalize(noWhitespace, Normalizer.Form.NFD);
+        String slug = NON_LATIN.matcher(normalized).replaceAll("");
         return slug.toLowerCase(Locale.ENGLISH);
     }
 
@@ -110,7 +104,6 @@ public class CsvRowMapperUtils {
         try {
             return Double.parseDouble(str);
         } catch (Exception e) {
-            e.printStackTrace();
             return 0d;
         }
     }

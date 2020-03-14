@@ -1,6 +1,6 @@
 package com.sivalabs.moviebuffs.web.dto;
 
-import com.sivalabs.moviebuffs.entity.Order;
+import com.sivalabs.moviebuffs.core.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

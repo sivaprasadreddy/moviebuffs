@@ -1,7 +1,7 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractIntegrationTest;
-import com.sivalabs.moviebuffs.service.MovieService;
+import com.sivalabs.moviebuffs.core.service.MovieService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

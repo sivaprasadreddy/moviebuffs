@@ -1,25 +1,24 @@
 package com.sivalabs.moviebuffs.importer;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVIterator;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.sivalabs.moviebuffs.config.ApplicationProperties;
-import com.sivalabs.moviebuffs.entity.CastMember;
-import com.sivalabs.moviebuffs.entity.CrewMember;
-import com.sivalabs.moviebuffs.entity.Genre;
-import com.sivalabs.moviebuffs.entity.Movie;
+import com.sivalabs.moviebuffs.core.entity.CastMember;
+import com.sivalabs.moviebuffs.core.entity.CrewMember;
+import com.sivalabs.moviebuffs.core.entity.Genre;
+import com.sivalabs.moviebuffs.core.entity.Movie;
+import com.sivalabs.moviebuffs.core.service.MovieService;
 import com.sivalabs.moviebuffs.importer.mappers.CsvRowMapperUtils;
 import com.sivalabs.moviebuffs.importer.model.CastMemberRecord;
 import com.sivalabs.moviebuffs.importer.model.CreditsCsvRecord;
 import com.sivalabs.moviebuffs.importer.model.CrewMemberRecord;
 import com.sivalabs.moviebuffs.importer.model.MovieCsvRecord;
-import com.sivalabs.moviebuffs.service.MovieService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
@@ -30,31 +29,20 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.sivalabs.moviebuffs.utils.TimeUtils.millisToLongDHMS;
+import static com.sivalabs.moviebuffs.core.utils.TimeUtils.millisToLongDHMS;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class MovieDataImporter {
 
     private final MovieService movieService;
     private final CsvRowMapperUtils csvRowMapperUtils;
     private final ApplicationProperties properties;
+    private final ObjectMapper objectMapper;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
     private static final int MAX_CAST_MEMBERS_PER_MOVIE = 10;
     private static final List<String> CREW_JOBS_TO_IMPORT = Arrays.asList("PRODUCER", "DIRECTOR");
-
-    @Autowired
-    public MovieDataImporter(MovieService movieService,
-                             CsvRowMapperUtils csvRowMapperUtils,
-                             ApplicationProperties properties) {
-        this.movieService = movieService;
-        this.csvRowMapperUtils = csvRowMapperUtils;
-        this.properties = properties;
-
-        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-    }
 
     @Async
     public void importDataAsync() throws IOException, CsvValidationException {

@@ -1,6 +1,6 @@
 package com.sivalabs.moviebuffs.config;
 
-import com.sivalabs.moviebuffs.utils.Constants;
+import com.sivalabs.moviebuffs.core.utils.Constants;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
 
-import static com.sivalabs.moviebuffs.utils.TimeUtils.millisToLongDHMS;
+import static com.sivalabs.moviebuffs.core.utils.TimeUtils.millisToLongDHMS;
 
 @Aspect
 @Component

@@ -1,6 +1,6 @@
 package com.sivalabs.moviebuffs.datafactory;
 
-import com.sivalabs.moviebuffs.entity.*;
+import com.sivalabs.moviebuffs.core.entity.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

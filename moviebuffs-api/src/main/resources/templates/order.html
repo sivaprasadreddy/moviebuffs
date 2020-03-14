@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{mainLayout}">
+<head>
+    <title>Order</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+
+        <div class="col-md-8 offset-md-2">
+        <h2>Order Id: <span th:text="${order.orderId}">OrderId</span></h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Sub Total</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="item: ${order.items}">
+                <td th:text="${item.productName}">title</td>
+                <td th:text="${item.productPrice}">price</td>
+                <td th:text="${item.quantity}">quantity</td>
+                <td th:text="${item.getSubTotal()}">subtotal</td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="3"/>
+                <th colspan="1" style="text-align: left">
+                    Total Amount: <span th:text="${order.getTotalAmount()}">totalAmount</span>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+        <form>
+            <div class="form-group">
+                <label for="customerName">Customer Name</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        id="customerName"
+                        name="customerName"
+                        readonly="readonly"
+                        value=""
+                        th:value="${order.customerName}"
+                />
+            </div>
+            <div class="form-group">
+                <label for="customerEmail">Customer Email</label>
+                <input
+                        type="email"
+                        class="form-control"
+                        id="customerEmail"
+                        name="customerEmail"
+                        readonly="readonly"
+                        value=""
+                        th:value="${order.customerEmail}"
+                />
+            </div>
+            <div class="form-group">
+                <label for="deliveryAddress">Delivery Address</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        id="deliveryAddress"
+                        name="deliveryAddress"
+                        readonly="readonly"
+                        value=""
+                        th:value="${order.deliveryAddress}"
+                />
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+</div>
+</body>
+</html>

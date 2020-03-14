@@ -1,8 +1,8 @@
 package com.sivalabs.moviebuffs.web.mappers;
 
-import com.sivalabs.moviebuffs.entity.Role;
-import com.sivalabs.moviebuffs.entity.User;
-import com.sivalabs.moviebuffs.repository.RoleRepository;
+import com.sivalabs.moviebuffs.core.entity.Role;
+import com.sivalabs.moviebuffs.core.entity.User;
+import com.sivalabs.moviebuffs.core.repository.RoleRepository;
 import com.sivalabs.moviebuffs.web.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

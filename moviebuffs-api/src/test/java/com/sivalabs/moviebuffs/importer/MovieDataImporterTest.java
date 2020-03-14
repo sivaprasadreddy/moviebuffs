@@ -1,10 +1,12 @@
 package com.sivalabs.moviebuffs.importer;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.exceptions.CsvValidationException;
 import com.sivalabs.moviebuffs.config.ApplicationProperties;
-import com.sivalabs.moviebuffs.entity.Genre;
+import com.sivalabs.moviebuffs.core.entity.Genre;
+import com.sivalabs.moviebuffs.core.service.MovieService;
 import com.sivalabs.moviebuffs.importer.mappers.CsvRowMapperUtils;
-import com.sivalabs.moviebuffs.service.MovieService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +27,10 @@ class MovieDataImporterTest {
 
     @BeforeEach
     void setUp() {
-        csvRowMapperUtils = new CsvRowMapperUtils();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        csvRowMapperUtils = new CsvRowMapperUtils(objectMapper);
         properties = new ApplicationProperties();
         properties.setImportTmdbData(true);
         properties.setMoviesDataFiles(singletonList("/data/movies_metadata-test.csv"));
@@ -35,7 +40,7 @@ class MovieDataImporterTest {
 
         given(movieService.saveGenre(any(Genre.class))).willAnswer(answer -> answer.getArgument(0));
 
-        movieDataImporter = new MovieDataImporter(movieService, csvRowMapperUtils, properties);
+        movieDataImporter = new MovieDataImporter(movieService, csvRowMapperUtils, properties, objectMapper);
     }
 
     @Test

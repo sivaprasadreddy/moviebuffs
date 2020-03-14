@@ -23,7 +23,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                  //.apis(RequestHandlerSelectors.any())
-                .apis(RequestHandlerSelectors.basePackage("com.sivalabs.moviebuffs.web.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sivalabs.moviebuffs.web.api"))
                 // .paths(PathSelectors.any())
                  .paths(PathSelectors.ant("/api/**"))
                 .build()

@@ -30,7 +30,7 @@
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<p6spy.starter.version>1.6.1</p6spy.starter.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
-		<jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
+		<jacoco.minimum.coverage>0.70</jacoco.minimum.coverage>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.organization>sivaprasadreddy-github</sonar.organization>
@@ -45,13 +45,10 @@
 			src/main/java/**/*Application.*
 		</sonar.exclusions>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-		<ui.proj.dir>${project.basedir}/../moviebuffs-ui-react</ui.proj.dir>
-		<ui.build.dir>${ui.proj.dir}/build</ui.build.dir>
 
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 		<dependency-check-maven.version>3.3.2</dependency-check-maven.version>
-		<frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
 		<heroku-maven-plugin.version>2.0.11</heroku-maven-plugin.version>
 	</properties>
 
@@ -412,82 +409,6 @@
 			<id>ci</id>
 			<build>
 				<plugins>
-					<plugin>
-						<artifactId>maven-clean-plugin</artifactId>
-						<version>3.1.0</version>
-						<configuration>
-							<filesets>
-								<fileset>
-									<directory>${ui.build.dir}</directory>
-								</fileset>
-							</filesets>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>${frontend-maven-plugin.version}</version>
-						<configuration>
-							<workingDirectory>${ui.proj.dir}</workingDirectory>
-						</configuration>
-						<executions>
-							<execution>
-								<id>install node and npm</id>
-								<goals>
-									<goal>install-node-and-npm</goal>
-								</goals>
-								<configuration>
-									<nodeVersion>v8.12.0</nodeVersion>
-									<npmVersion>6.11.3</npmVersion>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm install</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<arguments>install</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm run build</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<configuration>
-									<arguments>run build</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-resources-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>copy frontend content</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}/classes/static</outputDirectory>
-									<overwrite>true</overwrite>
-									<resources>
-										<resource>
-											<directory>${ui.build.dir}</directory>
-											<includes>
-												<include>static/</include>
-												<include>index.html</include>
-												<include>favicon.ico</include>
-											</includes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>com.heroku.sdk</groupId>
 						<artifactId>heroku-maven-plugin</artifactId>

@@ -28,7 +28,7 @@
                 <p th:text="${'Original Language:'+ movie.originalLanguage}">movie.originalLanguage</p>
             </div>
             <div class="pt-3">
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" th:onclick="'javascript:addItemToCart(\'' + ${movie.id} + '\');'">
                 Add to Cart
                 </button>
             </div>

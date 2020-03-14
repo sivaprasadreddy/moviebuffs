@@ -1,6 +1,6 @@
 package com.sivalabs.moviebuffs.config.security;
 
-import com.sivalabs.moviebuffs.entity.User;
+import com.sivalabs.moviebuffs.core.entity.User;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

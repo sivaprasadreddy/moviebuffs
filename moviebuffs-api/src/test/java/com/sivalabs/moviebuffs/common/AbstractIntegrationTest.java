@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.sivalabs.moviebuffs.utils.Constants.PROFILE_IT;
+import static com.sivalabs.moviebuffs.core.utils.Constants.PROFILE_IT;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @ActiveProfiles({PROFILE_IT})

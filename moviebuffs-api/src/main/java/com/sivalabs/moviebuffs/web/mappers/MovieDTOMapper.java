@@ -1,8 +1,8 @@
 package com.sivalabs.moviebuffs.web.mappers;
 
-import com.sivalabs.moviebuffs.entity.CastMember;
-import com.sivalabs.moviebuffs.entity.CrewMember;
-import com.sivalabs.moviebuffs.entity.Movie;
+import com.sivalabs.moviebuffs.core.entity.CastMember;
+import com.sivalabs.moviebuffs.core.entity.CrewMember;
+import com.sivalabs.moviebuffs.core.entity.Movie;
 import com.sivalabs.moviebuffs.web.dto.CastMemberDTO;
 import com.sivalabs.moviebuffs.web.dto.CrewMemberDTO;
 import com.sivalabs.moviebuffs.web.dto.MovieDTO;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.sivalabs.moviebuffs.utils.Constants.TMDB_IMAGE_PATH_PREFIX;
+import static com.sivalabs.moviebuffs.core.utils.Constants.TMDB_IMAGE_PATH_PREFIX;
 
 @Component
 public class MovieDTOMapper {

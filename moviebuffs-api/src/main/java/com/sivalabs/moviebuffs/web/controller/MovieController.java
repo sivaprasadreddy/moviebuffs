@@ -1,7 +1,7 @@
 package com.sivalabs.moviebuffs.web.controller;
 
-import com.sivalabs.moviebuffs.entity.Genre;
-import com.sivalabs.moviebuffs.service.MovieService;
+import com.sivalabs.moviebuffs.core.entity.Genre;
+import com.sivalabs.moviebuffs.core.service.MovieService;
 import com.sivalabs.moviebuffs.web.dto.MovieDTO;
 import com.sivalabs.moviebuffs.web.mappers.MovieDTOMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Controller
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class MovieController {
     private final MovieService movieService;
     private final MovieDTOMapper movieDTOMapper;

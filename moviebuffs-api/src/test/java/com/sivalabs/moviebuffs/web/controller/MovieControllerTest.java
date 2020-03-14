@@ -1,11 +1,13 @@
 package com.sivalabs.moviebuffs.web.controller;
 
 import com.sivalabs.moviebuffs.common.AbstractMvcUnitTest;
-import com.sivalabs.moviebuffs.entity.Movie;
-import com.sivalabs.moviebuffs.service.MovieService;
+import com.sivalabs.moviebuffs.core.entity.Movie;
+import com.sivalabs.moviebuffs.core.service.MovieService;
+import com.sivalabs.moviebuffs.web.mappers.MovieDTOMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,9 @@ class MovieControllerTest extends AbstractMvcUnitTest {
 
     @MockBean
     private MovieService movieService;
+
+    @SpyBean
+    private MovieDTOMapper movieDTOMapper;
 
     @Test
     void shouldShowHomePage() throws Exception {

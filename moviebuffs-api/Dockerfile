@@ -1,7 +1,12 @@
+FROM maven:3.6.3-jdk-11-slim AS build
+RUN mkdir -p /workspace
+WORKDIR /workspace
+COPY pom.xml /workspace
+COPY src /workspace/src
+RUN mvn -B package -DskipTests --file pom.xml
+
 FROM openjdk:11-jdk-slim
-VOLUME /tmp
-ADD target/*.jar app.jar
-RUN sh -c 'touch /app.jar'
+COPY --from=build /workspace/target/*.jar app.jar
 ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
 ENV SPRING_PROFILES_ACTIVE "default"
 EXPOSE 8080 8787

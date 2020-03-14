@@ -42,7 +42,8 @@
                            data-toggle="tooltip"
                            data-placement="top"
                            th:text="${movie.getTrimmedTagline()}">movie.tagline</p>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" onclick=""
+                                th:onclick="'javascript:addItemToCart(\'' + ${movie.id} + '\');'">
                         Add to Cart
                         </button>
                     </div>
@@ -70,7 +71,7 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         var page = /*[[${page}]]*/ 1;
-        console.log(page);
+        //console.log(page);
         /*]]>*/
     </script>
 </div>

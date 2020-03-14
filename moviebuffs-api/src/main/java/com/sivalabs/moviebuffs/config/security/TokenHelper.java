@@ -84,10 +84,6 @@ public class TokenHelper {
         return (username != null && username.equals(userDetails.getUsername()));
     }
 
-    /**
-     *  Getting the token from Authentication header
-     *  e.g Bearer your_token
-     */
     public String getToken( HttpServletRequest request ) {
         String authHeader = getAuthHeaderFromHeader( request );
         if ( authHeader != null && authHeader.startsWith("Bearer ")) {

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -36,8 +36,8 @@
                 <a class="nav-link" href="#" th:href="@{/login}">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span id="navbarCartLink">Cart(0)</span>
+                <a class="nav-link" href="#" th:href="@{/cart}">
+                    Cart<span id="cart-item-count">(0)</span>
                 </a>
             </li>
         </ul>
@@ -60,6 +60,7 @@
 <script th:src="@{'/webjars/popper.js/1.14.3/umd/popper.js'}"></script>
 <script th:src="@{'/webjars/bootstrap/4.4.1/js/bootstrap.js'}"></script>
 <script th:src="@{'/js/common.js'}"></script>
+<script th:src="@{'/js/app.js'}"></script>
 <div layout:fragment="pageScripts">
 </div>
 </body>

@@ -1,6 +1,6 @@
 package com.sivalabs.moviebuffs.config.security;
 
-import com.sivalabs.moviebuffs.repository.UserRepository;
+import com.sivalabs.moviebuffs.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<com.sivalabs.moviebuffs.entity.User> user = userRepository.findByEmail(username);
+        Optional<com.sivalabs.moviebuffs.core.entity.User> user = userRepository.findByEmail(username);
         if (user.isPresent()) {
             return new SecurityUser(user.get());
         } else {
