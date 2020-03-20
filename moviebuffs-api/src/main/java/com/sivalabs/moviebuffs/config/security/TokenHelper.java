@@ -1,6 +1,5 @@
 package com.sivalabs.moviebuffs.config.security;
 
-import com.sivalabs.moviebuffs.config.ApplicationProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,7 +14,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenHelper {
 
-    private final ApplicationProperties applicationProperties;
+    private final SecurityConfigProperties securityConfigProperties;
     private final TimeProvider timeProvider;
 
     private static final String AUDIENCE_WEB = "web";
@@ -43,7 +42,7 @@ public class TokenHelper {
             refreshedToken = Jwts.builder()
                     .setClaims(claims)
                     .setExpiration(generateExpirationDate())
-                    .signWith( SIGNATURE_ALGORITHM, applicationProperties.getJwt().getSecret() )
+                    .signWith( SIGNATURE_ALGORITHM, securityConfigProperties.getJwt().getSecret() )
                     .compact();
         } catch (Exception e) {
             refreshedToken = null;
@@ -53,12 +52,12 @@ public class TokenHelper {
 
     public String generateToken(String username) {
         return Jwts.builder()
-                .setIssuer( applicationProperties.getJwt().getIssuer() )
+                .setIssuer( securityConfigProperties.getJwt().getIssuer() )
                 .setSubject(username)
                 .setAudience(AUDIENCE_WEB)
                 .setIssuedAt(timeProvider.now())
                 .setExpiration(generateExpirationDate())
-                .signWith( SIGNATURE_ALGORITHM, applicationProperties.getJwt().getSecret() )
+                .signWith( SIGNATURE_ALGORITHM, securityConfigProperties.getJwt().getSecret() )
                 .compact();
     }
 
@@ -66,7 +65,7 @@ public class TokenHelper {
         Claims claims;
         try {
             claims = Jwts.parser()
-                    .setSigningKey(applicationProperties.getJwt().getSecret())
+                    .setSigningKey(securityConfigProperties.getJwt().getSecret())
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -76,7 +75,7 @@ public class TokenHelper {
     }
 
     private Date generateExpirationDate() {
-        return new Date(timeProvider.now().getTime() + applicationProperties.getJwt().getExpiresIn() * 1000);
+        return new Date(timeProvider.now().getTime() + securityConfigProperties.getJwt().getExpiresIn() * 1000);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -93,7 +92,7 @@ public class TokenHelper {
     }
 
     private String getAuthHeaderFromHeader(HttpServletRequest request) {
-        return request.getHeader(applicationProperties.getJwt().getHeader());
+        return request.getHeader(securityConfigProperties.getJwt().getHeader());
     }
 
 }

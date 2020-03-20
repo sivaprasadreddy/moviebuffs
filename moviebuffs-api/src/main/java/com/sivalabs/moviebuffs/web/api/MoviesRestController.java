@@ -1,6 +1,5 @@
 package com.sivalabs.moviebuffs.web.api;
 
-import com.sivalabs.moviebuffs.config.Loggable;
 import com.sivalabs.moviebuffs.core.entity.Genre;
 import com.sivalabs.moviebuffs.core.exception.ResourceNotFoundException;
 import com.sivalabs.moviebuffs.core.service.MovieService;
@@ -29,7 +28,6 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Loggable
 public class MoviesRestController {
     private static final int DEFAULT_PAGE_SIZE = 24;
 

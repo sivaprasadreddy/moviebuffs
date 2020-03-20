@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.sivalabs.moviebuffs.core.utils.TestConstants.MOVIES_COLLECTION_BASE_PATH;
+import static com.sivalabs.moviebuffs.common.TestConstants.MOVIES_COLLECTION_BASE_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;

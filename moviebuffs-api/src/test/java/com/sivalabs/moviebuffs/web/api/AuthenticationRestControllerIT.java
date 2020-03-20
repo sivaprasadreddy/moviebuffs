@@ -1,7 +1,7 @@
 package com.sivalabs.moviebuffs.web.api;
 
 import com.sivalabs.moviebuffs.common.AbstractIntegrationTest;
-import com.sivalabs.moviebuffs.config.ApplicationProperties;
+import com.sivalabs.moviebuffs.config.security.SecurityConfigProperties;
 import com.sivalabs.moviebuffs.config.security.TokenHelper;
 import com.sivalabs.moviebuffs.core.entity.User;
 import com.sivalabs.moviebuffs.core.service.UserService;
@@ -29,7 +29,7 @@ class AuthenticationRestControllerIT extends AbstractIntegrationTest {
     private TokenHelper tokenHelper;
 
     @Autowired
-    private ApplicationProperties applicationProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     @Test
     void should_login_successfully_with_valid_credentials() throws Exception {
@@ -63,7 +63,7 @@ class AuthenticationRestControllerIT extends AbstractIntegrationTest {
     void should_get_refreshed_authToken_if_authorized() throws Exception {
         String token = tokenHelper.generateToken("admin@gmail.com");
         this.mockMvc.perform(post("/api/auth/refresh")
-                .header(applicationProperties.getJwt().getHeader(),"Bearer "+token))
+                .header(securityConfigProperties.getJwt().getHeader(),"Bearer "+token))
                 .andExpect(status().isOk());
     }
 
@@ -76,7 +76,7 @@ class AuthenticationRestControllerIT extends AbstractIntegrationTest {
     @Test
     void should_fail_to_get_refreshed_authToken_if_token_is_invalid() throws Exception {
         this.mockMvc.perform(post("/api/auth/refresh")
-                .header(applicationProperties.getJwt().getHeader(),"Bearer invalid-token"))
+                .header(securityConfigProperties.getJwt().getHeader(),"Bearer invalid-token"))
                 .andExpect(status().isForbidden());
     }
 

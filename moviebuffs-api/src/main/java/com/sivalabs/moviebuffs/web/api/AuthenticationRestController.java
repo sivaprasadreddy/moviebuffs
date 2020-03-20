@@ -1,10 +1,10 @@
 package com.sivalabs.moviebuffs.web.api;
 
-import com.sivalabs.moviebuffs.config.ApplicationProperties;
 import com.sivalabs.moviebuffs.config.security.CustomUserDetailsService;
-import com.sivalabs.moviebuffs.config.security.SecurityUser;
+import com.sivalabs.moviebuffs.config.security.SecurityConfigProperties;
 import com.sivalabs.moviebuffs.config.security.TokenHelper;
 import com.sivalabs.moviebuffs.core.entity.User;
+import com.sivalabs.moviebuffs.core.model.SecurityUser;
 import com.sivalabs.moviebuffs.core.service.SecurityService;
 import com.sivalabs.moviebuffs.web.dto.AuthenticationRequestDTO;
 import com.sivalabs.moviebuffs.web.dto.AuthenticationResponseDTO;
@@ -30,7 +30,7 @@ public class AuthenticationRestController {
     private final TokenHelper tokenHelper;
     private final UserDTOMapper userDTOMapper;
     private final SecurityService securityService;
-    private final ApplicationProperties applicationProperties;
+    private final SecurityConfigProperties securityConfigProperties;
 
 
     @PostMapping(value = "/login")
@@ -43,7 +43,7 @@ public class AuthenticationRestController {
 
         SecurityUser user = (SecurityUser) authentication.getPrincipal();
         String jws = tokenHelper.generateToken(user.getUsername());
-        return new AuthenticationResponseDTO(jws, applicationProperties.getJwt().getExpiresIn());
+        return new AuthenticationResponseDTO(jws, securityConfigProperties.getJwt().getExpiresIn());
     }
 
     @PostMapping(value = "/refresh")
@@ -54,7 +54,7 @@ public class AuthenticationRestController {
         return ResponseEntity.ok(
                 new AuthenticationResponseDTO(
                         refreshedToken,
-                        applicationProperties.getJwt().getExpiresIn()
+                        securityConfigProperties.getJwt().getExpiresIn()
                 )
         );
     }

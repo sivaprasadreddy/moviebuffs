@@ -2,9 +2,9 @@ package com.sivalabs.moviebuffs.web.api;
 
 import com.sivalabs.moviebuffs.core.entity.Order;
 import com.sivalabs.moviebuffs.core.exception.BadRequestException;
+import com.sivalabs.moviebuffs.core.model.OrderConfirmationDTO;
 import com.sivalabs.moviebuffs.core.service.OrderService;
 import com.sivalabs.moviebuffs.core.service.SecurityService;
-import com.sivalabs.moviebuffs.web.dto.OrderConfirmationDTO;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;

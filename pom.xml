@@ -17,11 +17,28 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <modules>
-        <module>moviebuffs-ui-react</module>
-        <module>moviebuffs-api</module>
-        <module>moviebuffs-gatling-tests</module>
-        <module>tools</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>moviebuffs-core</module>
+                <module>moviebuffs-api</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>full</id>
+            <modules>
+                <module>moviebuffs-ui-react</module>
+                <module>moviebuffs-core</module>
+                <module>moviebuffs-api</module>
+                <module>moviebuffs-gatling-tests</module>
+                <module>tools</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>

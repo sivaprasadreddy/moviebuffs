@@ -1,5 +1,6 @@
 package com.sivalabs.moviebuffs.config.security;
 
+import com.sivalabs.moviebuffs.core.model.SecurityUser;
 import com.sivalabs.moviebuffs.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

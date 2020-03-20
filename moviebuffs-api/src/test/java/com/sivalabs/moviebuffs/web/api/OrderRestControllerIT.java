@@ -15,8 +15,8 @@ import org.zalando.problem.violations.ConstraintViolationProblemModule;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sivalabs.moviebuffs.core.utils.TestConstants.ORDERS_COLLECTION_BASE_PATH;
-import static com.sivalabs.moviebuffs.core.utils.TestConstants.ORDERS_SINGLE_BASE_PATH;
+import static com.sivalabs.moviebuffs.common.TestConstants.ORDERS_COLLECTION_BASE_PATH;
+import static com.sivalabs.moviebuffs.common.TestConstants.ORDERS_SINGLE_BASE_PATH;
 import static com.sivalabs.moviebuffs.datafactory.TestDataFactory.createOrder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

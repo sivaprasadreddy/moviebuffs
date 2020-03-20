@@ -11,7 +11,7 @@ public class MicrometerConfig {
 
     @Bean
     MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
-        return registry -> registry.config().commonTags("app.name", "moviebuffs-api");
+        return registry -> registry.config().commonTags("app.name", "moviebuffs");
     }
 
     @Bean
