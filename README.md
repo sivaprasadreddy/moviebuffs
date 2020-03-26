@@ -25,11 +25,11 @@
 
 ### Run Backend tests
 
-`moviebuffs/moviebuffs-api> ./mvnw clean verify`
+`moviebuffs/moviebuffs> ./mvnw clean verify`
 
 ### Run application locally
 
-`moviebuffs/moviebuffs-api> ./mvnw clean package -Pci & java -jar target/bookmarker-0.0.1-SNAPSHOT.jar`
+`moviebuffs/moviebuffs> ./mvnw clean package -Pci & java -jar target/bookmarker-0.0.1-SNAPSHOT.jar`
 
 * Application: http://localhost:8080/
 

@@ -1,9 +1,9 @@
 version: '3.1'
 services:
 
-  moviebuffs-api:
-    build: ../moviebuffs-api
-    container_name: moviebuffs-api
+  moviebuffs:
+    build: ../moviebuffs
+    container_name: moviebuffs
     ports:
       - "18080:8080"
       - "18787:8787"
@@ -34,4 +34,4 @@ services:
     ports:
       - "90:80"
     environment:
-      REACT_APP_API_BASE_URL: http://moviebuffs-api:8080
+      REACT_APP_API_BASE_URL: http://moviebuffs:8080

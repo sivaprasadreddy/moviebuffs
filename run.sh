@@ -6,7 +6,7 @@ declare dc_platform=${project_dir}/docker/docker-compose-platform.yml
 declare dc_elk=${project_dir}/docker/docker-compose-elk.yml
 declare dc_monitoring=${project_dir}/docker/docker-compose-monitoring.yml
 declare dc_test=${project_dir}/docker/docker-compose-test.yml
-declare moviebuffs_api="moviebuffs-api"
+declare moviebuffs="moviebuffs"
 declare sonarqube="sonarqube"
 declare elk="elasticsearch logstash kibana"
 declare monitoring="prometheus grafana"
@@ -17,20 +17,20 @@ function restart() {
 }
 
 function start() {
-    echo "Starting ${moviebuffs_api}...."
+    echo "Starting ${moviebuffs}...."
     build_api
-    docker-compose -f ${dc_main} up --build --force-recreate -d ${moviebuffs_api}
+    docker-compose -f ${dc_main} up --build --force-recreate -d ${moviebuffs}
     docker-compose -f ${dc_main} logs -f
 }
 
 function stop() {
-    echo "Stopping ${moviebuffs_api}...."
+    echo "Stopping ${moviebuffs}...."
     docker-compose -f ${dc_main} stop
     docker-compose -f ${dc_main} rm -f
 }
 
 function start_all() {
-    echo "Starting ${moviebuffs_api} and dependencies...."
+    echo "Starting ${moviebuffs} and dependencies...."
     build_api
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
     docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f

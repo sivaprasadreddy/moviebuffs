@@ -11,7 +11,7 @@ properties([
 ])
 
 def DOCKER_USERNAME = 'sivaprasadreddy'
-def API_IMAGE_NAME = 'moviebuffs-api'
+def API_IMAGE_NAME = 'moviebuffs'
 def UI_IMAGE_NAME = 'moviebuffs-ui-react'
 
 def utils = new JenkinsSharedLib(this, env, params, scm, currentBuild)
@@ -26,7 +26,7 @@ node {
             utils.npmTest("UI Test")
         }
 
-        dir("moviebuffs-api") {
+        dir("moviebuffs") {
             utils.runMavenTests("Tests")
             utils.runOWASPChecks("OWASP Checks")
             utils.publishDockerImage("Publish Docker", DOCKER_USERNAME, API_IMAGE_NAME)

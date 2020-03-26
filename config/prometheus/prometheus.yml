@@ -28,16 +28,16 @@ scrape_configs:
   static_configs:
   - targets: ['localhost:9090']
 
-- job_name: 'moviebuffs-api-local'
+- job_name: 'moviebuffs-local'
 
   metrics_path: '/actuator/prometheus'
   scrape_interval: 5s
   static_configs:
     - targets: ['localhost:18181']
 
-- job_name: 'moviebuffs-api-docker'
+- job_name: 'moviebuffs-docker'
 
   metrics_path: '/actuator/prometheus'
   scrape_interval: 5s
   static_configs:
-    - targets: ['moviebuffs-api:8080']
+    - targets: ['moviebuffs:8080']

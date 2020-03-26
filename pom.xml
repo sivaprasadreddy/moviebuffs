@@ -6,11 +6,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sivalabs</groupId>
-    <artifactId>moviebuffs</artifactId>
+    <artifactId>moviebuffs-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>moviebuffs</name>
+    <name>moviebuffs-parent</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,8 +24,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>moviebuffs-core</module>
-                <module>moviebuffs-api</module>
+                <module>moviebuffs</module>
             </modules>
         </profile>
 
@@ -33,8 +32,7 @@
             <id>full</id>
             <modules>
                 <module>moviebuffs-ui-react</module>
-                <module>moviebuffs-core</module>
-                <module>moviebuffs-api</module>
+                <module>moviebuffs</module>
                 <module>moviebuffs-gatling-tests</module>
                 <module>tools</module>
             </modules>

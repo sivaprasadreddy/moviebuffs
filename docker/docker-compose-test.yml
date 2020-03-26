@@ -1,9 +1,9 @@
 version: '3.1'
 services:
 
-  moviebuffs-api-hub:
-    image: sivaprasadreddy/moviebuffs-api
-    container_name: moviebuffs-api-hub
+  moviebuffs-hub:
+    image: sivaprasadreddy/moviebuffs
+    container_name: moviebuffs-hub
     environment:
       - SPRING_PROFILES_ACTIVE=default
     ports:
