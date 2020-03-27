@@ -53,4 +53,12 @@ public class OrderService {
         order.setStatus(Order.OrderStatus.CANCELLED);
         orderRepository.save(order);
     }
+
+    public List<Order> findOrdersByStatus(Order.OrderStatus status) {
+        return orderRepository.findByStatus(status);
+    }
+
+    public void updateOrder(Order order) {
+        orderRepository.save(order);
+    }
 }

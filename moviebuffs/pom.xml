@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.4.RELEASE</version>
+		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sivalabs</groupId>
@@ -19,7 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<java.version>11</java.version>
-		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
 		<swagger2.version>2.9.2</swagger2.version>
 		<problem-spring-web.version>0.25.2</problem-spring-web.version>
 		<logstash-logback.version>4.9</logstash-logback.version>
@@ -30,6 +30,7 @@
 		<testcontainers.version>1.12.2</testcontainers.version>
 		<p6spy.starter.version>1.6.1</p6spy.starter.version>
 		<playtika.testcontainers.version>1.39</playtika.testcontainers.version>
+		<archunit-junit5.version>0.13.1</archunit-junit5.version>
 		<jacoco.minimum.coverage>0.70</jacoco.minimum.coverage>
 		<jacoco.destFile>${project.build.directory}/coverage-reports/aggregate.exec</jacoco.destFile>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -227,6 +228,20 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5-api</artifactId>
+			<version>${archunit-junit5.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+		<!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5-engine</artifactId>
+			<version>${archunit-junit5.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

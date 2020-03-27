@@ -48,7 +48,7 @@ public class UserService {
 
     public User updateUser(User user) {
         Optional<User> byId = userRepository.findById(user.getId());
-        if(!byId.isPresent()) {
+        if(byId.isEmpty()) {
             throw new UserNotFoundException("User with id "+user.getId() + " not found");
         }
         user.setRoles(byId.get().getRoles());
@@ -63,7 +63,7 @@ public class UserService {
 
     public void changePassword(String email, String oldPwd, String newPwd) {
         Optional<User> userByEmail = this.getUserByEmail(email);
-        if(!userByEmail.isPresent()) {
+        if(userByEmail.isEmpty()) {
             throw new UserNotFoundException("User with email " + email + " not found");
         }
         User user = userByEmail.get();
@@ -73,5 +73,9 @@ public class UserService {
         } else {
             throw new ApplicationException("Current password doesn't match");
         }
+    }
+
+    public Optional<Role> findRoleByName(String roleName) {
+        return roleRepository.findByName(roleName);
     }
 }

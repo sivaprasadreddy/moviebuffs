@@ -1,7 +1,8 @@
-package com.sivalabs.moviebuffs.core.service;
+package com.sivalabs.moviebuffs.core.jobs;
 
 import com.sivalabs.moviebuffs.core.entity.Order;
-import com.sivalabs.moviebuffs.core.repository.OrderRepository;
+import com.sivalabs.moviebuffs.core.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -10,17 +11,14 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class OrderProcessingJob {
 
-    private final OrderRepository orderRepository;
-
-    public OrderProcessingJob(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+    private final OrderService orderService;
 
     @Scheduled(fixedDelay = 2 * 60 * 1000) //every 2 minutes
     void processOrders() {
-        List<Order> orders = orderRepository.findByStatus(Order.OrderStatus.NEW);
+        List<Order> orders = orderService.findOrdersByStatus(Order.OrderStatus.NEW);
         if (orders.isEmpty()) {
             log.info("No new orders to be processed");
             return;
@@ -28,7 +26,7 @@ public class OrderProcessingJob {
         for (Order order : orders) {
             log.info("Processing order {} ", order.getOrderId());
             order.setStatus(Order.OrderStatus.DELIVERED);
-            orderRepository.save(order);
+            orderService.updateOrder(order);
             log.info("Order {} is delivered", order.getOrderId());
         }
     }

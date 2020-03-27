@@ -1,7 +1,7 @@
-package com.sivalabs.moviebuffs.core.service;
+package com.sivalabs.moviebuffs.core.jobs;
 
 import com.sivalabs.moviebuffs.core.entity.Order;
-import com.sivalabs.moviebuffs.core.repository.OrderRepository;
+import com.sivalabs.moviebuffs.core.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 class OrderProcessingJobTest {
 
     @Mock
-    private OrderRepository orderRepository;
+    private OrderService orderService;
 
     @InjectMocks
     private OrderProcessingJob orderProcessingJob;
@@ -37,19 +37,19 @@ class OrderProcessingJobTest {
 
     @Test
     void should_process_orders() {
-        given(orderRepository.findByStatus(Order.OrderStatus.NEW)).willReturn(orderList);
+        given(orderService.findOrdersByStatus(Order.OrderStatus.NEW)).willReturn(orderList);
 
         orderProcessingJob.processOrders();
 
-        verify(orderRepository, times(orderList.size())).save(any(Order.class));
+        verify(orderService, times(orderList.size())).updateOrder(any(Order.class));
     }
 
     @Test
     void should_ignore_if_no_orders_to_process() {
-        given(orderRepository.findByStatus(Order.OrderStatus.NEW)).willReturn(new ArrayList<>());
+        given(orderService.findOrdersByStatus(Order.OrderStatus.NEW)).willReturn(new ArrayList<>());
 
         orderProcessingJob.processOrders();
 
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderService, never()).updateOrder(any(Order.class));
     }
 }
