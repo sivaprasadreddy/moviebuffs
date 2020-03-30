@@ -10,44 +10,45 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="movie_cast")
+@Table(name = "movie_cast")
 @Setter
 @Getter
-@EqualsAndHashCode(of = {"id"}, callSuper = false)
-public class CastMember implements Serializable
-{
-    private static final long serialVersionUID = 1L;
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
+public class CastMember implements Serializable {
 
-    @Id
-    @SequenceGenerator(name = "cast_id_generator", sequenceName = "cast_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "cast_id_generator")
-    private Long id;
+	private static final long serialVersionUID = 1L;
 
-    @JsonProperty("cast_id")
-    @Column(name = "cast_id")
-    private String castId;
+	@Id
+	@SequenceGenerator(name = "cast_id_generator", sequenceName = "cast_id_seq", allocationSize = 1)
+	@GeneratedValue(generator = "cast_id_generator")
+	private Long id;
 
-    private String character;
+	@JsonProperty("cast_id")
+	@Column(name = "cast_id")
+	private String castId;
 
-    @JsonProperty("credit_id")
-    @Column(name = "credit_id")
-    private String creditId;
+	private String character;
 
-    private String gender;
+	@JsonProperty("credit_id")
+	@Column(name = "credit_id")
+	private String creditId;
 
-    private String uid;
+	private String gender;
 
-    private String name;
+	private String uid;
 
-    @Column(name = "cast_order")
-    private String order;
+	private String name;
 
-    @JsonProperty("profile_path")
-    @Column(name = "profile_path")
-    private String profilePath;
+	@Column(name = "cast_order")
+	private String order;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
+	@JsonProperty("profile_path")
+	@Column(name = "profile_path")
+	private String profilePath;
+
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "movie_id")
+	private Movie movie;
+
 }

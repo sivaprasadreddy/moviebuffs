@@ -24,70 +24,64 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestPropertySource(properties = {
-    "application.import-tmdb-data=false"
-})
+@TestPropertySource(properties = { "application.import-tmdb-data=false" })
 class OrderRestControllerIT extends AbstractIntegrationTest {
 
-    @Autowired
-    private OrderRepository orderRepository;
+	@Autowired
+	private OrderRepository orderRepository;
 
-    private List<Order> orderList = null;
+	private List<Order> orderList = null;
 
-    @BeforeEach
-    void setUp() {
-        objectMapper.registerModule(new ProblemModule());
-        objectMapper.registerModule(new ConstraintViolationProblemModule());
+	@BeforeEach
+	void setUp() {
+		objectMapper.registerModule(new ProblemModule());
+		objectMapper.registerModule(new ConstraintViolationProblemModule());
 
-        orderList = new ArrayList<>();
-        orderList.add(createOrder(1L));
-        orderList.add(createOrder(2L));
-        orderList.add(createOrder(3L));
+		orderList = new ArrayList<>();
+		orderList.add(createOrder(1L));
+		orderList.add(createOrder(2L));
+		orderList.add(createOrder(3L));
 
-        orderList = orderRepository.saveAll(orderList);
-    }
+		orderList = orderRepository.saveAll(orderList);
+	}
 
-    @Test
-    @WithMockUser(value = "admin@gmail.com", roles = {"USER", "ADMIN"})
-    void should_fetch_all_orders() throws Exception {
-        this.mockMvc.perform(get(ORDERS_COLLECTION_BASE_PATH))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(orderList.size())));
-    }
+	@Test
+	@WithMockUser(value = "admin@gmail.com", roles = { "USER", "ADMIN" })
+	void should_fetch_all_orders() throws Exception {
+		this.mockMvc.perform(get(ORDERS_COLLECTION_BASE_PATH)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.size()", is(orderList.size())));
+	}
 
-    @Test
-    @WithMockUser(value = "admin@gmail.com")
-    void should_fetch_order_by_id() throws Exception {
-        Order order = this.orderList.get(0);
+	@Test
+	@WithMockUser(value = "admin@gmail.com")
+	void should_fetch_order_by_id() throws Exception {
+		Order order = this.orderList.get(0);
 
-        this.mockMvc.perform(get(ORDERS_SINGLE_BASE_PATH, order.getOrderId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderId", is(order.getOrderId())));
-    }
+		this.mockMvc.perform(get(ORDERS_SINGLE_BASE_PATH, order.getOrderId())).andExpect(status().isOk())
+				.andExpect(jsonPath("$.orderId", is(order.getOrderId())));
+	}
 
-    @Test
-    @WithMockUser
-    void should_create_new_order() throws Exception {
-        Order order = this.orderList.get(0);
+	@Test
+	@WithMockUser
+	void should_create_new_order() throws Exception {
+		Order order = this.orderList.get(0);
 
-        this.mockMvc.perform(post(ORDERS_COLLECTION_BASE_PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(order)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.orderId", notNullValue()))
-                .andExpect(jsonPath("$.orderStatus", is(Order.OrderStatus.NEW.name())))
-        ;
+		this.mockMvc
+				.perform(post(ORDERS_COLLECTION_BASE_PATH).contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(order)))
+				.andExpect(status().isCreated()).andExpect(jsonPath("$.orderId", notNullValue()))
+				.andExpect(jsonPath("$.orderStatus", is(Order.OrderStatus.NEW.name())));
 
-    }
+	}
 
-    @Test
-    @WithMockUser(value = "admin@gmail.com")
-    void should_cancel_order() throws Exception {
-        Order order = orderList.get(0);
-        //order.getCreatedBy().setId(1L);
-        String orderId = order.getOrderId();
+	@Test
+	@WithMockUser(value = "admin@gmail.com")
+	void should_cancel_order() throws Exception {
+		Order order = orderList.get(0);
+		// order.getCreatedBy().setId(1L);
+		String orderId = order.getOrderId();
 
-        this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId))
-                .andExpect(status().isOk());
-    }
+		this.mockMvc.perform(delete(ORDERS_SINGLE_BASE_PATH, orderId)).andExpect(status().isOk());
+	}
+
 }

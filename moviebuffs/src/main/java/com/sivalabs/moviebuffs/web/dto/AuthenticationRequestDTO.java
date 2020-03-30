@@ -8,9 +8,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class AuthenticationRequestDTO {
-    @NotBlank(message = "UserName cannot be blank")
-    private String username;
 
-    @NotBlank(message = "Password cannot be blank")
-    private String password;
+	@NotBlank(message = "UserName cannot be blank")
+	private String username;
+
+	@NotBlank(message = "Password cannot be blank")
+	private String password;
+
 }

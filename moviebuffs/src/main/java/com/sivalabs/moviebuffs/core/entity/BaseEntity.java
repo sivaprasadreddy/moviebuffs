@@ -16,26 +16,27 @@ import java.time.LocalDateTime;
 @Getter
 public abstract class BaseEntity implements Serializable {
 
-    @Override
-    public int hashCode() {
-        return 31;
-    }
+	@Override
+	public int hashCode() {
+		return 31;
+	}
 
-    @JsonProperty("created_at")
-    @Column(updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+	@JsonProperty("created_at")
+	@Column(updatable = false)
+	private LocalDateTime createdAt = LocalDateTime.now();
 
-    @JsonProperty("updated_at")
-    @Column(insertable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+	@JsonProperty("updated_at")
+	@Column(insertable = false)
+	private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @PrePersist
-    public void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+	@PrePersist
+	public void onCreate() {
+		createdAt = LocalDateTime.now();
+	}
 
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+	@PreUpdate
+	public void onUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
+
 }

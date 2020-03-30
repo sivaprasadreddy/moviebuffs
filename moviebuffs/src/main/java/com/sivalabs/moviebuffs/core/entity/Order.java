@@ -13,40 +13,49 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "orders")
-@EqualsAndHashCode(of = {"id"}, callSuper = false)
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
 public class Order {
 
-    @Id
-    @SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "order_id_generator")
-    private Long id;
-    private String orderId;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
-    private Set<OrderItem> items;
-    private String customerName;
-    private String customerEmail;
-    private String deliveryAddress;
-    private String creditCardNumber;
-    private String cvv;
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+	@Id
+	@SequenceGenerator(name = "order_id_generator", sequenceName = "order_id_seq", allocationSize = 1)
+	@GeneratedValue(generator = "order_id_generator")
+	private Long id;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    private User createdBy;
+	private String orderId;
 
-    public enum OrderStatus {
-        NEW, DELIVERED, CANCELLED, ERROR
-    }
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order")
+	private Set<OrderItem> items;
 
-    public BigDecimal getTotalAmount()
-    {
-        BigDecimal amount = new BigDecimal("0.0");
-        for (OrderItem orderItem : items)
-        {
-            amount = amount.add(orderItem.getSubTotal());
-        }
-        return amount;
-    }
+	private String customerName;
+
+	private String customerEmail;
+
+	private String deliveryAddress;
+
+	private String creditCardNumber;
+
+	private String cvv;
+
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status;
+
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "created_by")
+	private User createdBy;
+
+	public enum OrderStatus {
+
+		NEW, DELIVERED, CANCELLED, ERROR
+
+	}
+
+	public BigDecimal getTotalAmount() {
+		BigDecimal amount = new BigDecimal("0.0");
+		for (OrderItem orderItem : items) {
+			amount = amount.add(orderItem.getSubTotal());
+		}
+		return amount;
+	}
+
 }

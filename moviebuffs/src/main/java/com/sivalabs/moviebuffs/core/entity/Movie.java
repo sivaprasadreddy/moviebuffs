@@ -14,12 +14,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="movies")
+@Table(name = "movies")
 @Setter
 @Getter
-@EqualsAndHashCode(of = {"id"}, callSuper = false)
-public class Movie implements Serializable
-{
+@EqualsAndHashCode(of = { "id" }, callSuper = false)
+public class Movie implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -80,11 +80,9 @@ public class Movie implements Serializable
 	@Column(insertable = false)
 	protected LocalDateTime updatedAt = LocalDateTime.now();
 
-	@ManyToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JoinTable(
-			name="movie_genre",
-			joinColumns={@JoinColumn(name="MOVIE_ID", referencedColumnName="ID")},
-			inverseJoinColumns={@JoinColumn(name="GENRE_ID", referencedColumnName="ID")})
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+	@JoinTable(name = "movie_genre", joinColumns = { @JoinColumn(name = "MOVIE_ID", referencedColumnName = "ID") },
+			inverseJoinColumns = { @JoinColumn(name = "GENRE_ID", referencedColumnName = "ID") })
 	private Set<Genre> genres = new HashSet<>();
 
 	@OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
@@ -102,4 +100,5 @@ public class Movie implements Serializable
 	public void onUpdate() {
 		updatedAt = LocalDateTime.now();
 	}
+
 }

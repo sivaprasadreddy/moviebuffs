@@ -19,37 +19,38 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class OrderProcessingJobTest {
 
-    @Mock
-    private OrderService orderService;
+	@Mock
+	private OrderService orderService;
 
-    @InjectMocks
-    private OrderProcessingJob orderProcessingJob;
+	@InjectMocks
+	private OrderProcessingJob orderProcessingJob;
 
-    private List<Order> orderList = null;
+	private List<Order> orderList = null;
 
-    @BeforeEach
-    void setUp() {
-        orderList = new ArrayList<>();
-        orderList.add(createOrder(1L));
-        orderList.add(createOrder(2L));
-        orderList.add(createOrder(3L));
-    }
+	@BeforeEach
+	void setUp() {
+		orderList = new ArrayList<>();
+		orderList.add(createOrder(1L));
+		orderList.add(createOrder(2L));
+		orderList.add(createOrder(3L));
+	}
 
-    @Test
-    void should_process_orders() {
-        given(orderService.findOrdersByStatus(Order.OrderStatus.NEW)).willReturn(orderList);
+	@Test
+	void should_process_orders() {
+		given(orderService.findOrdersByStatus(Order.OrderStatus.NEW)).willReturn(orderList);
 
-        orderProcessingJob.processOrders();
+		orderProcessingJob.processOrders();
 
-        verify(orderService, times(orderList.size())).updateOrder(any(Order.class));
-    }
+		verify(orderService, times(orderList.size())).updateOrder(any(Order.class));
+	}
 
-    @Test
-    void should_ignore_if_no_orders_to_process() {
-        given(orderService.findOrdersByStatus(Order.OrderStatus.NEW)).willReturn(new ArrayList<>());
+	@Test
+	void should_ignore_if_no_orders_to_process() {
+		given(orderService.findOrdersByStatus(Order.OrderStatus.NEW)).willReturn(new ArrayList<>());
 
-        orderProcessingJob.processOrders();
+		orderProcessingJob.processOrders();
 
-        verify(orderService, never()).updateOrder(any(Order.class));
-    }
+		verify(orderService, never()).updateOrder(any(Order.class));
+	}
+
 }

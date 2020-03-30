@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationResponseDTO {
-    @JsonProperty("access_token")
-    private String accessToken;
 
-    @JsonProperty("expires_in")
-    private Long expiresIn;
+	@JsonProperty("access_token")
+	private String accessToken;
+
+	@JsonProperty("expires_in")
+	private Long expiresIn;
+
 }

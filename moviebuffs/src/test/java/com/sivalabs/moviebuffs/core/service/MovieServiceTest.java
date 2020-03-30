@@ -25,38 +25,39 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
-    @Mock
-    private MovieRepository movieRepository;
+	@Mock
+	private MovieRepository movieRepository;
 
-    @Mock
-    private CastMemberRepository castMemberRepository;
+	@Mock
+	private CastMemberRepository castMemberRepository;
 
-    @Mock
-    private CrewMemberRepository crewMemberRepository;
+	@Mock
+	private CrewMemberRepository crewMemberRepository;
 
-    @Mock
-    private GenreRepository genreRepository;
+	@Mock
+	private GenreRepository genreRepository;
 
-    @InjectMocks
-    private MovieService movieService;
+	@InjectMocks
+	private MovieService movieService;
 
-    @Test
-    void should_get_all_movies() {
-        Pageable pageable = PageRequest.of(0,10);
-        given(movieRepository.findAll(pageable)).willReturn(new PageImpl<>(new ArrayList<>()));
+	@Test
+	void should_get_all_movies() {
+		Pageable pageable = PageRequest.of(0, 10);
+		given(movieRepository.findAll(pageable)).willReturn(new PageImpl<>(new ArrayList<>()));
 
-        Page<Movie> movies = movieService.findMovies(pageable);
+		Page<Movie> movies = movieService.findMovies(pageable);
 
-        assertThat(movies).isNotNull();
-    }
+		assertThat(movies).isNotNull();
+	}
 
-    @Test
-    void shout_save_new_movie() {
-        Movie movie = createMovie("abcd", "genre-1", "genre-2");
-        given(movieRepository.save(any(Movie.class))).willAnswer(answer-> answer.getArgument(0));
+	@Test
+	void shout_save_new_movie() {
+		Movie movie = createMovie("abcd", "genre-1", "genre-2");
+		given(movieRepository.save(any(Movie.class))).willAnswer(answer -> answer.getArgument(0));
 
-        Movie newMovie = movieService.createMovie(movie);
+		Movie newMovie = movieService.createMovie(movie);
 
-        assertThat(newMovie).isNotNull();
-    }
+		assertThat(newMovie).isNotNull();
+	}
+
 }

@@ -7,7 +7,8 @@ import java.util.Date;
 @Component
 public class TimeProvider {
 
-    public Date now() {
-        return new Date();
-    }
+	public Date now() {
+		return new Date();
+	}
+
 }

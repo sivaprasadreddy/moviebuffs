@@ -16,30 +16,31 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import org.zalando.problem.violations.ConstraintViolationProblemModule;
 
 @ActiveProfiles(Constants.PROFILE_TEST)
-@Import({TestConfig.class})
+@Import({ TestConfig.class })
 public abstract class AbstractMvcUnitTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
+	@Autowired
+	protected MockMvc mockMvc;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+	@Autowired
+	protected ObjectMapper objectMapper;
 
-    @MockBean
-    protected UserDetailsService userDetailsService;
+	@MockBean
+	protected UserDetailsService userDetailsService;
 
-    @MockBean
-    protected TokenHelper tokenHelper;
+	@MockBean
+	protected TokenHelper tokenHelper;
 
-    @MockBean
-    protected SecurityProblemSupport problemSupport;
+	@MockBean
+	protected SecurityProblemSupport problemSupport;
 
-    @MockBean
-    protected SecurityService securityService;
+	@MockBean
+	protected SecurityService securityService;
 
-    @BeforeEach
-    void setUpBase() {
-        objectMapper.registerModule(new ProblemModule());
-        objectMapper.registerModule(new ConstraintViolationProblemModule());
-    }
+	@BeforeEach
+	void setUpBase() {
+		objectMapper.registerModule(new ProblemModule());
+		objectMapper.registerModule(new ConstraintViolationProblemModule());
+	}
+
 }

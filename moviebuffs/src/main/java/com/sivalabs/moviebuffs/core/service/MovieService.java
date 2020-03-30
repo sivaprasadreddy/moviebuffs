@@ -27,85 +27,91 @@ import java.util.Set;
 @Transactional
 @RequiredArgsConstructor
 public class MovieService {
-    private final MovieRepository movieRepository;
-    private final CastMemberRepository castMemberRepository;
-    private final CrewMemberRepository crewMemberRepository;
-    private final GenreRepository genreRepository;
 
-    public void cleanupMovieData() {
-        crewMemberRepository.deleteAll();
-        castMemberRepository.deleteAll();
-        movieRepository.deleteAll();
-    }
+	private final MovieRepository movieRepository;
 
-    @Transactional(readOnly = true)
-    public Optional<Movie> findMovieById(Long id) {
-        return movieRepository.findById(id);
-    }
+	private final CastMemberRepository castMemberRepository;
 
-    @Transactional(readOnly = true)
-    public Page<Movie> findMovies(Pageable pageable) {
-        return movieRepository.findAll(pageable);
-    }
+	private final CrewMemberRepository crewMemberRepository;
 
-    @Transactional(readOnly = true)
-    public Page<Movie> findMoviesByGenre(Long genreId, String query, Pageable pageable) {
-        String searchQuery = StringUtils.trimToEmpty(query).replaceAll("%","");
-        return movieRepository.findByGenre(genreId, "%"+searchQuery+"%", pageable);
-    }
+	private final GenreRepository genreRepository;
 
-    @Transactional(readOnly = true)
-    public Page<Movie> searchMovies(String query, Pageable pageable) {
-        return movieRepository.findByTitleContainingIgnoreCase(query, pageable);
-    }
+	public void cleanupMovieData() {
+		crewMemberRepository.deleteAll();
+		castMemberRepository.deleteAll();
+		movieRepository.deleteAll();
+	}
 
-    @Transactional(readOnly = true)
-    public List<Genre> findAllGenres(Sort sort) {
-        return genreRepository.findAll(sort);
-    }
+	@Transactional(readOnly = true)
+	public Optional<Movie> findMovieById(Long id) {
+		return movieRepository.findById(id);
+	}
 
-    @Transactional(readOnly = true)
-    public Optional<Genre> findGenreBySlug(String slug) {
-        return genreRepository.findBySlug(slug);
-    }
+	@Transactional(readOnly = true)
+	public Page<Movie> findMovies(Pageable pageable) {
+		return movieRepository.findAll(pageable);
+	}
 
-    @Transactional(readOnly = true)
-    public Optional<Movie> findByTmdbId(String tmdbId) {
-        return movieRepository.findByTmdbId(tmdbId);
-    }
+	@Transactional(readOnly = true)
+	public Page<Movie> findMoviesByGenre(Long genreId, String query, Pageable pageable) {
+		String searchQuery = StringUtils.trimToEmpty(query).replaceAll("%", "");
+		return movieRepository.findByGenre(genreId, "%" + searchQuery + "%", pageable);
+	}
 
-    public Movie createMovie(Movie movie) {
-        Set<Genre> genreList = saveGenres(movie.getGenres());
-        movie.setGenres(genreList);
-        return movieRepository.save(movie);
-    }
+	@Transactional(readOnly = true)
+	public Page<Movie> searchMovies(String query, Pageable pageable) {
+		return movieRepository.findByTitleContainingIgnoreCase(query, pageable);
+	}
 
-    public List<Movie> createMovies(List<Movie> movies) {
-        return movieRepository.saveAll(movies);
-    }
+	@Transactional(readOnly = true)
+	public List<Genre> findAllGenres(Sort sort) {
+		return genreRepository.findAll(sort);
+	}
 
-    private Set<Genre> saveGenres(Set<Genre> genres) {
-        Set<Genre> genreList = new HashSet<>();
-        for (Genre genre : genres) {
-            Optional<Genre> byId = genreRepository.findByName(genre.getName());
-            if(byId.isPresent()) {
-                genreList.add(byId.get());
-            } else {
-                genreList.add(genreRepository.save(genre));
-            }
-        }
-        return genreList;
-    }
+	@Transactional(readOnly = true)
+	public Optional<Genre> findGenreBySlug(String slug) {
+		return genreRepository.findBySlug(slug);
+	}
 
-    public List<CastMember> saveAllCastMembers(List<CastMember> castMembers) {
-        return castMemberRepository.saveAll(castMembers);
-    }
+	@Transactional(readOnly = true)
+	public Optional<Movie> findByTmdbId(String tmdbId) {
+		return movieRepository.findByTmdbId(tmdbId);
+	}
 
-    public List<CrewMember> saveAllCrewMembers(List<CrewMember> crewMembers) {
-        return crewMemberRepository.saveAll(crewMembers);
-    }
+	public Movie createMovie(Movie movie) {
+		Set<Genre> genreList = saveGenres(movie.getGenres());
+		movie.setGenres(genreList);
+		return movieRepository.save(movie);
+	}
 
-    public Genre saveGenre(Genre genre) {
-        return genreRepository.save(genre);
-    }
+	public List<Movie> createMovies(List<Movie> movies) {
+		return movieRepository.saveAll(movies);
+	}
+
+	private Set<Genre> saveGenres(Set<Genre> genres) {
+		Set<Genre> genreList = new HashSet<>();
+		for (Genre genre : genres) {
+			Optional<Genre> byId = genreRepository.findByName(genre.getName());
+			if (byId.isPresent()) {
+				genreList.add(byId.get());
+			}
+			else {
+				genreList.add(genreRepository.save(genre));
+			}
+		}
+		return genreList;
+	}
+
+	public List<CastMember> saveAllCastMembers(List<CastMember> castMembers) {
+		return castMemberRepository.saveAll(castMembers);
+	}
+
+	public List<CrewMember> saveAllCrewMembers(List<CrewMember> crewMembers) {
+		return crewMemberRepository.saveAll(crewMembers);
+	}
+
+	public Genre saveGenre(Genre genre) {
+		return genreRepository.save(genre);
+	}
+
 }

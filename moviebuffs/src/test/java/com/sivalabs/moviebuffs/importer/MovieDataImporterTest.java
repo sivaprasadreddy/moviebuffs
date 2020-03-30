@@ -19,32 +19,36 @@ import static org.mockito.Mockito.mock;
 
 class MovieDataImporterTest {
 
-    private CsvRowMapperUtils csvRowMapperUtils;
-    private DataImportProperties dataImportProperties;
-    private MovieService movieService;
-    private MovieDataImporter movieDataImporter;
+	private CsvRowMapperUtils csvRowMapperUtils;
 
-    @BeforeEach
-    void setUp() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        csvRowMapperUtils = new CsvRowMapperUtils(objectMapper);
-        dataImportProperties = new DataImportProperties();
-        dataImportProperties.getTmdb().setDisabled(false);
-        dataImportProperties.getTmdb().setMoviesDataFiles(singletonList("/data/movies_metadata-test.csv"));
-        dataImportProperties.getTmdb().setMovieCreditsFiles(singletonList("/data/credits-test.csv"));
+	private DataImportProperties dataImportProperties;
 
-        movieService = mock(MovieService.class);
+	private MovieService movieService;
 
-        given(movieService.saveGenre(any(Genre.class))).willAnswer(answer -> answer.getArgument(0));
+	private MovieDataImporter movieDataImporter;
 
-        movieDataImporter = new MovieDataImporter(movieService, csvRowMapperUtils, dataImportProperties, objectMapper);
-    }
+	@BeforeEach
+	void setUp() {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+		objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+		csvRowMapperUtils = new CsvRowMapperUtils(objectMapper);
+		dataImportProperties = new DataImportProperties();
+		dataImportProperties.getTmdb().setDisabled(false);
+		dataImportProperties.getTmdb().setMoviesDataFiles(singletonList("/data/movies_metadata-test.csv"));
+		dataImportProperties.getTmdb().setMovieCreditsFiles(singletonList("/data/credits-test.csv"));
 
-    @Test
-    void should_import_movie_data_successfully() throws IOException, CsvValidationException {
-        movieDataImporter.importData();
-        assertTrue(true);
-    }
+		movieService = mock(MovieService.class);
+
+		given(movieService.saveGenre(any(Genre.class))).willAnswer(answer -> answer.getArgument(0));
+
+		movieDataImporter = new MovieDataImporter(movieService, csvRowMapperUtils, dataImportProperties, objectMapper);
+	}
+
+	@Test
+	void should_import_movie_data_successfully() throws IOException, CsvValidationException {
+		movieDataImporter.importData();
+		assertTrue(true);
+	}
+
 }

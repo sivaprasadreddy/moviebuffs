@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableConfigurationProperties({SecurityConfigProperties.class, DataImportProperties.class})
+@EnableConfigurationProperties({ SecurityConfigProperties.class, DataImportProperties.class })
 @EnableAsync
 @EnableScheduling
 public class MovieBuffsApplication {

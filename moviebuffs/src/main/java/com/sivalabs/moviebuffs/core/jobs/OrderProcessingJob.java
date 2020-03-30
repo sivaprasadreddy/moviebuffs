@@ -14,20 +14,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderProcessingJob {
 
-    private final OrderService orderService;
+	private final OrderService orderService;
 
-    @Scheduled(fixedDelay = 2 * 60 * 1000) //every 2 minutes
-    void processOrders() {
-        List<Order> orders = orderService.findOrdersByStatus(Order.OrderStatus.NEW);
-        if (orders.isEmpty()) {
-            log.info("No new orders to be processed");
-            return;
-        }
-        for (Order order : orders) {
-            log.info("Processing order {} ", order.getOrderId());
-            order.setStatus(Order.OrderStatus.DELIVERED);
-            orderService.updateOrder(order);
-            log.info("Order {} is delivered", order.getOrderId());
-        }
-    }
+	@Scheduled(fixedDelay = 2 * 60 * 1000) // every 2 minutes
+	void processOrders() {
+		List<Order> orders = orderService.findOrdersByStatus(Order.OrderStatus.NEW);
+		if (orders.isEmpty()) {
+			log.info("No new orders to be processed");
+			return;
+		}
+		for (Order order : orders) {
+			log.info("Processing order {} ", order.getOrderId());
+			order.setStatus(Order.OrderStatus.DELIVERED);
+			orderService.updateOrder(order);
+			log.info("Order {} is delivered", order.getOrderId());
+		}
+	}
+
 }

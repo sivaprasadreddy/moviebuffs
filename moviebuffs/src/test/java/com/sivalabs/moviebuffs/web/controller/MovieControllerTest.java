@@ -23,18 +23,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = MovieController.class)
 class MovieControllerTest extends AbstractMvcUnitTest {
 
-    @MockBean
-    private MovieService movieService;
+	@MockBean
+	private MovieService movieService;
 
-    @SpyBean
-    private MovieDTOMapper movieDTOMapper;
+	@SpyBean
+	private MovieDTOMapper movieDTOMapper;
 
-    @Test
-    void shouldShowHomePage() throws Exception {
-        Page<Movie> page = new PageImpl<>(new ArrayList<>());
-        given(movieService.findMovies(any(Pageable.class))).willReturn(page);
-        this.mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("home"));
-    }
+	@Test
+	void shouldShowHomePage() throws Exception {
+		Page<Movie> page = new PageImpl<>(new ArrayList<>());
+		given(movieService.findMovies(any(Pageable.class))).willReturn(page);
+		this.mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("home"));
+	}
+
 }

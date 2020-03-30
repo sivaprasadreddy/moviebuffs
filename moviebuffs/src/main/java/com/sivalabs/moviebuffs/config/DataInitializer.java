@@ -12,22 +12,25 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
-    private final MovieDataImporter movieDataImporter;
-    private final DataImportProperties dataImportProperties;
+	private final MovieDataImporter movieDataImporter;
 
-    @Override
-    public void run(String... args) throws Exception {
-        if(dataImportProperties.getTmdb().isDisabled()) {
-            log.info("TMDB data initialization is disabled");
-            return;
-        }
-        if(dataImportProperties.getTmdb().isAsync()) {
-            log.info("Initializing TMDB data in async mode");
-            movieDataImporter.importDataAsync();
-        } else {
-            log.info("Initializing TMDB data in sync mode");
-            movieDataImporter.importData();
-        }
-        log.debug("TMDB data initialized successfully");
-    }
+	private final DataImportProperties dataImportProperties;
+
+	@Override
+	public void run(String... args) throws Exception {
+		if (dataImportProperties.getTmdb().isDisabled()) {
+			log.info("TMDB data initialization is disabled");
+			return;
+		}
+		if (dataImportProperties.getTmdb().isAsync()) {
+			log.info("Initializing TMDB data in async mode");
+			movieDataImporter.importDataAsync();
+		}
+		else {
+			log.info("Initializing TMDB data in sync mode");
+			movieDataImporter.importData();
+		}
+		log.debug("TMDB data initialized successfully");
+	}
+
 }

@@ -25,44 +25,45 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationRestController {
-    private final AuthenticationManager authenticationManager;
-    private final CustomUserDetailsService userDetailsService;
-    private final TokenHelper tokenHelper;
-    private final UserDTOMapper userDTOMapper;
-    private final SecurityService securityService;
-    private final SecurityConfigProperties securityConfigProperties;
 
+	private final AuthenticationManager authenticationManager;
 
-    @PostMapping(value = "/login")
-    public AuthenticationResponseDTO createAuthenticationToken(@RequestBody AuthenticationRequestDTO credentials) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword())
-        );
+	private final CustomUserDetailsService userDetailsService;
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+	private final TokenHelper tokenHelper;
 
-        SecurityUser user = (SecurityUser) authentication.getPrincipal();
-        String jws = tokenHelper.generateToken(user.getUsername());
-        return new AuthenticationResponseDTO(jws, securityConfigProperties.getJwt().getExpiresIn());
-    }
+	private final UserDTOMapper userDTOMapper;
 
-    @PostMapping(value = "/refresh")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<AuthenticationResponseDTO> refreshAuthenticationToken(HttpServletRequest request) {
-        String authToken = tokenHelper.getToken(request);
-        String refreshedToken = tokenHelper.refreshToken(authToken);
-        return ResponseEntity.ok(
-                new AuthenticationResponseDTO(
-                        refreshedToken,
-                        securityConfigProperties.getJwt().getExpiresIn()
-                )
-        );
-    }
+	private final SecurityService securityService;
 
-    @GetMapping("/me")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<UserDTO> me() {
-        User loginUser = securityService.loginUser();
-        return ResponseEntity.ok(userDTOMapper.toDTO(loginUser));
-    }
+	private final SecurityConfigProperties securityConfigProperties;
+
+	@PostMapping(value = "/login")
+	public AuthenticationResponseDTO createAuthenticationToken(@RequestBody AuthenticationRequestDTO credentials) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		SecurityUser user = (SecurityUser) authentication.getPrincipal();
+		String jws = tokenHelper.generateToken(user.getUsername());
+		return new AuthenticationResponseDTO(jws, securityConfigProperties.getJwt().getExpiresIn());
+	}
+
+	@PostMapping(value = "/refresh")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public ResponseEntity<AuthenticationResponseDTO> refreshAuthenticationToken(HttpServletRequest request) {
+		String authToken = tokenHelper.getToken(request);
+		String refreshedToken = tokenHelper.refreshToken(authToken);
+		return ResponseEntity
+				.ok(new AuthenticationResponseDTO(refreshedToken, securityConfigProperties.getJwt().getExpiresIn()));
+	}
+
+	@GetMapping("/me")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public ResponseEntity<UserDTO> me() {
+		User loginUser = securityService.loginUser();
+		return ResponseEntity.ok(userDTOMapper.toDTO(loginUser));
+	}
+
 }

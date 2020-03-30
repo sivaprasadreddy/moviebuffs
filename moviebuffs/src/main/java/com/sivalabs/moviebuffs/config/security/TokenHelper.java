@@ -14,85 +14,82 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenHelper {
 
-    private final SecurityConfigProperties securityConfigProperties;
-    private final TimeProvider timeProvider;
+	private final SecurityConfigProperties securityConfigProperties;
 
-    private static final String AUDIENCE_WEB = "web";
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+	private final TimeProvider timeProvider;
 
-    public String getUsernameFromToken(String token) {
-        String username;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            if(claims == null) return null;
-            username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
-    }
+	private static final String AUDIENCE_WEB = "web";
 
-    public String refreshToken(String token) {
-        String refreshedToken;
-        Date a = timeProvider.now();
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            if(claims == null) return null;
-            claims.setIssuedAt(a);
-            refreshedToken = Jwts.builder()
-                    .setClaims(claims)
-                    .setExpiration(generateExpirationDate())
-                    .signWith( SIGNATURE_ALGORITHM, securityConfigProperties.getJwt().getSecret() )
-                    .compact();
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
-    }
+	private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .setIssuer( securityConfigProperties.getJwt().getIssuer() )
-                .setSubject(username)
-                .setAudience(AUDIENCE_WEB)
-                .setIssuedAt(timeProvider.now())
-                .setExpiration(generateExpirationDate())
-                .signWith( SIGNATURE_ALGORITHM, securityConfigProperties.getJwt().getSecret() )
-                .compact();
-    }
+	public String getUsernameFromToken(String token) {
+		String username;
+		try {
+			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims == null)
+				return null;
+			username = claims.getSubject();
+		}
+		catch (Exception e) {
+			username = null;
+		}
+		return username;
+	}
 
-    private Claims getAllClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(securityConfigProperties.getJwt().getSecret())
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
-        return claims;
-    }
+	public String refreshToken(String token) {
+		String refreshedToken;
+		Date a = timeProvider.now();
+		try {
+			final Claims claims = this.getAllClaimsFromToken(token);
+			if (claims == null)
+				return null;
+			claims.setIssuedAt(a);
+			refreshedToken = Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
+					.signWith(SIGNATURE_ALGORITHM, securityConfigProperties.getJwt().getSecret()).compact();
+		}
+		catch (Exception e) {
+			refreshedToken = null;
+		}
+		return refreshedToken;
+	}
 
-    private Date generateExpirationDate() {
-        return new Date(timeProvider.now().getTime() + securityConfigProperties.getJwt().getExpiresIn() * 1000);
-    }
+	public String generateToken(String username) {
+		return Jwts.builder().setIssuer(securityConfigProperties.getJwt().getIssuer()).setSubject(username)
+				.setAudience(AUDIENCE_WEB).setIssuedAt(timeProvider.now()).setExpiration(generateExpirationDate())
+				.signWith(SIGNATURE_ALGORITHM, securityConfigProperties.getJwt().getSecret()).compact();
+	}
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username != null && username.equals(userDetails.getUsername()));
-    }
+	private Claims getAllClaimsFromToken(String token) {
+		Claims claims;
+		try {
+			claims = Jwts.parser().setSigningKey(securityConfigProperties.getJwt().getSecret()).parseClaimsJws(token)
+					.getBody();
+		}
+		catch (Exception e) {
+			claims = null;
+		}
+		return claims;
+	}
 
-    public String getToken( HttpServletRequest request ) {
-        String authHeader = getAuthHeaderFromHeader( request );
-        if ( authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
-        return null;
-    }
+	private Date generateExpirationDate() {
+		return new Date(timeProvider.now().getTime() + securityConfigProperties.getJwt().getExpiresIn() * 1000);
+	}
 
-    private String getAuthHeaderFromHeader(HttpServletRequest request) {
-        return request.getHeader(securityConfigProperties.getJwt().getHeader());
-    }
+	public boolean validateToken(String token, UserDetails userDetails) {
+		final String username = getUsernameFromToken(token);
+		return (username != null && username.equals(userDetails.getUsername()));
+	}
+
+	public String getToken(HttpServletRequest request) {
+		String authHeader = getAuthHeaderFromHeader(request);
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			return authHeader.substring(7);
+		}
+		return null;
+	}
+
+	private String getAuthHeaderFromHeader(HttpServletRequest request) {
+		return request.getHeader(securityConfigProperties.getJwt().getHeader());
+	}
 
 }

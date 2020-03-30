@@ -11,6 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderConfirmationDTO {
-    private String orderId;
-    private Order.OrderStatus orderStatus;
+
+	private String orderId;
+
+	private Order.OrderStatus orderStatus;
+
 }

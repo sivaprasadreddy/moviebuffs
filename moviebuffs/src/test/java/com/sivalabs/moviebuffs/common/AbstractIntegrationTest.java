@@ -10,14 +10,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.sivalabs.moviebuffs.core.utils.Constants.PROFILE_IT;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@ActiveProfiles({PROFILE_IT})
+@ActiveProfiles({ PROFILE_IT })
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureMockMvc
 public abstract class AbstractIntegrationTest {
 
-    @Autowired
-    protected MockMvc mockMvc;
+	@Autowired
+	protected MockMvc mockMvc;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+	@Autowired
+	protected ObjectMapper objectMapper;
+
 }

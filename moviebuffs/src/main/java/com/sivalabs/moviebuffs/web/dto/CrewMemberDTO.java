@@ -9,21 +9,23 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CrewMemberDTO {
-    private Long id;
 
-    @JsonProperty("credit_id")
-    private String creditId;
+	private Long id;
 
-    private String department;
+	@JsonProperty("credit_id")
+	private String creditId;
 
-    private String gender;
+	private String department;
 
-    private String uid;
+	private String gender;
 
-    private String job;
+	private String uid;
 
-    private String name;
+	private String job;
 
-    @JsonProperty("profile_path")
-    private String profilePath;
+	private String name;
+
+	@JsonProperty("profile_path")
+	private String profilePath;
+
 }

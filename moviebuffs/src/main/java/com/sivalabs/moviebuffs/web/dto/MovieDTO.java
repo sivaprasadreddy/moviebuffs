@@ -13,51 +13,53 @@ import java.util.Set;
 @Data
 @Builder
 public class MovieDTO {
-    private Long id;
 
-    private String title;
+	private Long id;
 
-    @JsonProperty("imdb_id")
-    private String imdbId;
+	private String title;
 
-    private String overview;
+	@JsonProperty("imdb_id")
+	private String imdbId;
 
-    private String tagline;
+	private String overview;
 
-    private String runtime;
+	private String tagline;
 
-    private String revenue;
+	private String runtime;
 
-    @JsonProperty("release_date")
-    private LocalDate releaseDate;
+	private String revenue;
 
-    @JsonProperty("poster_path")
-    private String posterPath;
+	@JsonProperty("release_date")
+	private LocalDate releaseDate;
 
-    private String budget;
+	@JsonProperty("poster_path")
+	private String posterPath;
 
-    private String homepage;
+	private String budget;
 
-    @JsonProperty("original_language")
-    private String originalLanguage;
+	private String homepage;
 
-    private BigDecimal price;
+	@JsonProperty("original_language")
+	private String originalLanguage;
 
-    private Set<Genre> genres;
+	private BigDecimal price;
 
-    private Set<CastMemberDTO> castMembers;
+	private Set<Genre> genres;
 
-    private Set<CrewMemberDTO> crewMembers;
+	private Set<CastMemberDTO> castMembers;
 
-    public String getTrimmedTitle() {
-        return StringUtils.abbreviate(title, 30);
-    }
+	private Set<CrewMemberDTO> crewMembers;
 
-    public String getTrimmedOverview() {
-        return StringUtils.abbreviate(overview, 100);
-    }
+	public String getTrimmedTitle() {
+		return StringUtils.abbreviate(title, 30);
+	}
 
-    public String getTrimmedTagline() {
-        return StringUtils.abbreviate(tagline, 100);
-    }
+	public String getTrimmedOverview() {
+		return StringUtils.abbreviate(overview, 100);
+	}
+
+	public String getTrimmedTagline() {
+		return StringUtils.abbreviate(tagline, 100);
+	}
+
 }

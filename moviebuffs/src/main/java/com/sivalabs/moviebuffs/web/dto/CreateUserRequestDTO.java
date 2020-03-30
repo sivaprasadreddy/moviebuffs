@@ -9,13 +9,15 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class CreateUserRequestDTO {
-    @NotBlank(message = "Name cannot be blank")
-    String name;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Invalid email address")
-    String email;
+	@NotBlank(message = "Name cannot be blank")
+	String name;
 
-    @NotBlank(message = "Password cannot be blank")
-    String password;
+	@NotBlank(message = "Email cannot be blank")
+	@Email(message = "Invalid email address")
+	String email;
+
+	@NotBlank(message = "Password cannot be blank")
+	String password;
+
 }

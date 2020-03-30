@@ -6,25 +6,25 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class CastMemberRecord implements Serializable
-{
-    @JsonProperty("cast_id")
-    private String castId;
+public class CastMemberRecord implements Serializable {
 
-    private String character;
+	@JsonProperty("cast_id")
+	private String castId;
 
-    @JsonProperty("credit_id")
-    private String creditId;
+	private String character;
 
-    private String gender;
+	@JsonProperty("credit_id")
+	private String creditId;
 
-    private String id;
+	private String gender;
 
-    private String name;
+	private String id;
 
-    private String order;
+	private String name;
 
-    @JsonProperty("profile_path")
-    private String profilePath;
+	private String order;
+
+	@JsonProperty("profile_path")
+	private String profilePath;
 
 }

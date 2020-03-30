@@ -11,18 +11,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class MovieControllerIT extends AbstractIntegrationTest {
 
-    @Autowired
-    private MovieService movieService;
+	@Autowired
+	private MovieService movieService;
 
-    @BeforeEach
-    void setUp() {
+	@BeforeEach
+	void setUp() {
 
-    }
+	}
 
-    @Test
-    void shouldFetchAllCategories() throws Exception {
-        this.mockMvc.perform(get("/"))
-                .andExpect(status().isOk());
-    }
+	@Test
+	void shouldFetchAllCategories() throws Exception {
+		this.mockMvc.perform(get("/")).andExpect(status().isOk());
+	}
 
 }

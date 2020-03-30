@@ -10,20 +10,21 @@ import java.util.stream.Collectors;
 
 @EqualsAndHashCode(exclude = "user", callSuper = true)
 public class SecurityUser extends org.springframework.security.core.userdetails.User {
-    private User user;
 
-    public SecurityUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-    }
+	private User user;
 
-    public SecurityUser(User user) {
-        super(user.getEmail(), user.getPassword(),
-                user.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
-        this.user = user;
-    }
+	public SecurityUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+		super(username, password, authorities);
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public SecurityUser(User user) {
+		super(user.getEmail(), user.getPassword(), user.getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+		this.user = user;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
 }

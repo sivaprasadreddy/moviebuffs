@@ -24,26 +24,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = MoviesRestController.class)
 class MoviesRestControllerTest extends AbstractMvcUnitTest {
 
-    @MockBean
-    private MovieService movieService;
+	@MockBean
+	private MovieService movieService;
 
-    @MockBean
-    private MovieDTOMapper movieDTOMapper;
+	@MockBean
+	private MovieDTOMapper movieDTOMapper;
 
-    @Test
-    void should_return_movies() throws Exception {
-        Page<Movie> page = new PageImpl<>(new ArrayList<>());
-        given(movieService.findMovies(any(Pageable.class))).willReturn(page);
+	@Test
+	void should_return_movies() throws Exception {
+		Page<Movie> page = new PageImpl<>(new ArrayList<>());
+		given(movieService.findMovies(any(Pageable.class))).willReturn(page);
 
-        this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH))
-                .andExpect(status().isOk());
-    }
+		this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH)).andExpect(status().isOk());
+	}
 
-    @Test
-    void should_return_empty_movie_results_for_invalid_genre() throws Exception {
-        given(movieService.findGenreBySlug(anyString())).willReturn(Optional.empty());
+	@Test
+	void should_return_empty_movie_results_for_invalid_genre() throws Exception {
+		given(movieService.findGenreBySlug(anyString())).willReturn(Optional.empty());
 
-        this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH+"?genre=abcd"))
-                .andExpect(status().isOk());
-    }
+		this.mockMvc.perform(get(MOVIES_COLLECTION_BASE_PATH + "?genre=abcd")).andExpect(status().isOk());
+	}
+
 }

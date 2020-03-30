@@ -9,24 +9,26 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CastMemberDTO {
-    private Long id;
 
-    @JsonProperty("cast_id")
-    private String castId;
+	private Long id;
 
-    private String character;
+	@JsonProperty("cast_id")
+	private String castId;
 
-    @JsonProperty("credit_id")
-    private String creditId;
+	private String character;
 
-    private String gender;
+	@JsonProperty("credit_id")
+	private String creditId;
 
-    private String uid;
+	private String gender;
 
-    private String name;
+	private String uid;
 
-    private String order;
+	private String name;
 
-    @JsonProperty("profile_path")
-    private String profilePath;
+	private String order;
+
+	@JsonProperty("profile_path")
+	private String profilePath;
+
 }

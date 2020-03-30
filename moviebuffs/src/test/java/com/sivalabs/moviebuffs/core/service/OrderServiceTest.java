@@ -20,33 +20,33 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
-    @Mock
-    private OrderRepository orderRepository;
+	@Mock
+	private OrderRepository orderRepository;
 
-    @InjectMocks
-    private OrderService orderService;
+	@InjectMocks
+	private OrderService orderService;
 
-    String orderId;
+	String orderId;
 
-    @BeforeEach
-    void setUp() {
-        orderId = "1234";
-    }
+	@BeforeEach
+	void setUp() {
+		orderId = "1234";
+	}
 
-    @Test
-    void should_throw_exception_when_cancelling_non_existing_order() {
-        given(orderRepository.findByOrderId(orderId)).willReturn(Optional.empty());
+	@Test
+	void should_throw_exception_when_cancelling_non_existing_order() {
+		given(orderRepository.findByOrderId(orderId)).willReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> orderService.cancelOrder(orderId));
-    }
+		assertThrows(ResourceNotFoundException.class, () -> orderService.cancelOrder(orderId));
+	}
 
-    @Test
-    void should_throw_exception_when_cancelling_delivered_order() {
-        Order order = createOrder(1L);
-        order.setStatus(Order.OrderStatus.DELIVERED);
-        given(orderRepository.findByOrderId(orderId)).willReturn(Optional.of(order));
+	@Test
+	void should_throw_exception_when_cancelling_delivered_order() {
+		Order order = createOrder(1L);
+		order.setStatus(Order.OrderStatus.DELIVERED);
+		given(orderRepository.findByOrderId(orderId)).willReturn(Optional.of(order));
 
-        assertThrows(BadRequestException.class, () -> orderService.cancelOrder(orderId));
-    }
+		assertThrows(BadRequestException.class, () -> orderService.cancelOrder(orderId));
+	}
 
 }

@@ -7,28 +7,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode(callSuper = true)
 public class TokenBasedAuthentication extends AbstractAuthenticationToken {
 
-    private String token;
-    private final UserDetails principle;
+	private String token;
 
-    public TokenBasedAuthentication(String token, UserDetails principle ) {
-        super( principle.getAuthorities() );
-        this.token = token;
-        this.principle = principle;
-    }
+	private final UserDetails principle;
 
-    @Override
-    public boolean isAuthenticated() {
-        return true;
-    }
+	public TokenBasedAuthentication(String token, UserDetails principle) {
+		super(principle.getAuthorities());
+		this.token = token;
+		this.principle = principle;
+	}
 
-    @Override
-    public Object getCredentials() {
-        return token;
-    }
+	@Override
+	public boolean isAuthenticated() {
+		return true;
+	}
 
-    @Override
-    public UserDetails getPrincipal() {
-        return principle;
-    }
+	@Override
+	public Object getCredentials() {
+		return token;
+	}
+
+	@Override
+	public UserDetails getPrincipal() {
+		return principle;
+	}
 
 }

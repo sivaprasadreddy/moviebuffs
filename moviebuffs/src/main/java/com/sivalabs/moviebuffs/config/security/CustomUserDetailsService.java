@@ -15,15 +15,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) {
-        Optional<User> user = userService.getUserByEmail(username);
-        if (user.isPresent()) {
-            return new SecurityUser(user.get());
-        } else {
-            throw new UsernameNotFoundException("No user found with username "+username);
-        }
-    }
+	@Override
+	public UserDetails loadUserByUsername(String username) {
+		Optional<User> user = userService.getUserByEmail(username);
+		if (user.isPresent()) {
+			return new SecurityUser(user.get());
+		}
+		else {
+			throw new UsernameNotFoundException("No user found with username " + username);
+		}
+	}
+
 }

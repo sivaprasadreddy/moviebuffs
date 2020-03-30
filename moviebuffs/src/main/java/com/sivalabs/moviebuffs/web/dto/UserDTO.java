@@ -13,20 +13,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private Long id;
 
-    @NotBlank(message = "Name cannot be blank")
-    private String name;
+	private Long id;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Invalid email address")
-    private String email;
+	@NotBlank(message = "Name cannot be blank")
+	private String name;
 
-    @NotBlank(message = "Password cannot be blank")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
+	@NotBlank(message = "Email cannot be blank")
+	@Email(message = "Invalid email address")
+	private String email;
 
-    private List<String> roles;
+	@NotBlank(message = "Password cannot be blank")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String password;
 
+	private List<String> roles;
 
 }

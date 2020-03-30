@@ -25,6 +25,7 @@
             </activation>
             <modules>
                 <module>moviebuffs</module>
+                <module>moviebuffs-data-importer</module>
             </modules>
         </profile>
 
@@ -33,6 +34,7 @@
             <modules>
                 <module>moviebuffs-ui-react</module>
                 <module>moviebuffs</module>
+                <module>moviebuffs-data-importer</module>
                 <module>moviebuffs-gatling-tests</module>
                 <module>tools</module>
             </modules>
