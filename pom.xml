@@ -36,7 +36,7 @@
                 <module>moviebuffs</module>
                 <module>moviebuffs-data-importer</module>
                 <module>moviebuffs-gatling-tests</module>
-                <module>tools</module>
+                <module>moviebuffs-tools</module>
             </modules>
         </profile>
     </profiles>

@@ -49,4 +49,16 @@ class ArchTest {
 				.haveSimpleNameEndingWith("Service").check(importedClasses);
 	}
 
+	@Test
+	void shouldNotUseJunit4Classes() {
+
+		JavaClasses classes = new ClassFileImporter().importPackages("com.sivalabs.moviebuffs");
+
+		noClasses().should().accessClassesThat().resideInAnyPackage("org.junit")
+				.because("Tests should use Junit5 instead of Junit4").check(classes);
+
+		noMethods().should().beAnnotatedWith("org.junit.Test").orShould().beAnnotatedWith("org.junit.Ignore")
+				.because("Tests should use Junit5 instead of Junit4").check(classes);
+	}
+
 }
