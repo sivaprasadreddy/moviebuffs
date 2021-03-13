@@ -2,7 +2,7 @@ version: '3.1'
 services:
 
   moviebuffs:
-    build: ../moviebuffs
+    image: sivaprasadreddy/moviebuffs
     container_name: moviebuffs
     ports:
       - "18080:8080"
@@ -13,25 +13,19 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-      SPRING_DATASOURCE_URL: jdbc:postgresql://mb-postgresdb:5432/appdb
-      SPRING_DATASOURCE_USERNAME: siva
-      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_DATASOURCE_URL: jdbc:postgresql://mb-postgresdb:5432/moviebuffs
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
       APPLICATION_LOGSTASH_HOST: logstash
 
   mb-postgresdb:
-    image: postgres:10.7
+    image: postgres:12.3
     container_name: mb-postgresdb
     environment:
-      - POSTGRES_USER=siva
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=appdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=moviebuffs
     ports:
       - "5432:5432"
-
-  moviebuffs-ui-react:
-    build: ../moviebuffs-ui-react
-    container_name: moviebuffs-ui-react
-    ports:
-      - "90:80"
-    environment:
-      REACT_APP_API_BASE_URL: http://moviebuffs:8080
+    volumes:
+      - ~/postgres-data/moviebuffs:/var/lib/postgresql/data

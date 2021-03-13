@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{mainLayout}">
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+    <div class="col-md-9">
+        <div>
+            <form class="form-inline pb-3" method="get" th:action="@{/}">
+                <div class="form-group  col-md-9">
+                    <input class="col-md-12 form-control" type="search" name="query"/>
+                </div>
+                <button class="btn btn-primary btn" type="submit">Search</button>
+            </form>
+        </div>
+        <div th:if="${header != null}">
+            <h3 th:text="${header}">Header</h3>
+            <hr/>
+        </div>
+        <div th:replace="fragments/pagination :: pagination"> </div>
+        <div class="row row-cols-1 row-cols-md-4">
+            <div class="col mb-3" th:each="movie: ${moviesData.content}">
+                <div class="card h-100" >
+                    <a href="#" th:href="${'/movies/'+movie.id}">
+                        <img th:src="${movie.posterPath}"
+                         onerror="this.onerror=null; this.src='/images/image-not-found.png'"
+                         class="card-img-top" alt="Movie"
+                         height="300" width="200"
+                        />
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            th:text="${movie.getTrimmedTitle()}">book.title</h5>
+                        <p class="card-text"
+                           data-toggle="tooltip"
+                           data-placement="top"
+                           th:text="${movie.getTrimmedTagline()}">movie.tagline</p>
+                        <button class="btn btn-primary" onclick=""
+                                th:onclick="'javascript:addItemToCart(\'' + ${movie.tmdbId} + '\');'">
+                        Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments/pagination :: pagination"> </div>
+    </div>
+    <div class="col-md-3">
+        <h2>Genres</h2>
+        <div class="list-group list-group-flush" style="max-height: 75vh; overflow-y: scroll">
+            <a href="#"
+               class="list-group-item list-group-item-action"
+               th:each="genre: ${genres}"
+               th:text="${genre.name}"
+               th:href="${'/genre/'+genre.slug}">
+                Genre Name
+            </a>
+        </div>
+    </div>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var page = /*[[${page}]]*/ 1;
+        //console.log(page);
+        /*]]>*/
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{mainLayout}">
+<head>
+    <title>Movie</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-md-9">
+            <div>
+                <h3
+                    th:text="${movie.title}">movie.title</h3>
+                <img th:src="${movie.posterPath}"  alt="Movie"
+                     onerror="this.onerror=null; this.src='/images/image-not-found.png'"
+                     height="400" width="300">
+            </div>
+            <div class="pt-3">
+                <h3>Tagline</h3>
+                <p th:text="${movie.tagline}">movie.tagline</p>
+            </div>
+            <div class="pt-3">
+                <p th:text="${'Released Date:'+ movie.releaseDate}">movie.releaseDate</p>
+                <p th:text="${'Budget:'+ movie.budget}">movie.budget</p>
+                <p th:text="${'Runtime:'+ movie.runtime}">movie.runtime</p>
+                <p th:text="${'Original Language:'+ movie.originalLanguage}">movie.originalLanguage</p>
+            </div>
+            <div class="pt-3">
+                <button class="btn btn-primary" th:onclick="'javascript:addItemToCart(\'' + ${movie.tmdbId} + '\');'">
+                Add to Cart
+                </button>
+            </div>
+            <div class="pt-3">
+                <h3>Overview</h3>
+                <p th:text="${movie.overview}">movie.overview</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+</div>
+</body>
+</html>

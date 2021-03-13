@@ -5,31 +5,24 @@
 * SpringBoot 2.x
 * H2(Dev) / Postgres (Prod)
 * Spring Data JPA
-* Spring Security JWT Authentication
+* Spring Security 
 * Jasypt
 * Swagger2
-* Zalando problem-spring-web
 * Flyway
 * SonarQube
 * Jacoco
 * Maven
 * JUnit 5, Mockito, Testcontainers
 
-## Frontend Tech Stack
-* ReactJS
-* Redux, React Router
-* Axios
-* Font-awesome
-
 ## How to run?
 
-### Run Backend tests
+### Run  tests
 
-`moviebuffs/moviebuffs> ./mvnw clean verify`
+`moviebuffs> ./mvnw clean verify`
 
 ### Run application locally
 
-`moviebuffs/moviebuffs> ./mvnw clean package -Pci & java -jar target/bookmarker-0.0.1-SNAPSHOT.jar`
+`moviebuffs> ./mvnw clean package -Pci & java -jar target/bookmarker-0.0.1-SNAPSHOT.jar`
 
 * Application: http://localhost:8080/
 
@@ -51,7 +44,11 @@ To start application and all dependent services like ELK, grafana, prometheus
 
 ### Run Performance Tests
 
-`moviebuffs/moviebuffs-gatling-tests> ./mvnw gatling:test`
+`moviebuffs> ./mvnw gatling:test -P perf`
+
+To test it out, simply execute the following command:
+
+$ ./mvnw gatling:test -Dgatling.simulationClass=moviebuffs.MovieBuffsAPISimulation
 
 ### Run SonarQube analysis
 

@@ -1,40 +1,28 @@
 #!groovy
 @Library('jenkins-shared-library')
-import com.sivalabs.JenkinsSharedLib
+import com.sivalabs.JenkinsMavenLib
 
-properties([
-    parameters([
-        booleanParam(defaultValue: false, name: 'PUBLISH_TO_DOCKERHUB', description: 'Publish Docker Image to DockerHub?'),
-        booleanParam(defaultValue: false, name: 'DEPLOY_ON_HEROKU', description: 'Should deploy on Heroku?'),
-        booleanParam(defaultValue: false, name: 'RUN_PERF_TESTS', description: 'Should run Performance Tests?')
-    ])
-])
+def dockerUsername = 'sivaprasadreddy'
+def dockerImageName = 'moviebuffs'
 
-def DOCKER_USERNAME = 'sivaprasadreddy'
-def API_IMAGE_NAME = 'moviebuffs'
-def UI_IMAGE_NAME = 'moviebuffs-ui-react'
-
-def utils = new JenkinsSharedLib(this, env, params, scm, currentBuild)
+def project = new JenkinsMavenLib(this, scm, env, params, currentBuild)
 
 node {
 
     try {
-        utils.checkout()
-
-        dir("moviebuffs-ui-react") {
-            utils.npmBuild("UI Build")
-            utils.npmTest("UI Test")
+        stage("Checkout") {
+            project.checkout()
         }
-
-        dir("moviebuffs") {
-            utils.runMavenTests("Tests")
-            utils.runOWASPChecks("OWASP Checks")
-            utils.publishDockerImage("Publish Docker", DOCKER_USERNAME, API_IMAGE_NAME)
-            utils.deployOnHeroku("Heroku Deployment")
+        stage("Build") {
+            project.runTests()
         }
-
-        dir("moviebuffs-gatling-tests") {
-            utils.runMavenGatlingTests("Perf Test")
+        stage("Publish Docker Image") {
+            project.buildSpringBootDockerImage(dockerUsername, dockerImageName)
+            def tags = []
+            if(env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main') {
+                tags << "latest"
+            }
+            project.publishDockerImage(dockerUsername, dockerImageName, tags)
         }
     }
     catch(err) {
