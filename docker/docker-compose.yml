@@ -17,7 +17,10 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       APPLICATION_LOGSTASH_HOST: logstash
-
+      LOGGING_FILE_NAME: /logs/moviebuffs.log
+      APPLICATION_DATAIMPORT_MAX_SIZE: 500
+    volumes:
+      - ../logs:/logs
   mb-postgresdb:
     image: postgres:12.3
     container_name: mb-postgresdb

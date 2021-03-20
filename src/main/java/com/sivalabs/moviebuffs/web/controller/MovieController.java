@@ -85,6 +85,7 @@ public class MovieController {
                     })
                     Pageable pageable,
             Model model) {
+        log.info("Fetching movies by genre: {} with page: {}", slug, pageable.getPageNumber());
         Optional<Genre> byId = movieService.findGenreBySlug(slug);
         if (byId.isPresent()) {
             Page<MovieDTO> data =

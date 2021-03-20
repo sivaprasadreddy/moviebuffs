@@ -50,11 +50,6 @@ function build_api() {
     ./mvnw clean package -DskipTests
 }
 
-function run_as_jar() {
-  build_api
-
-}
-
 function sonar() {
     echo 'Starting sonarqube....'
     docker-compose -f ${dc_platform} up --build --force-recreate -d ${sonarqube}

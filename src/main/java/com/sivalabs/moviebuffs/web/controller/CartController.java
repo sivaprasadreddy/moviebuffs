@@ -15,7 +15,6 @@ import com.sivalabs.moviebuffs.web.dto.OrderDTO;
 import com.sivalabs.moviebuffs.web.mappers.MovieDTOMapper;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -116,15 +115,18 @@ public class CartController extends BaseController {
                         .findMovieByTmdbId(product.getTmdbId())
                         .map(movieDTOMapper::map)
                         .orElse(null);
-        log.info("Adding product: {}", p);
+        log.info("Adding product: {}", p.getTmdbId());
         cart.addItem(p);
         return cart;
     }
 
     @PutMapping(value = "/cart/items")
     @ResponseBody
-    public Cart updateCartItem(
-            @RequestBody LineItem item, HttpServletRequest request, HttpServletResponse response) {
+    public Cart updateCartItem(@RequestBody LineItem item, HttpServletRequest request) {
+        log.info(
+                "Update cart line item tmdbId: {}, quantity: {} ",
+                item.getProduct().getTmdbId(),
+                item.getQuantity());
         Cart cart = getOrCreateCart(request);
         if (item.getQuantity() <= 0) {
             Long tmdbId = item.getProduct().getTmdbId();
@@ -138,6 +140,7 @@ public class CartController extends BaseController {
     @DeleteMapping(value = "/cart/items/{tmdbId}")
     @ResponseBody
     public Cart removeCartItem(@PathVariable("tmdbId") Long tmdbId, HttpServletRequest request) {
+        log.info("Remove cart line item tmdbId: {}", tmdbId);
         Cart cart = getOrCreateCart(request);
         cart.removeItem(tmdbId);
         return cart;
@@ -146,6 +149,7 @@ public class CartController extends BaseController {
     @DeleteMapping(value = "/cart")
     @ResponseBody
     public Cart clearCart(HttpServletRequest request) {
+        log.info("Clear cart");
         Cart cart = getOrCreateCart(request);
         cart.setItems(new ArrayList<>(0));
         return cart;

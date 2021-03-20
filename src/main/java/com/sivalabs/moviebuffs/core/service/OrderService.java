@@ -43,6 +43,7 @@ public class OrderService {
     }
 
     public void cancelOrder(String orderId) {
+        log.info("Cancel order with OrderId: {}", orderId);
         Order order = findOrderByOrderId(orderId).orElse(null);
         if (order == null) {
             throw new ResourceNotFoundException("Order with id: " + orderId + " is not found");

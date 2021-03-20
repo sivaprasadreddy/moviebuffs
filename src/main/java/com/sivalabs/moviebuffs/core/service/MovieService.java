@@ -72,8 +72,6 @@ public class MovieService {
     }
 
     public Movie createMovie(Movie movie) {
-        // Set<Genre> genreList = saveGenres(movie.getGenres());
-        // movie.setGenres(genreList);
         return movieRepository.save(movie);
     }
 
@@ -83,19 +81,6 @@ public class MovieService {
     public List<Movie> createMovies(List<Movie> movies) {
         return movieRepository.saveAll(movies);
     }
-
-    /*private Set<Genre> saveGenres(Set<Genre> genres) {
-        Set<Genre> genreList = new HashSet<>();
-        for (Genre genre : genres) {
-            Optional<Genre> byId = genreRepository.findByName(genre.getName());
-            if (byId.isPresent()) {
-                genreList.add(byId.get());
-            } else {
-                genreList.add(genreRepository.save(genre));
-            }
-        }
-        return genreList;
-    }*/
 
     @CacheEvict(
             value = {"genres", "genre-by-slug"},

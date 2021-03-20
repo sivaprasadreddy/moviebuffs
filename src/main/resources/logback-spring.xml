@@ -5,7 +5,7 @@
 
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
-    <appender class="net.logstash.logback.appender.LogstashTcpSocketAppender" name="stash">
+    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <!--<destination>localhost:5000</destination>-->
         <destination>${logstashHost}:5000</destination>
 
@@ -39,7 +39,7 @@
         </encoder>
     </appender>
 
-    <springProfile name="elk">
+    <springProfile name="docker">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
@@ -47,7 +47,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="!elk">
+    <springProfile name="!docker">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
