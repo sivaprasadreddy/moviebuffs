@@ -1,33 +1,50 @@
-version: '3.1'
+version: '3.5'
 services:
-
-  grafana:
-    image: grafana/grafana
-    ports:
-    - 3000:3000
-    volumes:
-    - grafana_data:/var/lib/grafana
-    - ../config/grafana/provisioning/:/etc/grafana/provisioning/
-    environment:
-    - GF_SECURITY_ADMIN_PASSWORD=admin
-    - GF_SECURITY_ADMIN_USER=admin
-    - GF_USERS_ALLOW_SIGN_UP=false
-    depends_on:
-    - prometheus
-
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.24.0
+    container_name: monitoring-prometheus
     ports:
       - 9090:9090
     volumes:
-      - ../config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
+    command: "--config.file=/etc/prometheus/prometheus.yml"
+
+  promtail:
+    image: grafana/promtail:2.1.0
+    container_name: monitoring-promtail
+    volumes:
+      - ./promtail/promtail-docker-config.yaml:/etc/promtail/docker-config.yaml
+      - ../logs:/var/logs
+    command: "--config.file=/etc/promtail/docker-config.yaml"
+
+  loki:
+    image: grafana/loki:2.1.0
+    container_name: monitoring-loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    depends_on:
+      - promtail
+
+  grafana:
+    image: grafana/grafana:7.3.6
+    container_name: monitoring-grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+      - loki
 
 volumes:
   prometheus_data: {}
   grafana_data: {}
   esdata1:
     driver: local
-

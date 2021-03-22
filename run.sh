@@ -32,14 +32,20 @@ function stop() {
 function start_all() {
     echo "Starting ${moviebuffs} and dependencies...."
     build_docker_image
-    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
-    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f
+    docker-compose -f ${dc_main} -f ${dc_monitoring} up --build --force-recreate -d
+    docker-compose -f ${dc_main} -f ${dc_monitoring} logs -f
+
+    #docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} up --build --force-recreate -d
+    #docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} logs -f
 }
 
 function stop_all() {
     echo 'Stopping all....'
-    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} stop
-    docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} rm -f
+    docker-compose -f ${dc_main} -f ${dc_monitoring} stop
+    docker-compose -f ${dc_main} -f ${dc_monitoring} rm -f
+
+    #docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} stop
+    #docker-compose -f ${dc_main} -f ${dc_elk} -f ${dc_monitoring} rm -f
 }
 
 function build_docker_image() {
