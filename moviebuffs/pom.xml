@@ -23,7 +23,7 @@
 		<swagger2.version>2.9.2</swagger2.version>
 		<problem-spring-web.version>0.25.2</problem-spring-web.version>
 		<logstash-logback.version>4.9</logstash-logback.version>
-		<commons-io.version>2.6</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<opencsv.version>5.0</opencsv.version>
 		<jjwt.version>0.6.0</jjwt.version>
 		<heroku.appName>sivalabs-moviebuffs</heroku.appName>
