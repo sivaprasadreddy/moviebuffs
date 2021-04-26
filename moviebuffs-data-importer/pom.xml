@@ -17,7 +17,7 @@
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <opencsv.version>5.0</opencsv.version>
         <testcontainers.version>1.12.2</testcontainers.version>
         <playtika.testcontainers.version>1.39</playtika.testcontainers.version>
